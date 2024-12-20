@@ -1,23 +1,30 @@
-genconfig:
+[working-directory: 'talos']
+@genconfig:
   talosctl gen config --force --with-secrets secrets.yaml --config-patch-control-plane @nodepatch.yaml homecluster https://192.168.1.123:6443
 
-applyconfig:
+[working-directory: 'talos']
+@applyconfig:
   talosctl apply-config -n 192.168.1.123 --file controlplane.yaml --insecure
 
-apply:
+[working-directory: 'talos']  
+@apply:
   talosctl apply-config -n 192.168.1.123 -e 192.168.1.123 --file controlplane.yaml --talosconfig=./talosconfig
 
-gensecrets:
+[working-directory: 'talos']
+@gensecrets:
   talosctl gen secrets -o secrets.yaml
 
-bootstrap:
+[working-directory: 'talos']
+@bootstrap:
   talosctl bootstrap --nodes 192.168.1.123 --endpoints 192.168.1.123 --talosconfig=./talosconfig
 
 debug:
   kubectl debug -n kube-system -it --image ubuntu node/homecluster --profile=sysadmin
 
-dashboard:
+[working-directory: 'talos']
+@dashboard:
   talosctl -n 192.168.1.123 -e 192.168.1.123 --talosconfig=./talosconfig dashboard
 
-do +AARGS:
+[working-directory: 'talos']
+@do +AARGS:
   talosctl -n 192.168.1.123 -e 192.168.1.123 --talosconfig=./talosconfig {{ AARGS }}
