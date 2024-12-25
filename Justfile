@@ -29,9 +29,9 @@ debug:
 @do +AARGS:
   talosctl -n 192.168.1.123 -e 192.168.1.123 --talosconfig=./talosconfig {{ AARGS }}
 
+[working-directory: 'kubernetes']
 install-argocd:
-  kubectl create namespace argocd
-  kubectl apply -k argocd/apps/argocd
+  kubectl apply -k apps/argocd
 
 forward-argocd:
   kubectl port-forward svc/argocd-server -n argocd 8080:443

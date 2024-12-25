@@ -1,0 +1,50 @@
+global:
+  env:
+    - name: TZ
+      value: Europe/Berlin
+
+configs:
+  cm:
+    kustomize.buildOptions: '--enable-helm --enable-alpha-plugins --enable-exec'
+  params:
+    server.insecure: 'true'
+    server.disable.auth: 'true'
+
+server:
+  ingress:
+    enabled: true
+    annotations:
+      cert-manager.io/common-name: &host argocd.devpi.de
+      cert-manager.io/subject-countries: DE
+      cert-manager.io/subject-organizations: "DEVPI.HOME"
+      cert-manager.io/subject-organizationalunits: "Kubernetes Cluster"
+      cert-manager.io/private-key-algorithm: ECDSA
+      cert-manager.io/private-key-size: "384"
+    ingressClassName: nginx
+    hostname: *host
+    tls: true
+
+repoServer:
+  volumes:
+    - name: custom-tools
+      emptyDir: {}
+
+  initContainers:
+    - name: install-ksops
+      image: viaductoss/ksops:v4.3.2
+      command: ["/bin/sh", "-c"]
+      args:
+        - echo "Installing KSOPS...";
+          mv ksops /custom-tools/;
+          mv kustomize /custom-tools/;
+          echo "Done.";
+      volumeMounts:
+        - mountPath: /custom-tools
+          name: custom-tools
+  volumeMounts:
+    - mountPath: /usr/local/bin/kustomize
+      name: custom-tools
+      subPath: kustomize
+    - mountPath: /usr/local/bin/ksops
+      name: custom-tools
+      subPath: ksops
