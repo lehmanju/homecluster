@@ -31,7 +31,8 @@ debug:
 
 [working-directory: 'kubernetes']
 install-argocd:
-  kubectl apply -k apps/argocd
+  kubectl create namespace argocd
+  kubectl kustomize --enable-helm apps/argocd | kubectl apply -f -
 
 forward-argocd:
-  kubectl port-forward svc/argocd-server -n argocd 8080:443
+  kubectl port-forward svc/argocd-server -n argocd 8080:80
