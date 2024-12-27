@@ -12,7 +12,9 @@ configs:
 repoServer:
   env:
     - name: XDG_CONFIG_HOME
-      value: /.config
+      value: /home/argocd/.config
+    - name: KUSTOMIZE_PLUGIN_HOME
+      value: /home/argocd/.config/kustomize/plugin
     - name: GNUPGHOME
       value: /home/argocd/.gnupg
 
