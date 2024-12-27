@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Secret
+metadata:
+    name: dynv6-api-token
+type: Opaque
+data:
+    api-token: ENC[AES256_GCM,data:3/wb54C2r2/qs2wn3lHMrICrOU8haPCQpp2RBEpftEnPEkUYCE7Zmkq2rQOHemo9jqiX2eoMm4ii6JWg/UaF08+9ys4S4CWY3Iap+aZ//CENHj032oeNRg==,iv:NvM51MJrToy9oWVH3erRqQJTTFBSdFoVZL2JiZDv4U0=,tag:+mCmqRpMLwEvtCsGrgkVmg==,type:str]
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age: []
+    lastmodified: "2024-12-27T19:26:09Z"
+    mac: ENC[AES256_GCM,data:kJqU/agvKhJrWeY5i/JjrwDe9R7ofCgfKwkf7TBbb3l1nRgZXqQnNLFXvd8YizGPkmZICohk3MKGHZVvBJfZgGWOrAca1vbEGd/WVqoOJy/6bsjFUj2bDcF3n786HEwxDqqS91NGU2/vv4tQcrRUiGTr+ildbRmURbHsfb+8+Yc=,iv:sdRzDZerRN0deBXzLcaZnn+1D0ptX6YiZM8blPcMTd8=,tag:/m4JkLhcN5yrJtled+JYAw==,type:str]
+    pgp:
+        - created_at: "2024-12-27T19:26:09Z"
+          enc: |-
+            -----BEGIN PGP MESSAGE-----
+
+            hQIMA4AEmF834AjHAQ//dvzYWzohZzcERGsKkPsySRrTTgfGErj2OmAcxE+UXSbi
+            c45zteAilF3ytnp8ebuROtzpc996yQ5LDrvfXb/CNPsuz7lwWS80jSIHJ2GlT1xs
+            OFWpp2CZuv/1tC9XYJi2pgHCMc8p8dRsySKZjBloUyrioYCy2/um2hJhxrk7Vqk1
+            A2UL3mo0MdM+KwZinOhpZ03DjEnFVyOhs5Jh3uM3SCru14/RSkW5bG3hy4lXGB4J
+            fj9ZSvzwlUsZOGzNK9MTOmbKu4syEk721QMh9Rin+FzI0hpRa9m15/Gg7CUt6HDi
+            Cl1chzb47Vu24f6wPLv+ToxaXNKBMOVk25cVwl4hdyFFbNpJwh9iFEgPGRveFUFi
+            +odxx4EPfStHgpWKCgkOEkZsAqDyU8hewSWt0Axro3O+GGLFRgtlzfTRJdgJrVaW
+            sWBctbfxEIgWaXe6RuSY9qu38WNyONFNY16RXdviuzhdlWvEQMGY/E8g1EccfDH+
+            bvpGBhMIJfe5XtXwvuouffrKQMShegmHkPFFLfvmKG8Z9eGrsFh6u9dPBfhvZ5yp
+            XjkdXr+sB0EjoFnhiYOLMDJUxVOxD7BBizCoax3fOnNwksLso3mYyQ8BQBlbIeKy
+            CqaeE/Zg+4Yg8r/MuR6vRgnzJ7UloqE5Jlmk/2VwtHZEWBY5Zatan/AhhM0Q0kzU
+            aAEJAhCj+0qErC4zvicq76jvZJ+eVHh6EmPJz4Mz/oqx/d8I5zrAfvwa68LQItrN
+            Qok5AOULCt9ps4eYC9enq+5W/b9Y45dg68vgY/QN2UGMmEFwMxNdiD0ipKsYnuPU
+            KXUMyGRRWlyN
+            =d94H
+            -----END PGP MESSAGE-----
+          fp: 65FFACBA29AFAFECC3F614C8F03D887806414471
+    encrypted_regex: ^(data|stringData)$
+    version: 3.9.2

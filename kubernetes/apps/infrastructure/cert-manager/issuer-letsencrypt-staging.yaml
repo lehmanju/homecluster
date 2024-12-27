@@ -1,0 +1,24 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-staging
+  namespace: cert-manager
+spec:
+  acme:
+    email: lehmanju@devpi.de
+    preferredChain: ""
+    privateKeySecretRef:
+      name: letsencrypt-staging
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    solvers:
+      - dns01:
+          rfc2136:
+            nameserver: ns1.dynv6.com
+            tsigKeyName: tsig-908498.dynv6.com
+            tsigAlgorithm: HMACSHA512
+            tsigSecretSecretRef:
+              name: dynv6-api-token
+              key: api-token
+        selector:
+          dnsZones:
+            - testcluster.v6.navy
