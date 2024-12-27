@@ -10,8 +10,19 @@ configs:
     server.insecure: "true"
 
 repoServer:
+  env:
+    - name: XDG_CONFIG_HOME
+      value: /.config
+    - name: GNUPGHOME
+      value: /home/argocd/.gnupg
+
   volumes:
     - name: custom-tools
+      emptyDir: {}
+    - name: sops-gpg
+      secret:
+        secretName: sops-gpg
+    - name: gnupg-home
       emptyDir: {}
 
   initContainers:
@@ -26,6 +37,18 @@ repoServer:
       volumeMounts:
         - mountPath: /custom-tools
           name: custom-tools
+    - name: import-gpg-key
+      image: argoproj/argocd:v2.13.2
+      command: ["gpg", "--import","/sops-gpg/sops.asc"]
+      env:
+        - name: GNUPGHOME
+          value: /gnupg-home/.gnupg
+      volumeMounts:
+        - mountPath: /sops-gpg
+          name: sops-gpg
+        - mountPath: /gnupg-home
+          name: gnupg-home
+
   volumeMounts:
     - mountPath: /usr/local/bin/kustomize
       name: custom-tools
@@ -33,3 +56,7 @@ repoServer:
     - mountPath: /usr/local/bin/ksops
       name: custom-tools
       subPath: ksops
+    - mountPath: /home/argocd/.gnupg
+      name: gnupg-home
+      subPath: .gnupg
+
