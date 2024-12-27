@@ -34,5 +34,9 @@ install-argocd:
   kubectl create namespace argocd
   kubectl kustomize --enable-helm apps/argocd | kubectl apply -f -
 
+[working-directory: 'kubernetes']
+install-clusterapp:
+  kubectl apply -f cluster.yaml
+
 forward-argocd:
   kubectl port-forward svc/argocd-server -n argocd 8080:80
