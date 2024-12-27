@@ -1,0 +1,14 @@
+machine:
+  network:
+    hostname: homecluster
+  install:
+    extraKernelArgs:
+      - usb-storage.quirks=152d:0579:u
+    disk: /dev/sda
+    # includes mdadm
+    image:  factory.talos.dev/installer/17d49db42ce886cf221cb466187d34481dc653f3f74a3105920798f4d819819a:v1.9.1
+    diskSelector:
+      model: External USB 3.0
+
+cluster:
+  allowSchedulingOnControlPlanes: true

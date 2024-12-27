@@ -1,6 +1,6 @@
 [working-directory: 'talos']
 @genconfig:
-  talosctl gen config --force --with-secrets secrets.yaml --config-patch-control-plane @nodepatch.yaml homecluster https://192.168.1.123:6443
+  talosctl gen config --force --with-secrets secrets.yaml --config-patch-control-plane @nodepatch-raspberry.yaml homecluster https://192.168.1.123:6443
 
 [working-directory: 'talos']
 @applyconfig:
