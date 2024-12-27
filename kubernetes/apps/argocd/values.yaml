@@ -38,7 +38,7 @@ repoServer:
         - mountPath: /custom-tools
           name: custom-tools
     - name: import-gpg-key
-      image: argoproj/argocd:v2.13.2
+      image: quay.io/argoproj/argocd:v2.13.2
       command: ["gpg", "--import","/sops-gpg/sops.asc"]
       env:
         - name: GNUPGHOME
