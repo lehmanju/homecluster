@@ -1,0 +1,215 @@
+http:
+    pprof:
+        port: 6060
+        enabled: false
+    address: 192.168.1.1:8080
+    session_ttl: 720h
+users:
+    - name: admin
+      password: ENC[AES256_GCM,data:xuOl/5A8HDWnvFf8LPZvyjRT+PN1coZymvUD7046W0jX5kgoGvRuBwgasX8Jm4iijTtlT41aoaZI746N,iv:hpmnKHXA27RT0fE7Ti4B4X97YgHLcrDBTGWdgMwdAII=,tag:kXnH9m1tjHhoLaTszMIUlw==,type:str]
+auth_attempts: 5
+block_auth_min: 15
+http_proxy: ""
+language: ""
+theme: auto
+dns:
+    bind_hosts:
+        - 0.0.0.0
+    port: 53
+    anonymize_client_ip: false
+    ratelimit: 20
+    ratelimit_subnet_len_ipv4: 24
+    ratelimit_subnet_len_ipv6: 56
+    ratelimit_whitelist:
+        - 192.168.1.123
+    refuse_any: true
+    upstream_dns:
+        - '[/lan/]127.0.0.1:54'
+        - '[//]127.0.0.1:54'
+        - 9.9.9.10
+        - 149.112.112.10
+        - 2620:fe::10
+        - 2620:fe::fe:10
+    upstream_dns_file: ""
+    bootstrap_dns:
+        - 9.9.9.10
+        - 149.112.112.10
+        - 2620:fe::10
+        - 2620:fe::fe:10
+    fallback_dns: []
+    upstream_mode: load_balance
+    fastest_timeout: 1s
+    allowed_clients: []
+    disallowed_clients: []
+    blocked_hosts:
+        - version.bind
+        - id.server
+        - hostname.bind
+    trusted_proxies:
+        - 127.0.0.0/8
+        - ::1/128
+    cache_size: 4194304
+    cache_ttl_min: 0
+    cache_ttl_max: 0
+    cache_optimistic: true
+    bogus_nxdomain: []
+    aaaa_disabled: false
+    enable_dnssec: false
+    edns_client_subnet:
+        custom_ip: ""
+        enabled: false
+        use_custom: false
+    max_goroutines: 300
+    handle_ddr: true
+    ipset: []
+    ipset_file: ""
+    bootstrap_prefer_ipv6: false
+    upstream_timeout: 10s
+    private_networks: []
+    use_private_ptr_resolvers: true
+    local_ptr_upstreams:
+        - 192.168.1.1:54
+    use_dns64: false
+    dns64_prefixes: []
+    serve_http3: false
+    use_http3_upstreams: false
+    serve_plain_dns: true
+    hostsfile_enabled: true
+tls:
+    enabled: false
+    server_name: ""
+    force_https: false
+    port_https: 443
+    port_dns_over_tls: 853
+    port_dns_over_quic: 853
+    port_dnscrypt: 0
+    dnscrypt_config_file: ""
+    allow_unencrypted_doh: false
+    certificate_chain: ""
+    private_key: ""
+    certificate_path: ""
+    private_key_path: ""
+    strict_sni_check: false
+querylog:
+    dir_path: ""
+    ignored: []
+    interval: 24h
+    size_memory: 1000
+    enabled: true
+    file_enabled: true
+statistics:
+    dir_path: ""
+    ignored: []
+    interval: 168h
+    enabled: true
+filters:
+    - enabled: true
+      url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt
+      name: AdGuard DNS filter
+      id: 1
+    - enabled: false
+      url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_2.txt
+      name: AdAway Default Blocklist
+      id: 2
+whitelist_filters: []
+user_rules: []
+dhcp:
+    enabled: false
+    interface_name: ""
+    local_domain_name: lan
+    dhcpv4:
+        gateway_ip: ""
+        subnet_mask: ""
+        range_start: ""
+        range_end: ""
+        lease_duration: 86400
+        icmp_timeout_msec: 1000
+        options: []
+    dhcpv6:
+        range_start: ""
+        lease_duration: 86400
+        ra_slaac_only: false
+        ra_allow_slaac: false
+filtering:
+    blocking_ipv4: ""
+    blocking_ipv6: ""
+    blocked_services:
+        schedule:
+            time_zone: UTC
+        ids: []
+    protection_disabled_until: null
+    safe_search:
+        enabled: false
+        bing: true
+        duckduckgo: true
+        google: true
+        pixabay: true
+        yandex: true
+        youtube: true
+    blocking_mode: default
+    parental_block_host: family-block.dns.adguard.com
+    safebrowsing_block_host: standard-block.dns.adguard.com
+    rewrites: []
+    safebrowsing_cache_size: 1048576
+    safesearch_cache_size: 1048576
+    parental_cache_size: 1048576
+    cache_time: 30
+    filters_update_interval: 24
+    blocked_response_ttl: 10
+    filtering_enabled: true
+    parental_enabled: false
+    safebrowsing_enabled: false
+    protection_enabled: true
+clients:
+    runtime_sources:
+        whois: true
+        arp: true
+        rdns: true
+        dhcp: true
+        hosts: true
+    persistent: []
+log:
+    file: ""
+    max_backups: 0
+    max_size: 100
+    max_age: 3
+    compress: false
+    local_time: false
+    verbose: false
+os:
+    group: ""
+    user: ""
+    rlimit_nofile: 0
+schema_version: 28
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age: []
+    lastmodified: "2025-01-10T16:27:50Z"
+    mac: ENC[AES256_GCM,data:tH17zFePYIr2WA4VaG82C4f/z10j5FSVHXibJdsl68IbbXa80KxDaWH9jOLkrAjDE+YITNnD6rBc18owNFKjis8h7Sa2wp4XMpM5wgHYdTTrUJususCUSCpfJn9MN2Mf9W+mXtIBzSzXg2LNYds44gNzxdNP1SxKmgkanI0bgds=,iv:bTiync0PsGK89Tptia/7Ycx3IxzIxqplGuGrYNFlWAI=,tag:q9cTfdBa+8FaTdzEvXEMrQ==,type:str]
+    pgp:
+        - created_at: "2025-01-10T16:27:50Z"
+          enc: |-
+            -----BEGIN PGP MESSAGE-----
+
+            hQIMA4AEmF834AjHARAAkVFQuYzlBshssE+PTKI5qtLxj+d2/vBvasSaBq4ozyG6
+            39khN0ocXVSx7rFkHal3PgtsXcaR7GAAoZIB23vRjmdF1qMlljQDWmEY8MiZrSKJ
+            ItxD/ZQVqxyz/XYmcP9DAqieCrcVXII3yARk5804FnydP2n8O4ugQfurug0RkXQb
+            61PFcLDMS5yXrlae5CTploc1R87+E1ssDYHxc7pswstB/s3CWjpUtGGXUYCbDAox
+            cOZNoNdT2Z4u87preL1nHcwcq1iQ3AXm3hvFLNEHdTbfEb/2Bl8AkpWp7QjmK473
+            D6s+1ZYwdxrm/b7f7Lc5s5Tdq5Hf4zNKMu7lL+bpPfOJRAUE4ukqSzuUxQ8vZfXU
+            IPIVOcs22dgJ+ndIlYkE+IbzXhonAVb7WJ5Zs05qXtq3JJ4YkGKO4HI6DkDJ7PtN
+            o6aerBYLpQsbKIOw0TzSkm65oYViZyCFTnuJM+Ir3rwRoqy92lMQ88vTK8x9SMMo
+            Ew8cw1iVG1LW/b6XqkAgFHBGsloezFFbDetqDCim8rE5pA8eeGARtjq4BpDcEEyI
+            ym4uMq27PQRDWDOVPionPlhg8FcobLWtipxBo5Pl8ngnLqUwyYzasJCdXRzpmMIG
+            MAk5Vv3z42ulU0N7qtVQDj7P+o4jluHe3rK8HnAqo40skDLYEdn+zoUeqU20DxzU
+            ZgEJAhBlbuo5WLMBV90kTrIm23lfQNGcDdL22dx+MoEfoJyGqOWNgiHUg+8Bqjm5
+            WINX5FDm4ZCHD9DGwiBoWLzR5rUoF8RJrBF4ZcfG7pHn1yrsw4joym519Tejz6VD
+            j3ZjYDMSGw==
+            =KLu8
+            -----END PGP MESSAGE-----
+          fp: 65FFACBA29AFAFECC3F614C8F03D887806414471
+    encrypted_regex: ^(password)$
+    version: 3.9.3

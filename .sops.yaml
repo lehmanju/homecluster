@@ -2,3 +2,8 @@ creation_rules:
   - path_regex: apps/.*\.sops\.ya?ml
     encrypted_regex: "^(data|stringData)$"
     pgp: "65FFACBA29AFAFECC3F614C8F03D887806414471"
+  - path_regex: network/adguardhome\.sops\.ya?ml
+    encrypted_regex: "^(password)$"
+    pgp: "65FFACBA29AFAFECC3F614C8F03D887806414471"
+  - path_regex: network/.*\.sops\.conf
+    pgp: "65FFACBA29AFAFECC3F614C8F03D887806414471"
