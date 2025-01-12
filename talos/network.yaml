@@ -1,0 +1,19 @@
+machine:
+  network:
+    hostname: homecluster
+  features:
+    hostDNS:
+      forwardKubeDNSToHost: false
+cluster:
+  allowSchedulingOnControlPlanes: true
+  network:
+    cni:
+      name: none
+    podSubnets:
+      - 10.244.0.0/16
+      - fd7f:eaef:3150:90:/96
+    serviceSubnets:
+      - 10.96.0.0/12
+      - fd7f:eaef:3150:91:/112
+  proxy: 
+    disabled: true
