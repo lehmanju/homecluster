@@ -1,5 +1,7 @@
 machine:
   install:
+    extraKernelArgs:
+      - usb-storage.quirks=152d:0576:u
     disk: /dev/sda
     # includes mdadm
-    image: factory.talos.dev/installer/c56e9463687298b75c69a6bd97840023af74d712c8f18a3df38a471bdd586024:v1.9.1
+    image: factory.talos.dev/installer/17d49db42ce886cf221cb466187d34481dc653f3f74a3105920798f4d819819a:v1.9.1
