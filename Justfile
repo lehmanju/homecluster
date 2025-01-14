@@ -2,10 +2,9 @@
 @genconfig:
   #!/usr/bin/env bash
   set -euxo pipefail
-  helm dependency build ../kubernetes/apps/infrastructure/cilium
-  chart="$(helm template cilium ../kubernetes/apps/infrastructure/cilium -n kube-system | sed 's/^/        /')"
+  chart="$(helm template cilium cilium/cilium --version 1.16.5 -f ../kubernetes/apps/infrastructure/cilium/values.yaml -n kube-system | sed 's/^/        /')"
   printf "cluster:\n  inlineManifests:\n    - name: cilium\n      contents: |\n%s" "$chart" > cilium.yaml
-  talosctl gen config --force --with-secrets secrets.yaml --config-patch @raspberry.yaml --config-patch @network.yaml --config-patch @cilium.yaml homecluster https://192.168.1.123:6443
+  talosctl gen config --force --with-secrets secrets.yaml --config-patch @raspberry.yaml --config-patch @common.yaml --config-patch @network.yaml --config-patch @cilium.yaml homecluster https://192.168.1.123:6443
 
 [working-directory: 'talos']
 @applyconfig:
@@ -28,7 +27,7 @@ debug:
 
 [working-directory: 'talos']
 @dashboard:
-  talosctl -n 192.168.1.123 -e 192.168.1.123 --talosconfig=./talosconfig dashboard
+  talosctl -n homecluster -e homecluster --talosconfig=./talosconfig dashboard
 
 [working-directory: 'talos']
 @do +AARGS:
