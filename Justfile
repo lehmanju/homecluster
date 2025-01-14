@@ -4,7 +4,7 @@
   set -euxo pipefail
   chart="$(helm template cilium cilium/cilium --version 1.16.5 -f ../kubernetes/apps/infrastructure/cilium/values.yaml -n kube-system | sed 's/^/        /')"
   printf "cluster:\n  inlineManifests:\n    - name: cilium\n      contents: |\n%s" "$chart" > cilium.yaml
-  talosctl gen config --force --with-secrets secrets.yaml --config-patch @raspberry.yaml --config-patch @common.yaml --config-patch @network.yaml --config-patch @cilium.yaml homecluster https://192.168.1.123:6443
+  talosctl gen config --force --with-secrets secrets.yaml --config-patch @raspberry.yaml --config-patch @common.yaml --config-patch @network.yaml --config-patch-control-plane @cilium.yaml homecluster https://192.168.1.123:6443
 
 [working-directory: 'talos']
 @applyconfig:

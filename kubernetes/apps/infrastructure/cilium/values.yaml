@@ -1,16 +1,23 @@
 
-ipv4:
-  enabled: true
+#ipv4:
+ # enabled: true
 
-ipv6:
-  enabled: true
+#ipv6:
+ # enabled: true
 
-ipv6NativeRoutingCIDR: "fd7f:eaef:3150::/48"
+#ipv6NativeRoutingCIDR: "fd7f:eaef:3150::/48"
 
-bpf:
-  masquerade: true
+#bpf:
+ # masquerade: true
+
+hubble:
+  enabled: false
+operator:
+  rollOutPods: true
+rollOutCiliumPods: true
 
 kubeProxyReplacement: true
+kubeProxyReplacementHealthzBindAddr: 0.0.0.0:10256
 
 ipam:
   mode: kubernetes
