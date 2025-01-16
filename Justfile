@@ -30,6 +30,10 @@ debug:
   talosctl -n homecluster -e homecluster --talosconfig=./talosconfig dashboard
 
 [working-directory: 'talos']
+@reset:
+  talosctl -n homecluster -e homecluster --talosconfig=./talosconfig reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --reboot
+
+[working-directory: 'talos']
 @do +AARGS:
   talosctl -n 192.168.1.123 -e 192.168.1.123 --talosconfig=./talosconfig {{ AARGS }}
 
