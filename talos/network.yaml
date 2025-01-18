@@ -3,15 +3,20 @@ machine:
     hostDNS:
       enabled: true
       forwardKubeDNSToHost: false
+  sysctls:
+    net.ipv6.conf.end0.accept_ra: '2'
 cluster:
   network:
     cni: 
       name: none
-#    podSubnets:
-#      - 10.244.0.0/16
-#      - fd7f:eaef:3150:90::/96
-#    serviceSubnets:
-#      - 10.96.0.0/12
-#      - fd7f:eaef:3150:91::/112
+    podSubnets:
+      - 10.244.0.0/16
+      - fd7f:eaef:3150:90::/96
+    serviceSubnets:
+      - 10.96.0.0/12
+      - fd7f:eaef:3150:91::/112
   proxy:
     disabled: true
+  controllerManager:
+    extraArgs:
+      node-cidr-mask-size-ipv6: "96"
