@@ -4,6 +4,8 @@ machine:
       enabled: true
       forwardKubeDNSToHost: false
   sysctls:
+    net.ipv6.conf.all.accept_ra: '2'
+    net.ipv6.conf.default.accept_ra: '2'
     net.ipv6.conf.end0.accept_ra: '2'
 cluster:
   network:
