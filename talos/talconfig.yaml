@@ -2,13 +2,18 @@
 clusterName: homecluster
 talosVersion: v1.9.3
 endpoint: https://cluster.lan:6443
+additionalApiServerCertSans: &sans
+  - cluster.lan
+  - &talosControlplaneVip 192.168.1.20
+  - 127.0.0.1
+additionalMachineCertSans: *sans
 allowSchedulingOnControlPlanes: true
 clusterPodNets:
   - 10.244.0.0/16
   - fd7f:eaef:3171::/96
 clusterSvcNets:
   - 10.96.0.0/12
-  - fd7f:eaef:3172::/96
+  - fd7f:eaef:3172::/112
 cniConfig:
   name: custom
   urls:
@@ -25,7 +30,15 @@ nodes:
         extraKernelArgs:
           - usb-storage.quirks=152d:0576:u
     installDiskSelector:
-      size: 64GB
+      size: <=64GB
+    networkInterfaces:
+      - deviceSelector:
+          physical: true
+        dhcp: true
+        vip:
+          ip: 192.168.1.20
+        addresses:
+          - 192.168.1.21/24
 patches:
   - |-
     machine:
@@ -44,3 +57,14 @@ patches:
       controllerManager:
         extraArgs:
           node-cidr-mask-size-ipv6: "96"
+  - |-
+    machine:
+      kubelet:
+        nodeIP:
+          validSubnets:
+            - 192.168.1.0/24
+  - |-
+    cluster:
+      etcd:
+        advertisedSubnets:
+          - 192.168.1.0/24

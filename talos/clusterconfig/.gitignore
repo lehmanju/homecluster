@@ -1,2 +1,3 @@
 homecluster-raspberrypi-black.yaml
 talosconfig
+cilium.yaml
