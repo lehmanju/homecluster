@@ -1,6 +1,0 @@
-machine:
-  install:
-    extraKernelArgs:
-      - usb-storage.quirks=152d:0576:u
-    disk: /dev/sda
-    image: factory.talos.dev/installer/acc700f5c9eeb99f0d934504b5f8c1186f4fd58947ee91826b5b668fc0609e5c:v1.9.1

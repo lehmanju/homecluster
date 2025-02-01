@@ -1,0 +1,45 @@
+---
+clusterName: homecluster
+talosVersion: v1.9.3
+endpoint: https://cluster.lan:6443
+allowSchedulingOnControlPlanes: true
+clusterPodNets:
+  - 10.244.0.0/16
+  - fd7f:eaef:3171::/96
+clusterSvcNets:
+  - 10.96.0.0/12
+  - fd7f:eaef:3172::/96
+cniConfig:
+  name: none
+nodes:
+  - hostname: raspberrypi-black
+    ipAddress: 192.168.1.21
+    controlPlane: true
+    schematic:
+      overlay:
+        image: siderolabs/sbc-raspberrypi
+        name: rpi_generic
+      customization:
+        extraKernelArgs:
+          - usb-storage.quirks=152d:0576:u
+    installDiskSelector:
+      size: 64GB
+patches:
+  - |-
+    machine:
+      features:
+        hostDNS:
+          enabled: true
+          forwardKubeDNSToHost: false
+      sysctls:
+        net.ipv6.conf.all.accept_ra: '2'
+        net.ipv6.conf.default.accept_ra: '2'
+        net.ipv6.conf.end0.accept_ra: '2'
+  - |-
+    cluster:
+      proxy:
+        disabled: true
+      controllerManager:
+        extraArgs:
+          node-cidr-mask-size-ipv6: "96"
+    
