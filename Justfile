@@ -2,9 +2,10 @@
 @genconfig:
   #!/usr/bin/env bash
   set -euxo pipefail
-  chart="$(helm template cilium cilium/cilium --version 1.16.5 -f ../kubernetes/apps/infrastructure/cilium/values.yaml -n kube-system | sed 's/^/        /')"
-  printf "cluster:\n  inlineManifests:\n    - name: cilium\n      contents: |\n%s" "$chart" > cilium.yaml
-  talosctl gen config --force --with-secrets secrets.yaml --config-patch @raspberry.yaml --config-patch @common.yaml --config-patch @network.yaml --config-patch-control-plane @cilium.yaml homecluster https://192.168.1.123:6443
+  #chart="$(helm template cilium cilium/cilium --version 1.16.5 -f ../kubernetes/apps/infrastructure/cilium/values.yaml -n kube-system | sed 's/^/        /')"
+  #printf "cluster:\n  inlineManifests:\n    - name: cilium\n      contents: |\n%s" "$chart" > cilium.yaml
+  helm template cilium cilium/cilium --version 1.16.5 -f ../kubernetes/apps/infrastructure/cilium/values.yaml -n kube-system > cilium.yaml
+  talhelper genconfig
 
 [working-directory: 'talos']
 @applyconfig:
@@ -13,6 +14,7 @@
 [working-directory: 'talos']  
 @apply:
   talosctl apply-config -n 192.168.1.123 -e 192.168.1.123 --file controlplane.yaml --talosconfig=./talosconfig
+  python3 serve_cilium.py
 
 [working-directory: 'talos']
 @gensecrets:

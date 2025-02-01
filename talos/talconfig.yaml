@@ -10,7 +10,9 @@ clusterSvcNets:
   - 10.96.0.0/12
   - fd7f:eaef:3172::/96
 cniConfig:
-  name: none
+  name: custom
+  urls:
+    - http://provisioner.lan:8000/cilium.yaml
 nodes:
   - hostname: raspberrypi-black
     ipAddress: 192.168.1.21
@@ -42,4 +44,3 @@ patches:
       controllerManager:
         extraArgs:
           node-cidr-mask-size-ipv6: "96"
-    
