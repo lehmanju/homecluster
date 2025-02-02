@@ -5,8 +5,11 @@ ipv4:
 ipv6:
   enabled: true
 
-ipv6NativeRoutingCIDR: "fd7f:eaef:3150::/48"
+ipv6NativeRoutingCIDR: "fd7f:eaef:317::/44"
+ipv4NativeRoutingCIDR: "192.168.1.0/24,10.0.0.0/8"
 enable-ipv6-masquerade: true
+autoDirectNodeRoutes: true
+routing-mode: native
 
 bpf:
   masquerade: true
