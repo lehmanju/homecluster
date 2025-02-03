@@ -26,9 +26,6 @@ nodes:
       overlay:
         image: siderolabs/sbc-raspberrypi
         name: rpi_generic
-      customization:
-        extraKernelArgs:
-          - usb-storage.quirks=152d:0576:u
     installDiskSelector:
       size: <=64GB
     networkInterfaces:
@@ -50,9 +47,7 @@ patches:
           enabled: true
           forwardKubeDNSToHost: false
       sysctls:
-        net.ipv6.conf.all.accept_ra: '2'
-        net.ipv6.conf.default.accept_ra: '2'
-        net.ipv6.conf.end0.accept_ra: '2'
+        net.ipv6.conf.bond0.accept_ra: '2'
   - |-
     cluster:
       proxy:
@@ -60,9 +55,3 @@ patches:
       controllerManager:
         extraArgs:
           node-cidr-mask-size-ipv6: "96"
-  - |-
-    machine:
-      kubelet:
-        nodeIP:
-          validSubnets:
-            - 192.168.1.0/24
