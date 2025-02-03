@@ -5,14 +5,15 @@ ipv4:
 ipv6:
   enabled: true
 
-ipv6NativeRoutingCIDR: "fd7f:eaef:317::/44"
-ipv4NativeRoutingCIDR: "192.168.1.0/24,10.0.0.0/8"
-enable-ipv6-masquerade: true
+ipv6NativeRoutingCIDR: "fd7f:eaef:3171::/96"
+ipv4NativeRoutingCIDR: "10.244.0.0/16"
 autoDirectNodeRoutes: true
-routing-mode: native
+routingMode: native
 
 bpf:
   masquerade: true
+
+devices: bond+
 
 hubble:
   relay:
@@ -21,6 +22,7 @@ hubble:
     enabled: true
 
 kubeProxyReplacement: true
+kubeProxyReplacementHealthzBindAddr: 0.0.0.0:10256
 
 ipam:
   mode: kubernetes
@@ -35,6 +37,8 @@ securityContext:
       - IPC_LOCK
       - SYS_ADMIN
       - SYS_RESOURCE
+      - PERFMON
+      - BPF
       - DAC_OVERRIDE
       - FOWNER
       - SETGID
