@@ -9,17 +9,17 @@ class SingleRequestHandler(SimpleHTTPRequestHandler):
         if self.path == '/cilium.yaml':
             super().do_GET()
             print("File has been downloaded. Shutting down the server.")
-            global done
-            done = True
+            global served
+            served += 1
         else:
             self.send_error(404, "File not found")
 
 if __name__ == "__main__":
     PORT = 8000
     handler = SingleRequestHandler
-    global done
-    done = False
+    global served
+    served = 0
     with HTTPServer(("", PORT), handler) as httpd:
         print(f"Serving cilium.yaml on port {PORT}")
-        while not done:
+        while served < 2:
             httpd.handle_request()
