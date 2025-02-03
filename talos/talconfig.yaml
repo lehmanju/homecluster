@@ -32,8 +32,11 @@ nodes:
     installDiskSelector:
       size: <=64GB
     networkInterfaces:
-      - deviceSelector:
-          physical: true
+      - interface: bond0
+        bond:
+          mode: active-backup
+          deviceSelectors:
+            - hardwareAddr: 2c:cf:67:09:61:85
         dhcp: true
         vip:
           ip: 192.168.1.20
