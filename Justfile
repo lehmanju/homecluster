@@ -1,41 +1,37 @@
 [working-directory: 'talos']
 @genconfig:
-  #!/usr/bin/env bash
-  set -euxo pipefail
-  #chart="$(helm template cilium cilium/cilium --version 1.16.5 -f ../kubernetes/apps/infrastructure/cilium/values.yaml -n kube-system | sed 's/^/        /')"
-  #printf "cluster:\n  inlineManifests:\n    - name: cilium\n      contents: |\n%s" "$chart" > cilium.yaml
-  helm template cilium cilium/cilium --version 1.16.5 -f ../kubernetes/apps/infrastructure/cilium/values.yaml -n kube-system > cilium.yaml
+  helm template cilium cilium/cilium --version 1.16.6 -f ../kubernetes/apps/infrastructure/cilium/values.yaml -n kube-system > clusterconfig/cilium.yaml
   talhelper genconfig
 
-[working-directory: 'talos']
+[working-directory: 'talos/clusterconfig']
 @applyconfig:
-  talosctl apply-config -n 192.168.1.123 --file controlplane.yaml --insecure
+  talosctl apply-config -n 192.168.1.123 --file homecluster-raspberrypi-black.yaml --insecure
 
-[working-directory: 'talos']  
+[working-directory: 'talos/clusterconfig']  
 @apply:
-  talosctl apply-config -n 192.168.1.123 -e 192.168.1.123 --file controlplane.yaml --talosconfig=./talosconfig
-  python3 serve_cilium.py
+  talosctl apply-config -n 192.168.1.123 -e 192.168.1.123 --file homecluster-raspberrypi-black.yaml --talosconfig=./talosconfig
 
 [working-directory: 'talos']
 @gensecrets:
   talosctl gen secrets -o secrets.yaml
 
-[working-directory: 'talos']
+[working-directory: 'talos/clusterconfig']
 @bootstrap:
-  talosctl bootstrap --nodes 192.168.1.123 --endpoints 192.168.1.123 --talosconfig=./talosconfig
+  talosctl bootstrap -n 192.168.1.21 -e 192.168.1.21 --talosconfig=./talosconfig
+  kubectl apply -f cilium.yaml
 
 debug:
-  kubectl debug -n kube-system -it --image ubuntu node/homecluster --profile=sysadmin
+  kubectl debug -n kube-system -it --image busybox node/raspberrypi-black --profile=sysadmin
 
-[working-directory: 'talos']
+[working-directory: 'talos/clusterconfig']
 @dashboard:
-  talosctl -n homecluster -e homecluster --talosconfig=./talosconfig dashboard
+  talosctl -n 192.168.1.21 -e 192.168.1.21 --talosconfig=./talosconfig dashboard
 
-[working-directory: 'talos']
+[working-directory: 'talos/clusterconfig']
 @reset:
-  talosctl -n homecluster -e homecluster --talosconfig=./talosconfig reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --reboot
+  talosctl -n 192.168.1.123 -e 192.168.1.123 --talosconfig=./talosconfig reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --reboot
 
-[working-directory: 'talos']
+[working-directory: 'talos/clusterconfig']
 @do +AARGS:
   talosctl -n 192.168.1.123 -e 192.168.1.123 --talosconfig=./talosconfig {{ AARGS }}
 

@@ -15,9 +15,7 @@ clusterSvcNets:
   - 10.245.0.0/16
   - fd7f:eaef:3172::/112
 cniConfig:
-  name: custom
-  urls:
-    - http://provisioner.lan:8000/cilium.yaml
+  name: none
 nodes:
   - hostname: raspberrypi-black
     ipAddress: 192.168.1.21
@@ -39,6 +37,12 @@ nodes:
           ip: 192.168.1.20
         addresses:
           - 192.168.1.21/24
+    patches:
+      - |-
+        machine:
+          install:
+            extraKernelArgs:
+              - usb-storage.quirks=152d:0576:u
 patches:
   - |-
     machine:
