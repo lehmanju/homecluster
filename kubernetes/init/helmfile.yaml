@@ -29,3 +29,5 @@ releases:
     version: 7.8.0
     values:
       - ../apps/argocd/values.yaml
+    secrets:
+      - gpg-secret.sops.yaml
