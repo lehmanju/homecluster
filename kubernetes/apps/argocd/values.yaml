@@ -16,7 +16,7 @@ repoServer:
     - name: KUSTOMIZE_PLUGIN_HOME
       value: /home/argocd/.config/kustomize/plugin
     - name: SOPS_AGE_KEY_FILE
-      value: /home/argocd/.config/sops/age/keys.txt
+      value: /home/argocd/.config/sops/age/key.txt
 
   volumes:
     - name: custom-tools
@@ -45,6 +45,6 @@ repoServer:
     - mountPath: /home/argocd/.config/kustomize/plugin/viaduct.ai/v1/ksops/ksops
       name: custom-tools
       subPath: ksops
-    - mountPath: /home/argocd/.config/sops/age/keys.txt
+    - mountPath: /home/argocd/.config/sops/age
       name: sops-age
-      subPath: keys.txt
+      readOnly: true
