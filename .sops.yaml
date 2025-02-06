@@ -1,7 +1,8 @@
 creation_rules:
   - path_regex: kubernetes/apps/.*\.sops\.ya?ml
     encrypted_regex: "^(data|stringData)$"
-    pgp: "65FFACBA29AFAFECC3F614C8F03D887806414471"
+    age: >-
+      age1zc4knw29dcgns9zdpyxyx56xsax6s9vsu82sgef3mph56mdr7fusp6v9yh
   - path_regex: kubernetes/init/.*\.sops\.ya?ml
     encrypted_regex: "^(data|stringData)$"
     age: >-

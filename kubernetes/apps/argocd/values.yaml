@@ -12,20 +12,16 @@ configs:
 repoServer:
   env:
     - name: XDG_CONFIG_HOME
-      value: /home/argocd/.config
+      value: /.config
     - name: KUSTOMIZE_PLUGIN_HOME
-      value: /home/argocd/.config/kustomize/plugin
-    - name: GNUPGHOME
-      value: /home/argocd/.gnupg
+      value: /.config/kustomize/plugin
 
   volumes:
     - name: custom-tools
       emptyDir: {}
-    - name: sops-gpg
+    - name: sops-age
       secret:
-        secretName: sops-gpg
-    - name: gnupg-home
-      emptyDir: {}
+        secretName: sops-age
 
   initContainers:
     - name: install-ksops
@@ -39,26 +35,14 @@ repoServer:
       volumeMounts:
         - mountPath: /custom-tools
           name: custom-tools
-    - name: import-gpg-key
-      image: quay.io/argoproj/argocd:v2.13.2
-      command: ["gpg", "--import","/sops-gpg/sops.asc"]
-      env:
-        - name: GNUPGHOME
-          value: /gnupg-home/.gnupg
-      volumeMounts:
-        - mountPath: /sops-gpg
-          name: sops-gpg
-        - mountPath: /gnupg-home
-          name: gnupg-home
 
   volumeMounts:
     - mountPath: /usr/local/bin/kustomize
       name: custom-tools
       subPath: kustomize
-    - mountPath: /home/argocd/.config/kustomize/plugin/viaduct.ai/v1/ksops/ksops
+    - mountPath: /.config/kustomize/plugin/viaduct.ai/v1/ksops/ksops
       name: custom-tools
       subPath: ksops
-    - mountPath: /home/argocd/.gnupg
-      name: gnupg-home
-      subPath: .gnupg
-
+    - mountPath: /.config/sops/age/keys.txt
+      name: sops-age
+      subPath: keys.txt

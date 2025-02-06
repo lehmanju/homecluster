@@ -5,7 +5,6 @@ helmDefaults:
   wait: true
   waitForJobs: true
   timeout: 600
-  recreatePods: true
   force: true
 
 repositories:
@@ -30,4 +29,6 @@ releases:
     values:
       - ../apps/argocd/values.yaml
     secrets:
-      - gpg-secret.sops.yaml
+      - age-secret.sops.yaml
+    needs:
+      - kube-system/cilium
