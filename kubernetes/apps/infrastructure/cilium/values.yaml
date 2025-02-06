@@ -16,10 +16,7 @@ bpf:
 devices: bond+
 
 hubble:
-  relay:
-    enabled: true
-  ui:
-    enabled: true
+  enabled: false
 
 kubeProxyReplacement: true
 kubeProxyReplacementHealthzBindAddr: 0.0.0.0:10256
