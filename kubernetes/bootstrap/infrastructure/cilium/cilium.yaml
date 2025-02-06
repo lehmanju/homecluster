@@ -23,7 +23,7 @@ spec:
     ref: repo
   destination:
     name: in-cluster
-    namespace: cilium
+    namespace: kube-system
   syncPolicy:
     automated:
       prune: false
