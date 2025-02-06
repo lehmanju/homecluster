@@ -1,0 +1,3 @@
+# Cluster initialization
+
+To initialize a fresh Kubernetes cluster, run `helmfile apply`. This install cilium first and argo-cd afterwards. `age-secret.sops.yaml` contains the secret key that allows argo-cd to decrypt secrets stored in `apps/` via ksops. This secret is injected via `extraObjects` into argo-cd's helm deployment. Once argo-cd is running, cilium and argo-cd are managed via GitOps. The secret is not managed.
