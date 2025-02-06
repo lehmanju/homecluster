@@ -20,6 +20,7 @@ spec:
     - repoURL: https://github.com/lehmanju/homecluster
       path: kubernetes/apps/argocd
       targetRevision: main
+      ref: repo
   destination:
     name: in-cluster
     namespace: argocd
