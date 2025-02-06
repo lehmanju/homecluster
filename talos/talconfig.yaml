@@ -37,12 +37,6 @@ nodes:
           ip: 192.168.1.20
         addresses:
           - 192.168.1.21/24
-    patches:
-      - |-
-        machine:
-          install:
-            extraKernelArgs:
-              - usb-storage.quirks=152d:0576:u
 patches:
   - |-
     machine:
