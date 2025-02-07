@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rook-ceph
+  namespace: rook-ceph
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/sync-wave: '1'
+spec:
+  project: default
+  sources:
+  - chart: rook-ceph
+    repoURL: https://charts.rook.io/
+    targetRevision: v1.16.3
+    helm:
+      valueFiles:
+      - $repo/kubernetes/apps/infrastructure/rook-ceph/operator/values.yaml
+      releaseName: rook-ceph
+  - repoURL: https://github.com/lehmanju/homecluster
+    path: kubernetes/apps/infrastructure/rook-ceph/operator
+    targetRevision: main
+    ref: repo
+  destination:
+    name: in-cluster
+    namespace: rook-ceph
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true
