@@ -3,12 +3,8 @@ crds:
 csi:
   cephFSKernelMountOptions: ms_mode=prefer-crc
   enableLiveness: true
-  serviceMonitor:
-    enabled: true
   provisionerReplicas: 1
 enableDiscoveryDaemon: true
-monitoring:
-  enabled: true
 resources:
   requests:
     memory: 128Mi
