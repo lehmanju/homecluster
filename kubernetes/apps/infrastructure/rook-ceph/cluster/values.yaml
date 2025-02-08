@@ -10,7 +10,10 @@ cephClusterSpec:
     enabled: true
     urlPrefix: /
     ssl: false
+  mon:
+    count: 1
   mgr:
+    count: 1
     modules:
       - name: pg_autoscaler
         enabled: true
