@@ -22,6 +22,11 @@ nodes:
       overlay:
         image: siderolabs/sbc-raspberrypi
         name: rpi_generic
+      customization:
+        systemExtensions:
+          officialExtensions:
+            - siderolabs/iscsi-tools
+            - siderolabs/util-linux-tools
     installDiskSelector:
       size: <=64GB
     networkInterfaces:
@@ -39,17 +44,6 @@ nodes:
       - device: /dev/disk/by-id/ata-CT1000MX500SSD1_2114E59353BB
         partitions:
           - mountpoint: /var/mnt/extra
-
-controlPlane:
-  schematic:
-    customization:
-      systemExtensions:
-        officialExtensions:
-          - siderolabs/i915
-          - siderolabs/intel-ucode
-          - siderolabs/iscsi-tools
-          - siderolabs/util-linux-tools
-
 patches:
   - |-
     machine:
