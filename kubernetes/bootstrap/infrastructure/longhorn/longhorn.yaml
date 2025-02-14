@@ -22,7 +22,7 @@ spec:
       targetRevision: main
       ref: repo
   destination:
-    server: in-cluster
+    name: in-cluster
     namespace: longhorn-system
   syncPolicy:
     automated:
