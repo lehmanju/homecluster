@@ -14,8 +14,6 @@ clusterPodNets:
 clusterSvcNets:
   - 10.245.0.0/16
   - fd7f:eaef:3172::/112
-cniConfig:
-  name: none
 nodes:
   - hostname: raspberrypi-black
     ipAddress: 192.168.1.21
@@ -40,16 +38,10 @@ nodes:
 patches:
   - |-
     machine:
-      features:
-        hostDNS:
-          enabled: true
-          forwardKubeDNSToHost: false
       sysctls:
         net.ipv6.conf.bond0.accept_ra: '2'
   - |-
     cluster:
-      proxy:
-        disabled: true
       controllerManager:
         extraArgs:
           node-cidr-mask-size-ipv6: "96"
