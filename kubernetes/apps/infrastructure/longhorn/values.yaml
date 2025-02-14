@@ -1,0 +1,4 @@
+defaultSettings:
+  defaultDataPath: /var/mnt/extra/longhorn
+  defaultLonghornStaticStorageClass: longhorn
+  storageReservedPercentageForDefaultDisk: 10
