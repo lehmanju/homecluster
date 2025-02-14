@@ -39,6 +39,17 @@ nodes:
       - device: /dev/disk/by-id/ata-CT1000MX500SSD1_2114E59353BB
         partitions:
           - mountpoint: /var/mnt/extra
+
+controlPlane:
+  schematic:
+    customization:
+      systemExtensions:
+        officialExtensions:
+          - siderolabs/i915
+          - siderolabs/intel-ucode
+          - siderolabs/iscsi-tools
+          - siderolabs/util-linux-tools
+
 patches:
   - |-
     machine:
