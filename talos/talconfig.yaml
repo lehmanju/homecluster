@@ -35,11 +35,21 @@ nodes:
           ip: 192.168.1.20
         addresses:
           - 192.168.1.21/24
+    machineDisks:
+      - device: /dev/disk/by-id/ata-CT1000MX500SSD1_2114E59353BB
+        partitions:
+          - mountpoint: /var/mnt/extra
 patches:
   - |-
     machine:
       sysctls:
         net.ipv6.conf.bond0.accept_ra: '2'
+      kubelet:
+        extraMounts:
+          - destination: /var/mnt/extra
+            type: bind
+            source: /var/mnt/extra
+            options: ["bind", "rshared", "rw"]
   - |-
     cluster:
       controllerManager:
