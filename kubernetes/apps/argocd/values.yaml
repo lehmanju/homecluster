@@ -11,6 +11,7 @@ configs:
     kustomize.buildOptions: '--enable-helm --enable-alpha-plugins --enable-exec'
   params:
     server.insecure: "true"
+    server.disable.auth: "true"
 
 repoServer:
   env:
