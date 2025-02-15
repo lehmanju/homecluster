@@ -29,6 +29,8 @@ nodes:
           officialExtensions:
             - siderolabs/iscsi-tools
             - siderolabs/util-linux-tools
+        extraKernelArgs:
+          - usb-storage.quirks=174c:1153:u
     installDiskSelector:
       size: <=64GB
     networkInterfaces:
