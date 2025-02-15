@@ -3,6 +3,9 @@ global:
     - name: TZ
       value: Europe/Berlin
 
+  dualStack:
+    ipFamilyPolicy: PreferDualStack
+
 configs:
   cm:
     kustomize.buildOptions: '--enable-helm --enable-alpha-plugins --enable-exec'
@@ -48,6 +51,3 @@ repoServer:
     - mountPath: /home/argocd/.config/sops/age
       name: sops-age
       readOnly: true
-
-dualStack:
-  ipFamilyPolicy: PreferDualStack
