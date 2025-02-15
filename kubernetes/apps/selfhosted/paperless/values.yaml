@@ -3,9 +3,6 @@
 
 controllers:
   paperless:
-    annotations:
-      reloader.stakater.com/auto: "true"
-
     containers:
       app:
         image:
@@ -25,15 +22,11 @@ controllers:
           PAPERLESS_TASK_WORKERS: "2"
           PAPERLESS_DATA_DIR: /data/local/data
           PAPERLESS_MEDIA_ROOT: /data/local/media
-          # Configure folder importer
-          PAPERLESS_CONSUMER_POLLING: "60"
-          PAPERLESS_CONSUMER_RECURSIVE: "true"
-          PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS: "true"
           # Configure OCR
           PAPERLESS_OCR_LANGUAGES: de
           PAPERLESS_OCR_LANGUAGE: de
           # Configure redis integration
-          PAPERLESS_REDIS: redis://paperless-redis.selfhosted.svc.cluster.local:6379
+          PAPERLESS_REDIS: redis://paperless-redis.paperless.svc.cluster.local:6379
           # Configure admin user
           PAPERLESS_ADMIN_USER:
             valueFrom:
