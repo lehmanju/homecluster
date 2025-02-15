@@ -48,3 +48,6 @@ repoServer:
     - mountPath: /home/argocd/.config/sops/age
       name: sops-age
       readOnly: true
+
+dualStack:
+  ipFamilyPolicy: PreferDualStack
