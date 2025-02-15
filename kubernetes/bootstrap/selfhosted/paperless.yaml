@@ -15,7 +15,7 @@ spec:
     targetRevision: 3.7.1
     helm:
       valueFiles:
-      - $repo/cluster/apps/selfhosted/paperless/values.yaml
+      - $repo/kubernetes/apps/selfhosted/paperless/values.yaml
       releaseName: paperless
   - repoURL: https://github.com/lehmanju/homecluster
     path: kubernetes/apps/selfhosted/paperless
