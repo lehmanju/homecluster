@@ -65,3 +65,4 @@ operator:
 ingressController:
   enabled: true
   loadbalancerMode: shared
+  service.allocateLoadBalancerNodePorts: false
