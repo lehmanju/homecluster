@@ -29,8 +29,6 @@ nodes:
           officialExtensions:
             - siderolabs/iscsi-tools
             - siderolabs/util-linux-tools
-        extraKernelArgs:
-          - usb-storage.quirks=174c:1153:u
     installDiskSelector:
       size: <=64GB
     networkInterfaces:
@@ -41,13 +39,69 @@ nodes:
             - hardwareAddr: 2c:cf:67:09:61:85
         dhcp: true
         vip:
-          ip: 192.168.1.20
+          ip: *talosControlplaneVip
         addresses:
-          - 192.168.1.21/24
+          - 192.168.1.21
     machineDisks:
       - device: /dev/disk/by-id/ata-CT1000MX500SSD1_2114E59353BB
         partitions:
           - mountpoint: /var/mnt/extra
+    patches:
+      - |-
+        machine:
+          kubelet:
+            extraMounts:
+              - destination: /var/mnt/extra
+                type: bind
+                source: /var/mnt/extra
+                options: ["bind", "rshared", "rw"]
+  - hostname: matebook
+    ipAddress: 192.168.1.22
+    controlPlane: true
+    schematic:
+      customization:
+        systemExtensions:
+          officialExtensions:
+            - siderolabs/amd-ucode
+            - siderolabs/usb-modem-drivers
+            - siderolabs/iscsi-tools
+            - siderolabs/util-linux-tools
+    installDiskSelector:
+      size: <=64GB
+    networkInterfaces:
+      - interface: bond0
+        bond:
+          mode: active-backup
+          deviceSelectors:
+            - hardwareAddr: c8:a3:62:a9:18:62
+        dhcp: true
+        vip:
+          ip: *talosControlplaneVip
+        addresses:
+          - 192.168.1.22
+  - hostname: minipc
+    ipAddress: 192.168.1.23
+    controlPlane: true
+    schematic:
+      customization:
+        systemExtensions:
+          officialExtensions:
+            - siderolabs/amd-ucode
+            - siderolabs/iscsi-tools
+            - siderolabs/util-linux-tools
+    installDiskSelector:
+      size: <=64GB
+    networkInterfaces:
+      - interface: bond0
+        bond:
+          mode: active-backup
+          deviceSelectors:
+            - hardwareAddr: b0:41:6f:14:7c:c5
+        dhcp: true
+        vip:
+          ip: *talosControlplaneVip
+        addresses:
+          - 192.168.1.23
 patches:
   - |-
     machine:
@@ -57,12 +111,6 @@ patches:
           forwardKubeDNSToHost: false
       sysctls:
         net.ipv6.conf.bond0.accept_ra: '2'
-      kubelet:
-        extraMounts:
-          - destination: /var/mnt/extra
-            type: bind
-            source: /var/mnt/extra
-            options: ["bind", "rshared", "rw"]
   - |-
     cluster:
       proxy:
