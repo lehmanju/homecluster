@@ -5,8 +5,8 @@ ipv4:
 ipv6:
   enabled: true
 
-ipv6NativeRoutingCIDR: "fd7f:eaef:3171::/96"
-ipv4NativeRoutingCIDR: "10.244.0.0/16"
+ipv6NativeRoutingCIDR: "fd7f:eaef:3171::/96,fd7f:eaef:3170::/96"
+ipv4NativeRoutingCIDR: "10.244.0.0/16,10.243.0.0/16"
 autoDirectNodeRoutes: true
 routingMode: native
 
