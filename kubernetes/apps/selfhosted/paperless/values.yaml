@@ -15,7 +15,7 @@ controllers:
               secretKeyRef:
                 name: paperless-secret
                 key: PAPERLESS_SECRET_KEY
-          PAPERLESS_URL: https://paperless.cluster.devpi.de
+          PAPERLESS_URL: https://paperless.lan
           PAPERLESS_PORT: "8000"
           PAPERLESS_TIME_ZONE: "Europe/Berlin"
           PAPERLESS_WEBSERVER_WORKERS: "2"
@@ -84,7 +84,7 @@ ingress:
   app:
     className: "cilium"
     hosts:
-      - host: paperless.cluster.devpi.de
+      - host: paperless.lan
         paths:
           - path: /
             service:
