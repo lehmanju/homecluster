@@ -82,7 +82,7 @@ service:
 
 ingress:
   app:
-    className: "cilium"
+    className: "nginx"
     hosts:
       - host: paperless.lan
         paths:
