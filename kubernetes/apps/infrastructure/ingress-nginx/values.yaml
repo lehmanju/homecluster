@@ -1,6 +1,6 @@
 controller:
   replicaCount: 1
-  
+
   config:
     annotations-risk-level: Critical
     block-user-agents: "AdsBot-Google,Amazonbot,anthropic-ai,Applebot-Extended,Bytespider,CCBot,ChatGPT-User,ClaudeBot,Claude-Web,cohere-ai,Diffbot,FacebookBot,FriendlyCrawler,Google-Extended,GoogleOther,GPTBot,img2dataset,omgili,omgilibot,peer39_crawler,peer39_crawler/1.0,PerplexityBot,YouBot," # taken from https://github.com/ai-robots-txt/ai.robots.txt
@@ -28,13 +28,6 @@ controller:
     proxy-buffer-size: "16k"
     ssl-protocols: "TLSv1.3 TLSv1.2"
     use-forwarded-headers: "true"
-
-  metrics:
-    enabled: true
-    serviceMonitor:
-      enabled: true
-      namespaceSelector:
-        any: true
   
   resources:
     requests:
