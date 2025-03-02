@@ -10,13 +10,13 @@ metadata:
 spec:
   project: default
   sources:
-  - chart: cilium
+  - chart: ingress-nginx
     repoURL: https://kubernetes.github.io/ingress-nginx
     targetRevision: 4.12.0
     helm:
       valueFiles:
       - $repo/kubernetes/apps/infrastructure/ingress-nginx/values.yaml
-      releaseName: cilium
+      releaseName: ingress-nginx
   - repoURL: https://github.com/lehmanju/homecluster
     path: kubernetes/apps/infrastructure/ingress-nginx
     targetRevision: main
