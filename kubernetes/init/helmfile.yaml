@@ -9,18 +9,13 @@ helmDefaults:
   force: true
 
 repositories:
-  - name: cilium
-    url: https://helm.cilium.io
   - name: argo
     url: https://argoproj.github.io/argo-helm
 
 releases:
   - name: cilium
     namespace: kube-system
-    chart: cilium/cilium
-    version: 1.17.0
-    values:
-      - ../apps/infrastructure/cilium/values.yaml
+    chart: ../apps/infrastructure/cilium
 
   - name: argocd
     namespace: argocd

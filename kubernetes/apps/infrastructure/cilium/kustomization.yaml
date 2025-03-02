@@ -2,6 +2,12 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+helmCharts:
+- name: argo-cd
+  repo: https://helm.cilium.io
+  version: 1.17.1
+  releaseName: cilium
+  valuesFile: values.yaml
 resources:
   - ./pool.yaml
 patches:

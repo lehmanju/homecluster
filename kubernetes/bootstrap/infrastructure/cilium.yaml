@@ -10,13 +10,6 @@ metadata:
 spec:
   project: default
   sources:
-  - chart: cilium
-    repoURL: https://helm.cilium.io
-    targetRevision: 1.17.0
-    helm:
-      valueFiles:
-      - $repo/kubernetes/apps/infrastructure/cilium/values.yaml
-      releaseName: cilium
   - repoURL: https://github.com/lehmanju/homecluster
     path: kubernetes/apps/infrastructure/cilium
     targetRevision: main
