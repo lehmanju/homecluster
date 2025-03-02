@@ -17,21 +17,6 @@ spec:
       valueFiles:
       - $repo/kubernetes/apps/infrastructure/cilium/values.yaml
       releaseName: cilium
-    kustomize:
-      patches:
-        - target:
-            kind: Service
-            name: cilium-ingress
-          patch: |-
-            - op: replace
-              path: /spec/ipFamilies
-              value:
-                - IPv4
-                - IPv6
-            - op: replace
-              path: /spec/ipFamilyPolicy
-              value:
-                PreferDualStack
   - repoURL: https://github.com/lehmanju/homecluster
     path: kubernetes/apps/infrastructure/cilium
     targetRevision: main
