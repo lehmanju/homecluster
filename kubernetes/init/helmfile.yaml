@@ -4,17 +4,23 @@
 helmDefaults:
   wait: true
   waitForJobs: true
-  timeout: 600
+  timeout: 900
   force: true
+  atomic: true
 
 repositories:
+  - name: cilium
+    url: https://helm.cilium.io
   - name: argo
     url: https://argoproj.github.io/argo-helm
 
 releases:
   - name: cilium
     namespace: kube-system
-    chart: ../apps/infrastructure/cilium
+    chart: cilium/cilium
+    version: 1.17.1
+    values:
+      - ../apps/infrastructure/cilium/values.yaml
 
   - name: argocd
     namespace: argocd
