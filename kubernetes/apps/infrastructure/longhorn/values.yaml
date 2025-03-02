@@ -2,3 +2,5 @@ defaultSettings:
   defaultDataPath: /var/mnt/extra/longhorn
   defaultLonghornStaticStorageClass: longhorn
   storageReservedPercentageForDefaultDisk: 10
+preUpgradeChecker:
+  jobEnabled: false
