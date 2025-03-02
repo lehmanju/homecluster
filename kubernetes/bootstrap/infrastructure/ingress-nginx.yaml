@@ -23,7 +23,7 @@ spec:
     ref: repo
   destination:
     name: in-cluster
-    namespace: kube-system
+    namespace: ingress-nginx
   syncPolicy:
     automated:
       prune: false
