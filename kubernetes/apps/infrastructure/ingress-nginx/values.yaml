@@ -35,5 +35,9 @@ controller:
     limits:
       memory: 500Mi
 
+  service:
+    ipFamilyPolicy: PreferDualStack
+    ipFamilies: [IPv4, IPv6]
+
 defaultBackend:
   enabled: false
