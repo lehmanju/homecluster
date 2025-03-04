@@ -1,0 +1,9 @@
+apiVersion: cilium.io/v2alpha1
+kind: CiliumGatewayClassConfig
+metadata:
+  name: cilium-gateway-config
+spec:
+  service:
+    type: LoadBalancer
+    ipFamilyPolicy: PreferDualStack
+    ipFamilies: [IPv4, IPv6]
