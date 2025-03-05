@@ -15,5 +15,6 @@ spec:
         namespaces:
           from: Same
       tls:
+        mode: Terminate
         certificateRefs:
           - name: paperless-cert
