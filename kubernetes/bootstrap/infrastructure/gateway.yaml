@@ -12,7 +12,7 @@ spec:
   sources:
   - repoURL: https://github.com/kubernetes-sigs/gateway-api
     targetRevision: v1.2.1
-    path: config/crd/standard
+    path: config/crd/experimental
   destination:
     name: in-cluster
     namespace: kube-system
