@@ -84,6 +84,7 @@ route:
   main:
     parentRefs:
       - name: paperless-web
+        namespace: paperless
     hostnames:
       - paperless.lan
     rules:
