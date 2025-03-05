@@ -80,16 +80,21 @@ service:
       http:
         port: 6379
 
-ingress:
-  app:
-    className: "nginx"
-    hosts:
-      - host: paperless.lan
-        paths:
-          - path: /
-            service:
-              identifier: app
-              port: http
+route:
+  main:
+    parentRefs:
+      - name: paperless-web
+    hostnames:
+      - paperless.lan
+    rules:
+      - matches:
+          - path:
+              type: PathPrefix
+              value: /
+        backendRefs:
+          - kind: Service
+            port: 80
+            name: app
 
 persistence:
   data:
