@@ -101,11 +101,7 @@ route:
     hostnames:
       - paperless.lan
     rules:
-      - backendRefs:
-          - kind: Service
-            port: 80
-            name: app
-        filters:
+      - filters:
         - type: RequestRedirect
           requestRedirect:
             scheme: https
