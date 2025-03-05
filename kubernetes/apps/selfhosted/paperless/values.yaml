@@ -106,6 +106,10 @@ route:
           requestRedirect:
             scheme: https
             statusCode: 301
+        backendRefs:
+        - kind: Service
+          port: 80
+          name: app
 
 
 persistence:
