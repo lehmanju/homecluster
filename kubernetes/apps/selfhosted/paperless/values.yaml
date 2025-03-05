@@ -85,17 +85,28 @@ route:
     parentRefs:
       - name: paperless-web
         namespace: paperless
+        sectionName: https
     hostnames:
       - paperless.lan
     rules:
-      - matches:
-          - path:
-              type: PathPrefix
-              value: /
-        backendRefs:
+      - backendRefs:
           - kind: Service
             port: 80
             name: app
+  redirect:
+    parentRefs:
+      - name: paperless-web
+        namespace: paperless
+        sectionName: http
+    hostnames:
+      - paperless.lan
+    rules:
+      - filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            statusCode: 301
+
 
 persistence:
   data:
