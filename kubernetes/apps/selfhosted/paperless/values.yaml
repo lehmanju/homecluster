@@ -93,19 +93,10 @@ route:
           - kind: Service
             port: 80
             name: app
-  redirect:
-    parentRefs:
-      - name: paperless-web
-        namespace: paperless
-        sectionName: http
-    hostnames:
-      - paperless.lan
-    rules:
-      - filters:
-        - type: RequestRedirect
-          requestRedirect:
-            scheme: https
-            statusCode: 301
+        matches:
+          - path:
+              type: PathPrefix
+              value: /
 
 
 persistence:
