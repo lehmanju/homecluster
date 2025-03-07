@@ -30,13 +30,20 @@ metadata:
   name: paperless-redirect
 spec:
   parentRefs:
-    - name: paperless-web
-      sectionName: http
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: paperless-web
+      namespace: paperless
+      sectionName: "http"
   hostnames:
-    - paperless.lan
+    - "paperless.lan"
   rules:
   - filters:
       - requestRedirect:
           scheme: https
           statusCode: 301
         type: RequestRedirect
+    matches:
+      - path:
+          type: PathPrefix
+          value: /
