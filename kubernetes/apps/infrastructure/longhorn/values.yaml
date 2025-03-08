@@ -4,5 +4,7 @@ defaultSettings:
   storageReservedPercentageForDefaultDisk: 10
   replicaSoftAntiAffinity: true
   replicaDiskSoftAntiAffinity: false
+  replicaAutoBalance: least-effort
+  defaultClassReplicaCount: 2
 preUpgradeChecker:
   jobEnabled: false
