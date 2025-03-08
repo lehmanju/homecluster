@@ -27,11 +27,14 @@
 
 [working-directory: 'talos/clusterconfig']
 @reset:
-  talosctl -n 192.168.1.21 -e 192.168.1.20 --talosconfig=./talosconfig reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --reboot
+  talosctl -n 192.168.1.21 -e 192.168.1.21 --talosconfig=./talosconfig reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --reboot
 
 [working-directory: 'talos/clusterconfig']
 @do +AARGS:
-  talosctl -n 192.168.1.21 -e 192.168.1.21 --talosconfig=./talosconfig {{ AARGS }}
+  talosctl -n 192.168.1.123 -e 192.168.1.123 --talosconfig=./talosconfig {{ AARGS }}
 
 forward-argocd:
   kubectl port-forward svc/argocd-server -n argocd 13000:80
+
+forward-longhorn:
+  kubectl port-forward svc/longhorn-frontend -n longhorn-system 13001:80
