@@ -4,7 +4,7 @@ metadata:
     name: dynv6-api-token
 type: Opaque
 data:
-    api-token: ENC[AES256_GCM,data:S/6ICzNKr+ZifGbDXSEZPpa/HKfmINApFLWzcaCcamQm/Q2gVkDR+f/q0+zOftYPMnICfDXfJ/jAAvmoXwNvqJ9lgUNzb70MP3HxvymQCjdOqUghzOrFXjbN1r/DqFN/WmyKD2iyx18Q8eqyRP55P7kFeNLP+g8+,iv:KN57HvcEYdglQHPC0iJxrvWDA1zfxLIBXlFWWWJMInA=,tag:M6FOEDetdS6lwOQqU1qBRA==,type:str]
+    api-token: ENC[AES256_GCM,data:W9V7bxz4cbKJefhMLvth0cjvqV+/VOMFaVuB4LHxiYS3VXcVPxk9DxVWnNlikQwByd06aKV7EorLLDR6uuqCZMQlmXbsRIdJ0Zv+qP4RJPUGItIBZaqRqHfGGpAvF9+Jh6NMGp7NeDBVfcdAYCI7bQ5jXhHGqZqv,iv:2tG/2hUnKZpuRpftacKWMHVcS13fLRTsjGwx76PVXpk=,tag:7wuzWYL/msSpGUo45H9Jxg==,type:str]
 sops:
     kms: []
     gcp_kms: []
@@ -14,14 +14,14 @@ sops:
         - recipient: age1zc4knw29dcgns9zdpyxyx56xsax6s9vsu82sgef3mph56mdr7fusp6v9yh
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBqMmdEQnNtckVkdnNsc0ZE
-            S2cxYjhYUStqdjVyQlRZS1RkYWtuUi9uWlhVCk43S0Exb1o5OEU3MjlKRmNYSVdE
-            VUZNdjNtVkF1cHBHMTRsSFppV3A0ZXcKLS0tIEpmcUcrS3pnYkEwenROVUppTzZT
-            TkFXVnQ4VHNkRFE0QWdvTDRXWmtOeUEKQ9Xv5t9EvMpNg/nspOCWYB7aWpqF8cRk
-            kSiKTsm6B/sOJfSSxn8S/o+kPWWTpyOQ2UHk87Anph4UgQESlPJZdg==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB6UUx0RTFSczhPNVVmM2xU
+            L2RScGVRNDJReVkvZFFaMm4wWUtneVBTVkQ4CkJmMU9FTmVmak9RQzhsTmNoTEM5
+            YktCOXgvdXZZUDZkdlFyK2xWK0M4Z1kKLS0tIHlOYmZma2NsTnJvYjFxdEFqUDRO
+            UHpUL3U4YUVaTW82Zlk3Y213Sm10N2sKIyR2xk+JzrK8c6PP8P/eI4PN8tDtzYxL
+            bDdjpYGbxSU65dcgzLDebTs8cHNqMvhcJrXLxgQkB6W53OZzcv1lXw==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-03-08T16:39:36Z"
-    mac: ENC[AES256_GCM,data:W9tWMJ+NyAMUNSj7LBakKPQEcZCTRDwb9EpNemdUfhvPxaOHfHm5yAYuRvi4y1nXNOKIlwmCF8RriRDV7YznDg2JrRPQX+L7NmHEfvS3MJ4LK5vwI91LWyw/VlNl1DoGI+WtPeWEGdImkzjQUeEM3wLjDYhu5r8yvxCD2w/FA+8=,iv:zCbRbSxslz8tuGSuBk4U6Kahl6dyZ5NIjTmcVb+Pdw0=,tag:4jsRPrPCd8aUsEH/ah24mQ==,type:str]
+    lastmodified: "2025-03-08T17:19:44Z"
+    mac: ENC[AES256_GCM,data:IAtjf9aKXOv07ZQYl9pgt3vqtmbi4WUEOrl8VSHTZsF/COXcaXHtfJlG+fkv/nx0rXMSNUoZNJwWjDp491L0U3sdJuUzjJRmtPcAmedw20PpNZHYaBcYDXyGUdGl8qtUiDsEDdGDAL969kYdUgNbHKFo2r6nFn3lI27RFWw0MhY=,iv:JD54uN4Y/OQMBuqEjSdN38Ry9D+oJRlkbU+qomcBEBI=,tag:oukkiqiIpIZR5aKOsvcW1g==,type:str]
     pgp: []
     encrypted_regex: ^(data|stringData)$
     version: 3.9.4

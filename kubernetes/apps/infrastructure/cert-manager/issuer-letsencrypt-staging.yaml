@@ -13,7 +13,7 @@ spec:
           rfc2136:
             nameserver: ns1.dynv6.com
             tsigKeyName: tsig-908498.dynv6.com
-            tsigAlgorithm: HMACSHA512
+            tsigAlgorithm: HMACSHA256
             tsigSecretSecretRef:
               name: dynv6-api-token
               key: api-token
