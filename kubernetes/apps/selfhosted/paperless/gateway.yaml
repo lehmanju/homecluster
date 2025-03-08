@@ -40,7 +40,7 @@ spec:
       namespace: paperless
       sectionName: "http"
   hostnames:
-    - "archive.devpi.de"
+    - "archiv.devpi.de"
   rules:
   - filters:
       - requestRedirect:
