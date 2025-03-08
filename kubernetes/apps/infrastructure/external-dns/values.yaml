@@ -15,7 +15,7 @@ provider:
       - name: LOG_LEVEL
         value: debug
       - name: ADGUARD_URL
-        value: http://192.168.1.1
+        value: http://192.168.1.1:8080
       - name: ADGUARD_USER
         value: admin
       - name: ADGUARD_PASSWORD
