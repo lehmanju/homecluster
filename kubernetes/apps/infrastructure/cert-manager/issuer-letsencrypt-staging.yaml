@@ -5,8 +5,6 @@ metadata:
   namespace: cert-manager
 spec:
   acme:
-    email: lehmanju@devpi.de
-    preferredChain: ""
     privateKeySecretRef:
       name: letsencrypt-staging
     server: https://acme-staging-v02.api.letsencrypt.org/directory
@@ -19,6 +17,7 @@ spec:
             tsigSecretSecretRef:
               name: dynv6-api-token
               key: api-token
+          cnameStrategy: Follow
         selector:
           dnsZones:
-            - testcluster.v6.navy
+            - devpi.de
