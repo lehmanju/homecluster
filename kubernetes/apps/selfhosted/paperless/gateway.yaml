@@ -10,14 +10,14 @@ spec:
     - name: http
       protocol: HTTP
       port: 80
-      hostname: "paperless.lan"
+      hostname: "doc"
       allowedRoutes:
         namespaces:
           from: Same
     - name: https
       protocol: HTTPS
       port: 443
-      hostname: "paperless.lan"
+      hostname: "archiv.devpi.de"
       allowedRoutes:
         namespaces:
           from: Same
@@ -40,7 +40,7 @@ spec:
       namespace: paperless
       sectionName: "http"
   hostnames:
-    - "paperless.lan"
+    - "archive.devpi.de"
   rules:
   - filters:
       - requestRedirect:

@@ -15,7 +15,7 @@ controllers:
               secretKeyRef:
                 name: paperless-secret
                 key: PAPERLESS_SECRET_KEY
-          PAPERLESS_URL: https://paperless.lan
+          PAPERLESS_URL: https://archiv.devpi.de
           PAPERLESS_PORT: "8000"
           PAPERLESS_TIME_ZONE: "Europe/Berlin"
           PAPERLESS_WEBSERVER_WORKERS: "2"
@@ -87,7 +87,7 @@ route:
         namespace: paperless
         sectionName: https
     hostnames:
-      - paperless.lan
+      - archiv.devpi.de
     rules:
       - backendRefs:
           - kind: Service
