@@ -17,6 +17,7 @@ spec:
           group: ''
           port: 80
           name: argocd-server
+          weight: 1
       matches:
         - path:
             type: PathPrefix
