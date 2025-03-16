@@ -83,8 +83,8 @@ service:
 route:
   main:
     parentRefs:
-      - name: paperless-web
-        namespace: paperless
+      - name: web-internal
+        namespace: kube-system
         sectionName: https
     hostnames:
       - archiv.devpi.de
