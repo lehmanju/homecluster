@@ -1,0 +1,41 @@
+{
+    $schema: "https://docs.renovatebot.com/renovate-schema.json",
+    packageRules: [
+      {
+        description: "Cert-Manager Group",
+        groupName: "Cert-Manager",
+        matchDatasources: ["docker"],
+        matchPackageNames: ["/cert-manager/"],
+        group: {
+          commitMessageTopic: "{{{groupName}}} group",
+        },
+      },
+      {
+        description: "Cilium Group",
+        groupName: "Cilium",
+        matchDatasources: ["docker"],
+        matchPackageNames: ["/cilium/"],
+        group: {
+          commitMessageTopic: "{{{groupName}}} group",
+        },
+      },
+      {
+        description: "ArgoCD Group",
+        groupName: "ArgoCD",
+        matchDatasources: ["docker"],
+        matchPackageNames: ["/argocd/"],
+        group: {
+          commitMessageTopic: "{{{groupName}}} group",
+        },
+      },
+      {
+        description: "Longhorn Group",
+        groupName: "Longhorn",
+        matchDatasources: ["docker"],
+        matchPackageNames: ["/longhorn/"],
+        group: {
+          commitMessageTopic: "{{{groupName}}} group",
+        },
+      },
+    ],
+  }
