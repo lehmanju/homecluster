@@ -91,7 +91,7 @@ route:
     rules:
       - backendRefs:
           - kind: Service
-            port: 80
+            port: 8000
             name: app
         matches:
           - path:
