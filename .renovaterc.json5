@@ -18,7 +18,7 @@
   dependencyDashboardTitle: "Renovate Dashboard 🤖",
   suppressNotifications: ["prEditedNotification", "prIgnoreNotification"],
   ignorePaths: ["network/**"],
-  flux: {
+  argocd: {
     fileMatch: ["(^|/)kubernetes/.+\\.ya?ml$"],
   },
   "helm-values": {
