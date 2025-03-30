@@ -31,13 +31,13 @@ provider:
     livenessProbe:
       httpGet:
         path: /healthz
-        port: 8080
+        port: healthz
       initialDelaySeconds: 10
       timeoutSeconds: 5
     readinessProbe:
       httpGet:
         path: /healthz
-        port: 8080
+        port: healthz
       initialDelaySeconds: 10
       timeoutSeconds: 5
     securityContext:
@@ -49,7 +49,6 @@ resources:
   limits:
     memory: 90M
 sources:
-  - ingress
   - service
   - gateway-httproute
 triggerLoopOnEvent: true
