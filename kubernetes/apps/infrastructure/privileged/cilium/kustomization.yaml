@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ./pool.yaml
+  - ./gatewayconfig.yaml
+  - ./gateway.yaml
+helmCharts:
+  - name: cilium
+    repo: https://helm.cilium.io
+    version: 1.18.0-pre.1
+    releaseName: cilium
+    valuesFile: ./values.yaml

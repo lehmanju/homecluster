@@ -3,8 +3,8 @@ kind: Kustomization
 generators:
   - ./secret-generator.yaml
 helmCharts:
-  - name: app-template
-    repo: https://bjw-s.github.io/helm-charts/
-    version: 3.7.3
-    releaseName: app-template
+  - name: external-dns
+    repo: https://kubernetes-sigs.github.io/external-dns
+    version: 1.15.2
+    releaseName: external-dns
     valuesFile: ./values.yaml

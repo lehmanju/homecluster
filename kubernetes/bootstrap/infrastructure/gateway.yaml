@@ -4,15 +4,15 @@ metadata:
   name: gateway
   namespace: argocd
   finalizers:
-  - resources-finalizer.argocd.argoproj.io
+    - resources-finalizer.argocd.argoproj.io
   annotations:
-    argocd.argoproj.io/sync-wave: '0'
+    argocd.argoproj.io/sync-wave: "0"
 spec:
   project: default
   sources:
-  - repoURL: https://github.com/kubernetes-sigs/gateway-api
-    targetRevision: v1.2.1
-    path: config/crd/experimental
+    - repoURL: https://github.com/kubernetes-sigs/gateway-api
+      targetRevision: v1.2.1
+      path: config/crd/experimental
   destination:
     name: in-cluster
     namespace: kube-system
@@ -21,6 +21,5 @@ spec:
       prune: false
       selfHeal: true
     syncOptions:
-    - CreateNamespace=true
-    - ServerSideApply=true
-
+      - CreateNamespace=true
+      - ServerSideApply=true
