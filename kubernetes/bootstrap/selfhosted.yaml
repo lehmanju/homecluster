@@ -11,7 +11,7 @@ spec:
         repoURL: https://github.com/lehmanju/homecluster.git
         revision: HEAD
         files:
-          - path: kubernetes/apps/infrastructure/privileged/**/argocd-app-config.yaml
+          - path: kubernetes/apps/selfhosted/**/argocd-app-config.yaml
   template:
     metadata:
       name: "{{.path.basename}}"
