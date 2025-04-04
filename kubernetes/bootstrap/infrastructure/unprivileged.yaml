@@ -14,7 +14,7 @@ spec:
           - path: kubernetes/apps/infrastructure/unprivileged/*
   template:
     metadata:
-      name: "{{.path.basename}}"
+      name: argocd
       finalizers:
         - resources-finalizer.argocd.argoproj.io
       annotations:
