@@ -1,0 +1,4 @@
+helm:
+  releaseName: app-template
+  version: 3.7.3
+  repo: https://bjw-s.github.io/helm-charts/

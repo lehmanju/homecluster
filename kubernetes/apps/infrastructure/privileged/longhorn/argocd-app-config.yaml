@@ -1,0 +1,4 @@
+helm:
+  releaseName: longhorn
+  version: 1.8.1
+  repo: https://charts.longhorn.io

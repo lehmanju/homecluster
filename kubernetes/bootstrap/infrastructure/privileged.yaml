@@ -10,8 +10,8 @@ spec:
     - git:
         repoURL: https://github.com/lehmanju/homecluster.git
         revision: HEAD
-        directories:
-          - path: kubernetes/apps/infrastructure/privileged/*
+        files:
+          - path: kubernetes/apps/infrastructure/privileged/**/argocd-app-config.yaml
   template:
     metadata:
       name: "{{.path.basename}}"
@@ -28,6 +28,14 @@ spec:
           path: "{{.path.path}}"
           kustomize:
             namespace: "{{.path.basename}}"
+          ref: repo
+        - chart: "{{.helm.releaseName}}"
+          repoURL: "{{.helm.repo}}"
+          targetRevision: "{{.helm.version}}"
+          helm:
+            valueFiles:
+              - $repo/{{.path.path}}/values.yaml
+            releaseName: "{{.helm.releaseName}}"
       destination:
         name: in-cluster
         namespace: "{{.path.basename}}"

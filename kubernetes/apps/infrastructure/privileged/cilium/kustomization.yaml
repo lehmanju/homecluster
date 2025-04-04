@@ -4,9 +4,3 @@ resources:
   - ./pool.yaml
   - ./gatewayconfig.yaml
   - ./gateway.yaml
-helmCharts:
-  - name: cilium
-    repo: https://helm.cilium.io
-    version: 1.18.0-pre.0
-    releaseName: cilium
-    valuesFile: ./values.yaml

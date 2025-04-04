@@ -1,0 +1,4 @@
+helm:
+  releaseName: cilium
+  version: 1.18.0-pre.0
+  repo: https://helm.cilium.io
