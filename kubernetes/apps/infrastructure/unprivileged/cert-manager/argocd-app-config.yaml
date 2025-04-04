@@ -1,0 +1,4 @@
+helm:
+  releaseName: cert-manager
+  version: v1.17.1
+  repo: https://charts.jetstack.io

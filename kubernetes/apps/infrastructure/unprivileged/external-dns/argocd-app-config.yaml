@@ -1,0 +1,4 @@
+helm:
+  releaseName: external-dns
+  version: 1.15.2
+  repo: https://kubernetes-sigs.github.io/external-dns
