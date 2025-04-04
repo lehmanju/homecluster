@@ -20,7 +20,7 @@ releases:
     chart: cilium/cilium
     version: 1.18.0-pre.0
     values:
-      - ../apps/infrastructure/privileged/cilium/values.yaml
+      - ../apps/infrastructure/cilium/values.yaml
 
   - name: argocd
     namespace: argocd
