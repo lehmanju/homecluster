@@ -29,7 +29,7 @@ spec:
           kustomize:
             namespace: "{{.path.basename}}"
           ref: repo
-        - chart: "{{.helm.releaseName}}"
+        - chart: "{{.helm.chart}}"
           repoURL: "{{.helm.repo}}"
           targetRevision: "{{.helm.version}}"
           helm:
