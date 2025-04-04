@@ -118,3 +118,16 @@ patches:
       controllerManager:
         extraArgs:
           node-cidr-mask-size-ipv6: "96"
+  - |-
+    cluster:
+      inlineManifests:
+        - name: cilium-namespace-privileged
+          contents: |
+            ---
+            apiVersion: v1
+            kind: Namespace
+            metadata:
+              name: kube-system
+              labels:
+                pod-security.kubernetes.io/enforce: privileged
+            ---
