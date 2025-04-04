@@ -14,7 +14,8 @@ spec:
           - path: kubernetes/apps/selfhosted/*
   template:
     metadata:
-      name: argocd
+      name: "{{.path.basename}}"
+      namespace: argocd
       finalizers:
         - resources-finalizer.argocd.argoproj.io
       annotations:
