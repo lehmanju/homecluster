@@ -84,7 +84,7 @@ route:
   main:
     parentRefs:
       - name: web-internal
-        namespace: cilium
+        namespace: kube-system
         sectionName: https
     hostnames:
       - archiv.devpi.de

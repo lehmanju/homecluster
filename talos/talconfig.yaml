@@ -1,6 +1,6 @@
 ---
 clusterName: homecluster
-talosVersion: v1.9.4
+talosVersion: v1.9.5
 endpoint: https://cluster.lan:6443
 additionalApiServerCertSans: &sans
   - cluster.lan

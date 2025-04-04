@@ -7,7 +7,7 @@ spec:
     - group: gateway.networking.k8s.io
       kind: Gateway
       name: web-internal
-      namespace: cilium
+      namespace: kube-system
       sectionName: https
   hostnames:
     - storage.devpi.de
