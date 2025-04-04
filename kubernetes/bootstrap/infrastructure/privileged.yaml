@@ -26,6 +26,8 @@ spec:
         - repoURL: https://github.com/lehmanju/homecluster.git
           targetRevision: HEAD
           path: "{{.path.path}}"
+          kustomize:
+            namespace: "{{.path.basename}}"
       destination:
         name: in-cluster
         namespace: "{{.path.basename}}"
