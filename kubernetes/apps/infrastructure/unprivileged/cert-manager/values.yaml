@@ -3,12 +3,8 @@ crds:
 
 dns01RecursiveNameserversOnly: true
 dns01RecursiveNameservers: "https://9.9.9.9:443/dns-query,https://1.1.1.1:443/dns-query,https://1.0.0.1:443/dns-query"
-ingressShim:
-  defaultIssuerName: letsencrypt-staging
-  defaultIssuerKind: ClusterIssuer
 
-startupapicheck:
-  enabled: false
+replicaCount: 1
 
 config:
   apiVersion: controller.config.cert-manager.io/v1alpha1
