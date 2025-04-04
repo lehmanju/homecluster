@@ -23,7 +23,7 @@ spec:
       project: default
       sources:
         - repoURL: https://github.com/lehmanju/homecluster.git
-          revision: HEAD
+          targetRevision: HEAD
           path: "{{.path.path}}"
       destination:
         name: in-cluster
