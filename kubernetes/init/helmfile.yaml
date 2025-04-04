@@ -16,7 +16,8 @@ repositories:
 
 releases:
   - name: cilium
-    namespace: kube-system
+    namespace: cilium
+    createNamespace: false
     chart: cilium/cilium
     version: 1.18.0-pre.0
     values:
@@ -32,4 +33,4 @@ releases:
     secrets:
       - age-secret.sops.yaml
     needs:
-      - kube-system/cilium
+      - cilium/cilium
