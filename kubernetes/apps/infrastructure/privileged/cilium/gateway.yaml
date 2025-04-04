@@ -39,17 +39,17 @@ spec:
     - group: gateway.networking.k8s.io
       kind: Gateway
       name: web-internal
-      namespace: kube-system
+      namespace: cilium
       sectionName: "http"
   hostnames:
     - "*.devpi.de"
   rules:
-  - filters:
-      - requestRedirect:
-          scheme: https
-          statusCode: 301
-        type: RequestRedirect
-    matches:
-      - path:
-          type: PathPrefix
-          value: /
+    - filters:
+        - requestRedirect:
+            scheme: https
+            statusCode: 301
+          type: RequestRedirect
+      matches:
+        - path:
+            type: PathPrefix
+            value: /

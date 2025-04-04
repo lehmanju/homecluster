@@ -4,17 +4,17 @@ metadata:
   name: longhorn-main
 spec:
   parentRefs:
-      - group: gateway.networking.k8s.io
-        kind: Gateway
-        name: web-internal
-        namespace: kube-system
-        sectionName: https
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: web-internal
+      namespace: cilium
+      sectionName: https
   hostnames:
     - storage.devpi.de
   rules:
     - backendRefs:
         - kind: Service
-          group: ''
+          group: ""
           port: 80
           name: longhorn-frontend
           weight: 1
