@@ -61,3 +61,6 @@ gatewayAPI:
 
 operator:
   replicas: 1
+
+cni:
+  exclusive: false
