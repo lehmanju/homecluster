@@ -8,6 +8,7 @@
     "github>lehmanju/homecluster//.renovate/groups.json5",
     "github>lehmanju/homecluster//.renovate/labels.json5",
     "github>lehmanju/homecluster//.renovate/semanticCommits.json5",
+    "github>lehmanju/homecluster//.renovate/customManagers.json5",
     ":automergeBranch",
     ":dependencyDashboard",
     ":disableRateLimiting",
@@ -16,15 +17,26 @@
     ":timezone(Europe/Berlin)",
   ],
   dependencyDashboardTitle: "Renovate Dashboard 🤖",
-  suppressNotifications: ["prEditedNotification", "prIgnoreNotification"],
-  ignorePaths: ["network/**"],
+  suppressNotifications: [
+    "prEditedNotification",
+    "prIgnoreNotification"
+  ],
+  ignorePaths: [
+    "network/**"
+  ],
   argocd: {
-    fileMatch: ["(^|/)kubernetes/.+\\.ya?ml$"],
+    fileMatch: [
+      "(^|/)kubernetes/.+\\.ya?ml$"
+    ],
   },
   "helm-values": {
-    fileMatch: ["(^|/)kubernetes/.+\\.ya?ml$"],
+    fileMatch: [
+      "(^|/)kubernetes/.+\\.ya?ml$"
+    ],
   },
   kubernetes: {
-    fileMatch: ["(^|/)kubernetes/.+\\.ya?ml$"],
+    fileMatch: [
+      "(^|/)kubernetes/.+\\.ya?ml$"
+    ],
   },
 }

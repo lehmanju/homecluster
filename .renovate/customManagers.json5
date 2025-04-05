@@ -1,0 +1,17 @@
+{
+    $schema: "https://docs.renovatebot.com/renovate-schema.json",
+    customManagers: [
+        {
+            customType: "jsonata",
+            description: "Process helm charts in argocd-app-config.yaml",
+            fileFormat: "yaml",
+            fileMatch: [
+                "(^|/)argocd-app-config\\.ya?ml$"
+            ],
+            matchStrings: [
+                'helm.{ "depName": chart, "currentValue": version, "registryUrl": repo }'
+            ],
+            datasourceTemplate: "helm",
+        },
+    ],
+}
