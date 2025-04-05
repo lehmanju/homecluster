@@ -1,0 +1,114 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/refs/heads/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+
+controllers:
+  home-assistant:
+    containers:
+      app:
+        image:
+          repository: ghcr.io/home-operations/home-assistant
+          tag: 2025.4.1@sha256:9495fb2aff6e56e13bf8ccc8f57b6e931b37c44ea1ffef69f6ee3fc5a951633a
+        env:
+          TZ: Europe/Berlin
+        resources:
+          requests:
+            cpu: 10m
+          limits:
+            memory: 800M
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities: { drop: ["ALL"] }
+      codeserver:
+        image:
+          repository: ghcr.io/coder/code-server
+          tag: 4.98.2@sha256:9ed588a05d4e81aa464e753a409bc3b2b93267323d1c3975fbddf6f9aef84c26
+        env:
+          TZ: Europe/Berlin
+        args:
+          [
+            "--auth",
+            "none",
+            "--user-data-dir",
+            "/config/.vscode",
+            "--extensions-dir",
+            "/config/.vscode",
+            "--port",
+            "12321",
+            "/config",
+          ]
+        resources:
+          requests:
+            cpu: 10m
+          limits:
+            memory: 512Mi
+defaultPodOptions:
+  annotations:
+    k8s.v1.cni.cncf.io/networks: |
+      [{
+        "name": "multus-iot",
+        "interface": "eth1",
+        "namespace": "multus",
+        "ips": ["192.168.1.45/24"]
+      }]
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 568
+    runAsGroup: 568
+    fsGroup: 568
+    fsGroupChangePolicy: OnRootMismatch
+persistence:
+  config:
+    type: persistentVolumeClaim
+    accessMode: ReadWriteOnce
+    size: 1Gi
+    retain: true
+  config-logs:
+    type: emptyDir
+    globalMounts:
+      - path: /config/logs
+  config-tts:
+    type: emptyDir
+    globalMounts:
+      - path: /config/tts
+  tmp:
+    type: emptyDir
+route:
+  app:
+    hostnames:
+      - hass.devpi.de
+    parentRefs:
+      - name: web-internal
+        namespace: cilium
+        sectionName: https
+    rules:
+      - backendRefs:
+          - name: home-assistant
+            port: &port 8123
+        matches:
+          - path:
+              type: PathPrefix
+              value: /
+  codeserver:
+    hostnames:
+      - hass-code.devpi.de
+    parentRefs:
+      - name: web-internal
+        namespace: cilium
+        sectionName: https
+    rules:
+      - backendRefs:
+          - name: home-assistant
+            port: &code-port 12321
+        matches:
+          - path:
+              type: PathPrefix
+              value: /
+service:
+  app:
+    controller: home-assistant
+    ports:
+      http:
+        port: *port
+      codeserver:
+        port: *code-port
