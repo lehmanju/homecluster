@@ -24,20 +24,18 @@ provider:
             name: external-dns-adguardhome-secret
             key: external_dns_password
     ports:
-      - containerPort: 8888
-        name: http
       - containerPort: 8080
-        name: healthz
+        name: http-webhook
     livenessProbe:
       httpGet:
         path: /healthz
-        port: 8080
+        port: http-webhook
       initialDelaySeconds: 10
       timeoutSeconds: 5
     readinessProbe:
       httpGet:
         path: /healthz
-        port: 8080
+        port: http-webhook
       initialDelaySeconds: 10
       timeoutSeconds: 5
     securityContext:
