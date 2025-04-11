@@ -1,0 +1,111 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/refs/heads/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+
+controllers:
+  evcc:
+    containers:
+      main:
+        image:
+          repository: evcc/evcc
+          tag: 0.202.1@sha256:a05d4916bbd237ed45125a3a90a76d87dcbfa250ca49a1176eeb8b81751501c8
+        resources:
+          limits:
+            memory: 128Mi
+          requests:
+            cpu: 10m
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities: { drop: ["ALL"] }
+      codeserver:
+        image:
+          repository: ghcr.io/coder/code-server
+          tag: 4.98.2@sha256:9ed588a05d4e81aa464e753a409bc3b2b93267323d1c3975fbddf6f9aef84c26
+        env:
+          TZ: Europe/Berlin
+        args:
+          [
+            "--auth",
+            "none",
+            "--user-data-dir",
+            "/config/.vscode",
+            "--extensions-dir",
+            "/config/.vscode",
+            "--port",
+            "12321",
+            "/etc/evcc.yaml",
+          ]
+        resources:
+          requests:
+            cpu: 10m
+          limits:
+            memory: 512Mi
+
+defaultPodOptions:
+  annotations:
+    k8s.v1.cni.cncf.io/networks: |
+      [{
+        "name": "multus-iot",
+        "interface": "eth1",
+        "namespace": "multus",
+        "ips": ["192.168.1.46/24"]
+      }]
+
+service:
+  app:
+    controller: evcc
+    ports:
+      http:
+        port: &port 7070
+      codeserver:
+        port: &code-port 12321
+
+persistence:
+  config:
+    type: persistentVolumeClaim
+    accessMode: ReadWriteOnce
+    size: 10Gi
+    retain: true
+    globalMounts:
+      - path: /root/.evcc
+  config-file:
+    type: persistentVolumeClaim
+    accessMode: ReadWriteOnce
+    size: 50Mi
+    retain: true
+    globalMounts:
+      - path: /etc/evcc.yaml
+        subPath: evcc.yaml
+        readOnly: false
+
+route:
+  app:
+    hostnames:
+      - evcc.devpi.de
+    parentRefs:
+      - name: web-internal
+        namespace: cilium
+        sectionName: https
+    rules:
+      - backendRefs:
+          - name: evcc
+            port: *port
+        matches:
+          - path:
+              type: PathPrefix
+              value: /
+  codeserver:
+    hostnames:
+      - evcc-code.devpi.de
+    parentRefs:
+      - name: web-internal
+        namespace: cilium
+        sectionName: https
+    rules:
+      - backendRefs:
+          - name: evcc
+            port: *code-port
+        matches:
+          - path:
+              type: PathPrefix
+              value: /
