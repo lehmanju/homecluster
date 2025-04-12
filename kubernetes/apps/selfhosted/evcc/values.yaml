@@ -8,15 +8,12 @@ controllers:
         image:
           repository: evcc/evcc
           tag: 0.202.1@sha256:a05d4916bbd237ed45125a3a90a76d87dcbfa250ca49a1176eeb8b81751501c8
+        args: ["-c", "/config/evcc.yaml", "--disable-auth"]
         resources:
           limits:
             memory: 128Mi
           requests:
             cpu: 10m
-        securityContext:
-          allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: true
-          capabilities: { drop: ["ALL"] }
       codeserver:
         image:
           repository: ghcr.io/coder/code-server
@@ -33,7 +30,7 @@ controllers:
             "/config/.vscode",
             "--port",
             "12321",
-            "/etc/evcc.yaml",
+            "/config",
           ]
         resources:
           requests:
@@ -50,6 +47,12 @@ defaultPodOptions:
         "namespace": "multus",
         "ips": ["192.168.1.46/24"]
       }]
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 568
+    runAsGroup: 568
+    fsGroup: 568
+    fsGroupChangePolicy: OnRootMismatch
 
 service:
   app:
@@ -66,17 +69,6 @@ persistence:
     accessMode: ReadWriteOnce
     size: 10Gi
     retain: true
-    globalMounts:
-      - path: /root/.evcc
-  config-file:
-    type: persistentVolumeClaim
-    accessMode: ReadWriteOnce
-    size: 50Mi
-    retain: true
-    globalMounts:
-      - path: /etc/evcc.yaml
-        subPath: evcc.yaml
-        readOnly: false
 
 route:
   app:
