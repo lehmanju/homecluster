@@ -1,0 +1,23 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+  namespace: cert-manager
+spec:
+  acme:
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    server: https://acme-v02.api.letsencrypt.org/directory
+    solvers:
+      - dns01:
+          rfc2136:
+            nameserver: ns1.dynv6.com
+            tsigKeyName: tsig-908498.dynv6.com
+            tsigAlgorithm: HMACSHA256
+            tsigSecretSecretRef:
+              name: dynv6-api-token
+              key: api-token
+          cnameStrategy: Follow
+        selector:
+          dnsZones:
+            - devpi.de

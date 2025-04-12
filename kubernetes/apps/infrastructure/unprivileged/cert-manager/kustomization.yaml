@@ -4,3 +4,4 @@ generators:
   - ./secret-generator.yaml
 resources:
   - ./issuer-letsencrypt-staging.yaml
+  - ./issuer-letsencrypt-prod.yaml
