@@ -14,29 +14,14 @@ controllers:
             memory: 128Mi
           requests:
             cpu: 10m
-      codeserver:
-        image:
-          repository: ghcr.io/coder/code-server
-          tag: 4.99.2@sha256:6b5fcf74bb19579ca1666c8f96ac406ca5146a5c8756963a10991c4e520fa085
-        env:
-          TZ: Europe/Berlin
-        args:
-          [
-            "--auth",
-            "none",
-            "--user-data-dir",
-            "/config/.vscode",
-            "--extensions-dir",
-            "/config/.vscode",
-            "--port",
-            "12321",
-            "/config",
-          ]
-        resources:
-          requests:
-            cpu: 10m
-          limits:
-            memory: 512Mi
+
+configMaps:
+  evcc-config:
+    data:
+      evcc.yaml: |
+        database:
+          type: sqlite
+          dsn: /data/evcc.db
 
 defaultPodOptions:
   annotations:
@@ -64,11 +49,18 @@ service:
         port: &code-port 12321
 
 persistence:
-  config:
+  data:
     type: persistentVolumeClaim
     accessMode: ReadWriteOnce
     size: 10Gi
     retain: true
+    globalMounts:
+      - path: /data
+  config:
+    type: configMap
+    identifier: evcc-config
+    globalMounts:
+      - path: /config
 
 route:
   app:
@@ -82,21 +74,6 @@ route:
       - backendRefs:
           - name: evcc
             port: *port
-        matches:
-          - path:
-              type: PathPrefix
-              value: /
-  codeserver:
-    hostnames:
-      - evcc-code.devpi.de
-    parentRefs:
-      - name: web-internal
-        namespace: cilium
-        sectionName: https
-    rules:
-      - backendRefs:
-          - name: evcc
-            port: *code-port
         matches:
           - path:
               type: PathPrefix
