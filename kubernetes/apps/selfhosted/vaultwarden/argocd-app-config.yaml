@@ -1,0 +1,5 @@
+helm:
+  chart: app-template
+  releaseName: vaultwarden
+  version: 3.7.3
+  repo: https://bjw-s.github.io/helm-charts/
