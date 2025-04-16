@@ -1,0 +1,42 @@
+replicaCount: 1
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 256Mi
+  requests:
+    cpu: 10m
+
+persistence:
+  enabled: false
+
+existingSecret: postfix-secret
+
+recreateOnRedeploy: false
+
+config:
+  general:
+    ALLOWED_SENDER_DOMAINS: devpi.de
+    RELAYHOST: smtp.goneo.de:587
+    RELAYHOST_USERNAME: server@devpi.de
+
+service:
+  type: LoadBalancer
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: sendmail.devpi.de
+
+startupProbe:
+  exec:
+    command:
+      - sh
+      - -c
+      - >-
+        exit 0
+
+livenessProbe:
+  exec:
+    command:
+      - sh
+      - -c
+      - >-
+        exit 0
