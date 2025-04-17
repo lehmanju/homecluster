@@ -45,8 +45,6 @@ service:
     ports:
       http:
         port: &port 7070
-      codeserver:
-        port: &code-port 12321
 
 persistence:
   data:
