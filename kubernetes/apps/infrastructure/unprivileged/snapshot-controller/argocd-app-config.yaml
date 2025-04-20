@@ -1,0 +1,5 @@
+helm:
+  chart: snapshot-controller
+  releaseName: snapshot-controller
+  version: 4.0.2
+  repo: https://piraeus.io/helm-charts/

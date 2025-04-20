@@ -1,0 +1,15 @@
+manageCRDs: true
+image:
+  repository: ghcr.io/home-operations/volsync
+
+rclone:
+  repository: ghcr.io/home-operations/volsync
+
+restic:
+  repository: ghcr.io/home-operations/volsync
+
+rsync:
+  repository: ghcr.io/home-operations/volsync
+
+rsync-tls:
+  repository: ghcr.io/home-operations/volsync
