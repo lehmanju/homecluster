@@ -11,7 +11,7 @@ spec:
   project: default
   sources:
     - repoURL: https://github.com/kubernetes-sigs/gateway-api
-      targetRevision: v1.2.1
+      targetRevision: v1.3.0
       path: config/crd/experimental
   destination:
     name: in-cluster
