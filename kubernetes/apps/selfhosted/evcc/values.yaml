@@ -6,8 +6,8 @@ controllers:
     containers:
       main:
         image:
-          repository: evcc/evcc
-          tag: 0.203.4@sha256:1286fbb0c6b57d6f066ef5b4879b0d0c4c92df8ff5b5b6d039d4f98cea20a27e
+          repository: ghcr.io/lehmanju/evcc
+          tag: testing@sha256:d599c04239e23b6194d5a15ce63c932a23ce3e96ad17db326e8a608035bd65dd
         args: ["-c", "/config/evcc.yaml", "--disable-auth"]
         resources:
           limits:
