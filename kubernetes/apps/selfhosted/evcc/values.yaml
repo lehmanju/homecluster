@@ -7,7 +7,7 @@ controllers:
       main:
         image:
           repository: ghcr.io/lehmanju/evcc
-          tag: testing@sha256:d599c04239e23b6194d5a15ce63c932a23ce3e96ad17db326e8a608035bd65dd
+          tag: testing@sha256:b6682132a954174dc0442fecdd719197a27f9325d0cc03bbaf1bbe0cf2659adb
         args: ["-c", "/config/evcc.yaml", "--disable-auth"]
         resources:
           limits:
