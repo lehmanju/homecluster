@@ -4,3 +4,6 @@ resources:
   - ./pool.yaml
   - ./gatewayconfig.yaml
   - ./gateway-http.yaml
+  - ./netbird-routing-peer.yaml
+generators:
+  - ./secret-generator.yaml
