@@ -1,5 +1,5 @@
 helm:
   chart: app-template
   releaseName: paperless
-  version: 3.7.3
+  version: 4.0.1
   repo: https://bjw-s-labs.github.io/helm-charts
