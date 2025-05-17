@@ -8,4 +8,4 @@ spec:
   allowFirstLastIPs: "No"
   blocks:
     - cidr: 10.243.0.0/16
-    - cidr: fd7f:eaef:3170::/96
+#    - cidr: fd7f:eaef:3170::/96
