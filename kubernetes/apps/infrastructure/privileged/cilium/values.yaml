@@ -1,4 +1,3 @@
-
 ipv4:
   enabled: true
 
@@ -16,7 +15,11 @@ bpf:
 devices: bond+
 
 hubble:
-  enabled: false
+  enabled: true
+  ui:
+    enabled: true
+  relay:
+    enabled: true
 
 kubeProxyReplacement: true
 kubeProxyReplacementHealthzBindAddr: 0.0.0.0:10256
