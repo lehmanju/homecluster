@@ -7,7 +7,7 @@ controllers:
       main:
         image:
           repository: docker.io/evcc/evcc
-          tag: nightly@sha256:b3c62f4bf3958674bc28f821f1a80f7c9a8c15ede126991b214c43a9da8e86a1
+          tag: nightly@sha256:e1cb2a85ce656b385079c0822bfc7eab7f6b0d2489b778ad9b071be227888c20
         args: ["-c", "/config/evcc.yaml", "--disable-auth"]
         resources:
           limits:
