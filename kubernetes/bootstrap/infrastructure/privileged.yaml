@@ -46,6 +46,11 @@ spec:
         syncOptions:
           - CreateNamespace=true
           - ServerSideApply=true
+          - RespectIgnoreDifferences=true
         managedNamespaceMetadata:
           labels:
             pod-security.kubernetes.io/enforce: privileged
+      ignoreDifferences:
+        - kind: CustomResourceDefinition
+          jsonPointers:
+            - /spec/preserveUnknownFields
