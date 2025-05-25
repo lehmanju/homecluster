@@ -1,5 +1,0 @@
-helm:
-  chart: volsync
-  releaseName: volsync
-  version: 0.12.1
-  repo: https://backube.github.io/helm-charts
