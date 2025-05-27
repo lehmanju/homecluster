@@ -22,6 +22,8 @@ controllers:
             memory: 32Mi
         securityContext:
           privileged: true
+    serviceAccount:
+      identifier: multus
 defaultPodOptions:
   hostNetwork: true
 persistence:
