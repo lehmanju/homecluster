@@ -15,7 +15,7 @@ controllers:
               secretKeyRef:
                 name: paperless-secret
                 key: PAPERLESS_SECRET_KEY
-          PAPERLESS_URL: https://archiv.devpi.de
+          PAPERLESS_URL: https://paperless.devpi.de
           PAPERLESS_PORT: "8000"
           PAPERLESS_TIME_ZONE: "Europe/Berlin"
           PAPERLESS_WEBSERVER_WORKERS: "2"
@@ -26,11 +26,13 @@ controllers:
           PAPERLESS_OCR_LANGUAGE: deu+eng
           PAPERLESS_EMAIL_TASK_CRON: "*/2 * * * *"
           PAPERLESS_FILENAME_FORMAT: "{created_year}/{correspondent}/{title}"
-          PAPERLESS_OCR_USER_ARGS: "{\"invalidate_digital_signatures\": true}"
+          PAPERLESS_OCR_USER_ARGS: '{"invalidate_digital_signatures": true}'
           # Configure redis integration
           PAPERLESS_REDIS: redis://paperless-redis.paperless.svc.cluster.local:6379
           # Configure postgres integration
           PAPERLESS_DBHOST: paperless-postgres.paperless.svc.cluster.local
+          PAPERLESS_DBNAME: paperless
+          PAPERLESS_DBUSER: paperless
           PAPERLESS_DBPASS:
             valueFrom:
               secretKeyRef:
@@ -117,18 +119,17 @@ service:
         port: 5432
 
 route:
-  main:
+  app:
     parentRefs:
       - name: web-internal
         namespace: cilium
         sectionName: https
     hostnames:
-      - archiv.devpi.de
+      - paperless.devpi.de
     rules:
       - backendRefs:
-          - kind: Service
-            port: 8000
-            name: app
+          - port: 8000
+            name: paperless-app
         matches:
           - path:
               type: PathPrefix
