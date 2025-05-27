@@ -23,10 +23,19 @@ controllers:
           PAPERLESS_DATA_DIR: /data/local/data
           PAPERLESS_MEDIA_ROOT: /data/local/media
           # Configure OCR
-          PAPERLESS_OCR_LANGUAGES: deu+eng
           PAPERLESS_OCR_LANGUAGE: deu+eng
+          PAPERLESS_EMAIL_TASK_CRON: "*/2 * * * *"
+          PAPERLESS_FILENAME_FORMAT: "{created_year}/{correspondent}/{title}"
+          PAPERLESS_OCR_USER_ARGS: "{\"invalidate_digital_signatures\": true}"
           # Configure redis integration
           PAPERLESS_REDIS: redis://paperless-redis.paperless.svc.cluster.local:6379
+          # Configure postgres integration
+          PAPERLESS_DBHOST: paperless-postgres.paperless.svc.cluster.local
+          PAPERLESS_DBPASS:
+            valueFrom:
+              secretKeyRef:
+                name: paperless-secret
+                key: PAPERLESS_POSTGRES_PASSWORD
           # Configure admin user
           PAPERLESS_ADMIN_USER:
             valueFrom:
@@ -46,6 +55,7 @@ controllers:
           startup:
             enabled: true
             spec:
+              initialDelaySeconds: 30
               failureThreshold: 30
               periodSeconds: 5
         resources:
@@ -68,6 +78,27 @@ controllers:
           limits:
             memory: 128Mi
 
+  postgres:
+    containers:
+      postgres:
+        image:
+          repository: docker.io/postgres
+          tag: 15.4
+        env:
+          POSTGRES_DB: paperless
+          POSTGRES_USER: paperless
+          POSTGRES_PASSWORD:
+            valueFrom:
+              secretKeyRef:
+                name: paperless-secret
+                key: PAPERLESS_POSTGRES_PASSWORD
+        resources:
+          requests:
+            cpu: 10m
+            memory: 128Mi
+          limits:
+            memory: 512Mi
+
 service:
   app:
     controller: paperless
@@ -79,6 +110,11 @@ service:
     ports:
       http:
         port: 6379
+  postgres:
+    controller: postgres
+    ports:
+      http:
+        port: 5432
 
 route:
   main:
@@ -100,8 +136,14 @@ route:
 
 persistence:
   data:
-    existingClaim: paperless-data-a
+    existingClaim: paperless-data-b
     advancedMounts:
       paperless:
         app:
           - path: /data/local
+  db:
+    existingClaim: paperless-db-a
+    advancedMounts:
+      postgres:
+        postgres:
+          - path: /var/lib/postgresql/data
