@@ -61,10 +61,7 @@ defaultPodOptions:
 
 persistence:
   config:
-    type: persistentVolumeClaim
-    accessMode: ReadWriteOnce
-    size: 20Gi
-    retain: true
+    existingClaim: homeassistant-data-a
   config-logs:
     type: emptyDir
     globalMounts:

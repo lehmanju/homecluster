@@ -48,10 +48,7 @@ service:
 
 persistence:
   data:
-    type: persistentVolumeClaim
-    accessMode: ReadWriteOnce
-    size: 10Gi
-    retain: true
+    existingClaim: evcc-data-a
     globalMounts:
       - path: /data
   config:
