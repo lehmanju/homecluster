@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -o xtrace
+#set -o xtrace
 set -m
 
 # args: namespace pvc
