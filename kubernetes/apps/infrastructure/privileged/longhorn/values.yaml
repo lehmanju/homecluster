@@ -5,6 +5,7 @@ defaultSettings:
   replicaSoftAntiAffinity: true
   replicaDiskSoftAntiAffinity: false
   replicaAutoBalance: least-effort
+  createDefaultDiskLabeledNodes: true
 preUpgradeChecker:
   jobEnabled: false
 persistence:
