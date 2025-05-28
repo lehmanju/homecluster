@@ -1,6 +1,9 @@
 ---
 clusterName: homecluster
+# renovate: depName=ghcr.io/siderolabs/installer datasource=docker
 talosVersion: v1.10.2
+# renovate: depName=ghcr.io/siderolabs/kubelet datasource=docker
+kubernetesVersion: v1.33.1
 endpoint: https://cluster.lan:6443
 additionalApiServerCertSans: &sans
   - cluster.lan
@@ -10,7 +13,7 @@ additionalMachineCertSans: *sans
 allowSchedulingOnControlPlanes: true
 clusterPodNets:
   - 10.244.0.0/16
-  - fd7f:eaef:3171::/96
+  - fd7f:eaef:3171::/48
 clusterSvcNets:
   - 10.245.0.0/16
   - fd7f:eaef:3172::/112
@@ -55,7 +58,7 @@ nodes:
                 type: bind
                 source: /var/mnt/extra
                 options: ["bind", "rshared", "rw"]
-  - hostname: matebook
+  - hostname: minipc
     ipAddress: 192.168.1.22
     controlPlane: true
     schematic:
@@ -63,34 +66,10 @@ nodes:
         systemExtensions:
           officialExtensions:
             - siderolabs/amd-ucode
-            - siderolabs/usb-modem-drivers
             - siderolabs/iscsi-tools
             - siderolabs/util-linux-tools
     installDiskSelector:
-      size: <=64GB
-    networkInterfaces:
-      - interface: bond0
-        bond:
-          mode: active-backup
-          deviceSelectors:
-            - hardwareAddr: c8:a3:62:a9:18:62
-        dhcp: true
-        vip:
-          ip: *talosControlplaneVip
-        addresses:
-          - 192.168.1.22
-  - hostname: minipc
-    ipAddress: 192.168.1.23
-    controlPlane: true
-    schematic:
-      customization:
-        systemExtensions:
-          officialExtensions:
-            - siderolabs/amd-ucode
-            - siderolabs/iscsi-tools
-            - siderolabs/util-linux-tools
-    installDiskSelector:
-      size: <=64GB
+      wwid: eui.000000000000000100a07524479db782
     networkInterfaces:
       - interface: bond0
         bond:
@@ -101,7 +80,31 @@ nodes:
         vip:
           ip: *talosControlplaneVip
         addresses:
-          - 192.168.1.23
+          - 192.168.1.22
+    volumes:
+      - name: EPHEMERAL
+        provisioning:
+          diskSelector:
+            match: disk.transport == "nvme"
+          maxSize: 50GiB
+          grow: false
+    userVolumes:
+      - name: extra-nvme
+        provisioning:
+          diskSelector:
+            match: disk.transport == "nvme"
+          minSize: 200GiB
+          grow: true
+        filesystem:
+          type: xfs
+      - name: extra-sata
+        provisioning:
+          diskSelector:
+            match: disk.transport == "sata"
+          minSize: 500GiB
+          grow: true
+        filesystem:
+          type: xfs
 patches:
   - |-
     machine:
@@ -115,9 +118,6 @@ patches:
     cluster:
       proxy:
         disabled: true
-      controllerManager:
-        extraArgs:
-          node-cidr-mask-size-ipv6: "96"
   - |-
     cluster:
       inlineManifests:
