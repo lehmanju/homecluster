@@ -1,4 +1,3 @@
-
 ipv4:
   enabled: true
 
@@ -64,3 +63,7 @@ operator:
 
 cni:
   exclusive: false
+
+l2announcements:
+  enabled: true
+  
