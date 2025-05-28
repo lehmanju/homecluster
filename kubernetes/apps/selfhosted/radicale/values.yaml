@@ -1,0 +1,50 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/refs/heads/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+
+controllers:
+  radicale:
+    containers:
+      main:
+        image:
+          repository: docker.io/tomsquest/docker-radicale
+          tag: 3.5.4.0@sha256:99a1145aafab55f211389a303a553109d06ff2c00f634847a52b8561bd01f172
+        resources:
+          limits:
+            memory: 256Mi
+          requests:
+            cpu: 10m
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities: { drop: ["ALL"], add: ["SETUID", "SETGID", "CHOWN", "KILL"] }
+
+service:
+  app:
+    controller: radicale
+    ports:
+      http:
+        port: &port 5232
+
+persistence:
+  data:
+    existingClaim: radicale-data-a
+    globalMounts:
+      - path: /data
+
+route:
+  app:
+    hostnames:
+      - calendar.devpi.de
+      - contacts.devpi.de
+    parentRefs:
+      - name: web-internal
+        namespace: cilium
+        sectionName: https
+    rules:
+      - backendRefs:
+          - name: radicale
+            port: *port
+        matches:
+          - path:
+              type: PathPrefix
+              value: /
