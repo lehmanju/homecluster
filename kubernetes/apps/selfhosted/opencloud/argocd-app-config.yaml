@@ -1,0 +1,5 @@
+helm:
+  chart: opencloud
+  releaseName: opencloud
+  version: 0.1.5
+  repo: ghcr.io/opencloud-eu/helm-charts

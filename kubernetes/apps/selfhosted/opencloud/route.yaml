@@ -1,0 +1,29 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: httproute
+spec:
+  hostnames:
+    - cloud.devpi.de
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: web-internal
+      namespace: cilium
+      sectionName: https
+  rules:
+    - backendRefs:
+        - group: ""
+          kind: Service
+          name: opencloud-opencloud
+          port: 9200
+          weight: 1
+      filters:
+        - requestHeaderModifier:
+            remove:
+              - Permissions-Policy
+          type: RequestHeaderModifier
+      matches:
+        - path:
+            type: PathPrefix
+            value: /

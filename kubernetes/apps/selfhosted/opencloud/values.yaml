@@ -1,0 +1,29 @@
+---
+global:
+  domain:
+    opencloud: "cloud.devpi.de"
+
+keycloak:
+  enabled: false
+postgres:
+  enabled: false
+onlyoffice:
+  enabled: false
+collabora:
+  enabled: false
+collaboration:
+  enabled: false
+
+opencloud:
+  enableBasicAuth: true
+  resources:
+    limits:
+      memory: 512Mi
+    requests:
+      cpu: 100m
+  proxy:
+    basicAuth:
+      enabled: true
+
+httpRoute:
+  enabled: false
