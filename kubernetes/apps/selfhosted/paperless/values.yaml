@@ -143,7 +143,7 @@ persistence:
         app:
           - path: /data/local
   db:
-    existingClaim: paperless-db-a
+    existingClaim: paperless-db-b
     advancedMounts:
       postgres:
         postgres:
