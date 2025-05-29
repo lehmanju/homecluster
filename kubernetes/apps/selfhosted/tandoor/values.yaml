@@ -1,0 +1,237 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/common-4.0.1/charts/library/common/values.schema.json
+
+controllers:
+  tandoor:
+    initContainers:
+      init-chmod-data:
+        image:
+          repository: ghcr.io/tandoorrecipes/recipes
+          tag: 1.5.34@sha256:7d083f3af3a2a58bb8bb5fe94d59a37e2076bc405cf9bd51c2e3eaa18d6baf5a
+        env:
+          # Configure application
+          SECRET_KEY:
+            valueFrom:
+              secretKeyRef:
+                name: tandoor-secret
+                key: TANDOOR_SECRET_KEY
+          # Configure postgres integration
+          DB_ENGINE: django.db.backends.postgresql
+          POSTGRES_HOST: tandoor-postgres.tandoor.svc.cluster.local
+          POSTGRES_PORT: 5432
+          POSTGRES_USER: tandoor
+          POSTGRES_DB: recipes
+          POSTGRES_PASSWORD:
+            valueFrom:
+              secretKeyRef:
+                name: tandoor-secret
+                key: TANDOOR_POSTGRES_PASSWORD
+        resources:
+          requests:
+            cpu: 250m
+            memory: 64Mi
+        command:
+          - sh
+          - -c
+          - |
+            set -e
+            source venv/bin/activate
+            echo "Updating database"
+            python manage.py migrate
+            python manage.py collectstatic_js_reverse
+            python manage.py collectstatic --noinput
+            echo "Setting media file attributes"
+            chown -R 65534:65534 /opt/recipes/mediafiles
+            find /opt/recipes/mediafiles -type d | xargs -r chmod 755
+            find /opt/recipes/mediafiles -type f | xargs -r chmod 644
+            echo "Done"
+        securityContext:
+          runAsUser: 0
+    containers:
+      app:
+        image:
+          repository: ghcr.io/tandoorrecipes/recipes
+          tag: 1.5.34@sha256:7d083f3af3a2a58bb8bb5fe94d59a37e2076bc405cf9bd51c2e3eaa18d6baf5a
+        env:
+          # Configure application
+          SECRET_KEY:
+            valueFrom:
+              secretKeyRef:
+                name: tandoor-secret
+                key: TANDOOR_SECRET_KEY
+          # Configure postgres integration
+          DB_ENGINE: django.db.backends.postgresql
+          POSTGRES_HOST: tandoor-postgres.tandoor.svc.cluster.local
+          POSTGRES_PORT: 5432
+          POSTGRES_USER: tandoor
+          POSTGRES_DB: recipes
+          POSTGRES_PASSWORD:
+            valueFrom:
+              secretKeyRef:
+                name: tandoor-secret
+                key: TANDOOR_POSTGRES_PASSWORD
+          DEBUG: "0"
+          ALLOWED_HOSTS: "*"
+          GUNICORN_MEDIA: "0"
+        command:
+          - /opt/recipes/venv/bin/gunicorn
+          - -b
+          - :8080
+          - --access-logfile
+          - "-"
+          - --error-logfile
+          - "-"
+          - --log-level
+          - INFO
+          - recipes.wsgi
+        probes:
+          liveness:
+            enabled: true
+            spec:
+              periodSeconds: 30
+          readiness:
+            enabled: true
+            spec:
+              periodSeconds: 30
+        resources:
+          requests:
+            cpu: 100m
+            memory: 64Mi
+          limits:
+            memory: 256Mi
+        securityContext:
+          runAsUser: 65534
+      nginx:
+        image:
+          repository: nginx
+          tag: latest
+        resources:
+          requests:
+            cpu: 100m
+            memory: 64Mi
+          limits:
+            memory: 256Mi
+
+  postgres:
+    containers:
+      postgres:
+        image:
+          repository: docker.io/postgres
+          tag: 17.5
+        env:
+          POSTGRES_USER: tandoor
+          POSTGRES_DB: recipes
+          POSTGRES_PASSWORD:
+            valueFrom:
+              secretKeyRef:
+                name: tandoor-secret
+                key: TANDOOR_POSTGRES_PASSWORD
+        resources:
+          requests:
+            cpu: 50m
+            memory: 128Mi
+          limits:
+            memory: 512Mi
+
+service:
+  app:
+    controller: tandoor
+    ports:
+      nginx:
+        port: 80
+      tandoor:
+        port: 8080
+  postgres:
+    controller: postgres
+    ports:
+      http:
+        port: 5432
+
+route:
+  app:
+    parentRefs:
+      - name: web-internal
+        namespace: cilium
+        sectionName: https
+    hostnames:
+      - recipes.devpi.de
+    rules:
+      - backendRefs:
+          - port: 8080
+            name: tandoor-app
+        matches:
+          - path:
+              type: PathPrefix
+              value: /
+      - backendRefs:
+          - port: 80
+            name: tandoor-app
+        matches:
+          - path:
+              type: PathPrefix
+              value: /static
+          - path:
+              type: PathPrefix
+              value: /media
+
+persistence:
+  data:
+    existingClaim: tandoor-data-a
+    advancedMounts:
+      tandoor:
+        init-chmod-data:
+          - path: /opt/recipes/mediafiles
+            subPath: media
+          - path: /opt/recipes/staticfiles
+            subPath: static
+        app:
+          - path: /opt/recipes/mediafiles
+            subPath: media
+          - path: /opt/recipes/staticfiles
+            subPath: static
+        nginx:
+          - path: /media
+            subPath: media
+          - path: /static
+            subPath: static
+  db:
+    existingClaim: tandoor-db-a
+    advancedMounts:
+      postgres:
+        postgres:
+          - path: /var/lib/postgresql/data
+            subPath: data
+  config:
+    type: configMap
+    identifier: nginx-config
+    advancedMounts:
+      tandoor:
+        nginx:
+          - path: /etc/nginx/nginx.conf
+            subPath: nginx.conf
+
+configMaps:
+  nginx-config:
+    data:
+      nginx.conf: |-
+        events {
+          worker_connections 1024;
+        }
+        http {
+          include mime.types;
+          server {
+            listen 80;
+            server_name _;
+
+            client_max_body_size 16M;
+
+            # serve static files
+            location /static/ {
+              alias /static/;
+            }
+            # serve media files
+            location /media/ {
+              alias /media/;
+            }
+          }
+        }
