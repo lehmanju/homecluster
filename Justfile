@@ -23,7 +23,7 @@
 
 [working-directory: 'talos/clusterconfig']
 @dashboard:
-  talosctl -n 192.168.1.21 -e 192.168.1.21 --talosconfig=./talosconfig dashboard
+  talosctl -n 192.168.1.22 --talosconfig=./talosconfig dashboard
 
 [working-directory: 'talos/clusterconfig']
 @reset:

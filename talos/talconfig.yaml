@@ -68,6 +68,7 @@ nodes:
             - siderolabs/amd-ucode
             - siderolabs/iscsi-tools
             - siderolabs/util-linux-tools
+            - siderolabs/amdgpu
     installDiskSelector:
       wwid: eui.000000000000000100a07524479db782
     networkInterfaces:
