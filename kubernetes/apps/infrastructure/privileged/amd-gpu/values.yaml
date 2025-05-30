@@ -1,0 +1,5 @@
+labeller:
+  enabled: true
+
+nfd:
+  enabled: true
