@@ -81,8 +81,6 @@ controllers:
           - "-"
           - --error-logfile
           - "-"
-          - --log-level
-          - INFO
           - recipes.wsgi
         probes:
           liveness:
