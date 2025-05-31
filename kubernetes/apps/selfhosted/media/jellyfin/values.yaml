@@ -35,7 +35,7 @@ controllers:
           requests:
             cpu: 100m
           limits:
-            memory: 8Gi
+            memory: 4Gi
             amd.com/gpu: "1"
 defaultPodOptions:
   securityContext:
@@ -53,7 +53,7 @@ service:
         port: *port
 route:
   app:
-    hostnames: ["jellyfin.devpi.de"]
+    hostnames: ["jellyfin.devpi.de", "media.devpi.de"]
     parentRefs:
       - name: web-internal
         namespace: cilium
