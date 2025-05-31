@@ -36,7 +36,7 @@ spec:
             releaseName: "{{.helm.releaseName}}"
       destination:
         name: in-cluster
-        namespace: '{{dig "app.namespace" .path.basename .}}'
+        namespace: '{{dig "app" "namespace" .path.basename .}}'
       syncPolicy:
         automated:
           prune: true
