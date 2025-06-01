@@ -103,7 +103,8 @@ persistence:
         app:
           - path: /config
   downloads:
-    existingClaim: media
+    type: hostPath
+    hostPath: /var/mnt/u-extra-sata
     globalMounts:
       - path: /data/media/Downloads/qbittorrent
         subPath: Downloads/qbittorrent
