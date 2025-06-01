@@ -31,7 +31,7 @@
 
 [working-directory: 'talos/clusterconfig']
 @do +AARGS:
-  talosctl -n 192.168.1.123 -e 192.168.1.123 --talosconfig=./talosconfig {{ AARGS }}
+  talosctl -n 192.168.1.22 --talosconfig=./talosconfig {{ AARGS }}
 
 forward-argocd:
   kubectl port-forward svc/argocd-server -n argocd 13000:80
