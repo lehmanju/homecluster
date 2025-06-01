@@ -76,8 +76,7 @@ persistence:
     globalMounts:
       - path: /config/metadata
   media:
-    type: hostPath
-    hostPath: /var/mnt/u-extra-sata
+    existingClaim: media
     globalMounts:
       - path: /media
         readOnly: true
