@@ -1,0 +1,167 @@
+controllers:
+  qbittorrent:
+    type: statefulset
+
+    pod:
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: "OnRootMismatch"
+
+    initContainers:
+      coredns:
+        image:
+          repository: mirror.gcr.io/coredns/coredns
+          tag: 1.12.1
+        args:
+          - -conf
+          - /etc/coredns/Corefile
+        restartPolicy: Always
+
+      gluetun:
+        dependsOn:
+          - coredns
+        image:
+          repository: ghcr.io/qdm12/gluetun
+          tag: v3.40.0
+        env:
+          DOT: "off"
+          DNS_ADDRESS: "127.0.0.2"
+          VPN_SERVICE_PROVIDER: private internet access
+          SERVER_REGIONS: "Denmark,Netherlands,Germany,Sweden"
+          FIREWALL_INPUT_PORTS: 8080
+          FIREWALL_OUTBOUND_SUBNETS: 10.245.0.0/16,10.244.0.0/16 # Allow access to k8s subnets
+        envFrom:
+          - secretRef:
+              name: qbittorrent-secret
+        lifecycle:
+          postStart:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - (ip rule del table 51820; ip -6 rule del table 51820) || true
+        resources:
+          requests:
+            squat.ai/tun: "1"
+          limits:
+            squat.ai/tun: "1"
+        restartPolicy: Always
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            add:
+              - NET_ADMIN
+
+    containers:
+      app:
+        nameOverride: qbittorrent
+        image:
+          repository: ghcr.io/home-operations/qbittorrent
+          tag: 5.1.0
+        env:
+          UMASK: "022"
+          QBT_WEBUI_PORT: &port 8080
+        probes:
+          liveness:
+            enabled: true
+          readiness:
+            enabled: true
+          startup:
+            enabled: true
+            spec:
+              failureThreshold: 30
+              periodSeconds: 5
+        resources:
+          requests:
+            cpu: 150m
+            memory: 2048Mi
+          limits:
+            memory: 4Gi
+        securityContext:
+          runAsUser: 1000
+          runAsGroup: 1000
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+              - ALL
+
+service:
+  app:
+    controller: qbittorrent
+    ports:
+      http:
+        port: *port
+
+persistence:
+  config:
+    enabled: true
+    existingClaim: qbittorrent
+    advancedMounts:
+      qbittorrent:
+        app:
+          - path: /config
+  downloads:
+    existingClaim: media
+    globalMounts:
+      - path: /data/media/Downloads/qbittorrent
+        subPath: Downloads/qbittorrent
+  coredns:
+    type: configMap
+    identifier: qbittorrent-coredns
+    advancedMounts:
+      qbittorrent:
+        coredns:
+          - path: /etc/coredns/Corefile
+            subPath: Corefile
+            readOnly: true
+
+route:
+  app:
+    hostnames:
+      - qbittorrent.devpi.de
+    parentRefs:
+      - name: web-internal
+        namespace: cilium
+        sectionName: https
+    rules:
+      - backendRefs:
+          - identifier: app
+            port: *port
+        matches:
+          - path:
+              type: PathPrefix
+              value: /
+
+configMaps:
+  qbittorrent-coredns:
+    data:
+      Corefile: |
+        .:53 {
+            bind 127.0.0.2
+            rewrite stop type AAAA A
+            errors
+            health :8081 {
+                lameduck 5s
+            }
+            log {
+                class error
+            }
+            forward . tls://9.9.9.9 tls://149.112.112.112 {
+                tls_servername dns.quad9.net        
+                policy sequential
+                health_check 5s
+            }
+            reload
+        }
+
+        cluster.local:53 {
+            bind 127.0.0.2
+            rewrite stop type AAAA A
+            errors
+            log {
+                class error
+            }
+            forward . 10.245.0.10
+        }
