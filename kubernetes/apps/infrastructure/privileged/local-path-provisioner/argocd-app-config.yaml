@@ -1,0 +1,5 @@
+helm:
+  chart: democratic-csi
+  releaseName: democratic-csi
+  version: 0.15.0
+  repo: https://democratic-csi.github.io/charts/
