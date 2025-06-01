@@ -44,3 +44,6 @@ spec:
         syncOptions:
           - CreateNamespace=true
           - ServerSideApply=true
+        managedNamespaceMetadata:
+          labels:
+            pod-security.kubernetes.io/enforce: '{{ if dig "app" "privileged" .path.basename . }}privileged{{ else }}baseline{{ end }}'
