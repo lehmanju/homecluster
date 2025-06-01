@@ -27,7 +27,7 @@ controllers:
           DOT: "off"
           DNS_ADDRESS: "127.0.0.2"
           VPN_SERVICE_PROVIDER: private internet access
-          SERVER_REGIONS: "Denmark,Netherlands,Germany,Sweden"
+          SERVER_REGIONS: "DK Copenhagen,Netherlands,DE Berlin"
           FIREWALL_INPUT_PORTS: 8080
           FIREWALL_OUTBOUND_SUBNETS: 10.245.0.0/16,10.244.0.0/16 # Allow access to k8s subnets
         envFrom:
