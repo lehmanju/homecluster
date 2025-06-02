@@ -44,7 +44,7 @@ defaultPodOptions:
     runAsGroup: 1000
     fsGroup: 1000
     fsGroupChangePolicy: OnRootMismatch
-    supplementalGroups: [44]
+    supplementalGroups: [44, 105]
 service:
   app:
     controller: jellyfin
