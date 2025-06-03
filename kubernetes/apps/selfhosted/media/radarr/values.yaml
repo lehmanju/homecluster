@@ -1,0 +1,81 @@
+controllers:
+  radarr:
+    containers:
+      app:
+        image:
+          repository: ghcr.io/home-operations/radarr
+          tag: 5.26.0.10051@sha256:9a9bbec11725e485a2cd0fb1bd199ec0c358aa7b09c81ae712c2cfb9d555fde5
+        env:
+          RADARR__APP__INSTANCENAME: Radarr
+          RADARR__APP__THEME: dark
+          RADARR__AUTH__METHOD: External
+          RADARR__AUTH__REQUIRED: DisabledForLocalAddresses
+          RADARR__LOG__DBENABLED: "False"
+          RADARR__LOG__LEVEL: info
+          RADARR__SERVER__PORT: &port 80
+          RADARR__UPDATE__BRANCH: develop
+          TZ: Europe/Berlin
+        envFrom:
+          - secretRef:
+              name: radarr-secret
+        probes:
+          liveness: &probes
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /ping
+                port: *port
+              initialDelaySeconds: 0
+              periodSeconds: 10
+              timeoutSeconds: 1
+              failureThreshold: 3
+          readiness: *probes
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities: { drop: ["ALL"] }
+        resources:
+          requests:
+            cpu: 100m
+          limits:
+            memory: 2Gi
+defaultPodOptions:
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
+    fsGroupChangePolicy: OnRootMismatch
+service:
+  app:
+    controller: radarr
+    ports:
+      http:
+        port: *port
+route:
+  app:
+    hostnames: ["radarr.devpi.de"]
+    parentRefs:
+      - name: web-internal
+        namespace: cilium
+        sectionName: https
+    rules:
+      - backendRefs:
+          - identifier: app
+            port: *port
+persistence:
+  config:
+    existingClaim: radarr
+  config-cache:
+    type: persistentVolumeClaim
+    accessMode: ReadWriteOnce
+    size: 5Gi
+    globalMounts:
+      - path: /config/MediaCover
+  media:
+    existingClaim: media
+    globalMounts:
+      - path: /media
+  tmp:
+    type: emptyDir
