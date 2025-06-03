@@ -66,10 +66,12 @@ route:
             port: *port
 persistence:
   config:
-    existingClaim: radarr
+    type: persistentVolumeClaim
+    accessMode: ReadWriteOnce
+    size: 5Gi
+    storageClass: longhorn-backup
   config-cache:
     type: persistentVolumeClaim
-    nameOverride: configCache
     accessMode: ReadWriteOnce
     size: 5Gi
     globalMounts:

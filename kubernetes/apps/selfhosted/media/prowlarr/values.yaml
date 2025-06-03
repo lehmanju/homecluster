@@ -66,6 +66,9 @@ route:
             port: *port
 persistence:
   config:
-    existingClaim: prowlarr
+    type: persistentVolumeClaim
+    accessMode: ReadWriteOnce
+    size: 5Gi
+    storageClass: longhorn-backup
   tmp:
     type: emptyDir
