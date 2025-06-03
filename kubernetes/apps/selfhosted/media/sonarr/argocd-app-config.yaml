@@ -1,6 +1,6 @@
 helm:
   chart: app-template
-  releaseName: prowlarr
+  releaseName: sonarr
   version: 4.0.1
   repo: https://bjw-s-labs.github.io/helm-charts
 app:
