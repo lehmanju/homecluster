@@ -1,23 +1,23 @@
 controllers:
-  radarr:
+  sonarr:
     containers:
       app:
         image:
-          repository: ghcr.io/home-operations/radarr
-          tag: 5.26.0.10051@sha256:9a9bbec11725e485a2cd0fb1bd199ec0c358aa7b09c81ae712c2cfb9d555fde5
+          repository: ghcr.io/home-operations/sonarr
+          tag: 4.0.14.2938@sha256:5126f7ae94745a8e58e6963e1f67e905766c096832eff08b0678355ad0cdecee
         env:
-          RADARR__APP__INSTANCENAME: Radarr
-          RADARR__APP__THEME: dark
-          RADARR__AUTH__METHOD: External
-          RADARR__AUTH__REQUIRED: DisabledForLocalAddresses
-          RADARR__LOG__DBENABLED: "False"
-          RADARR__LOG__LEVEL: info
-          RADARR__SERVER__PORT: &port 80
-          RADARR__UPDATE__BRANCH: develop
+          SONARR__APP__INSTANCENAME: Sonarr
+          SONARR__APP__THEME: dark
+          SONARR__AUTH__METHOD: External
+          SONARR__AUTH__REQUIRED: DisabledForLocalAddresses
+          SONARR__LOG__DBENABLED: "False"
+          SONARR__LOG__LEVEL: info
+          SONARR__SERVER__PORT: &port 80
+          SONARR__UPDATE__BRANCH: develop
           TZ: Europe/Berlin
         envFrom:
           - secretRef:
-              name: radarr-secret
+              name: sonarr-secret
         probes:
           liveness: &probes
             enabled: true
@@ -49,13 +49,13 @@ defaultPodOptions:
     fsGroupChangePolicy: OnRootMismatch
 service:
   app:
-    controller: radarr
+    controller: sonarr
     ports:
       http:
         port: *port
 route:
   app:
-    hostnames: ["radarr.devpi.de"]
+    hostnames: ["sonarr.devpi.de"]
     parentRefs:
       - name: web-internal
         namespace: cilium
@@ -66,7 +66,7 @@ route:
             port: *port
 persistence:
   config:
-    existingClaim: radarr
+    existingClaim: sonarr
   config-cache:
     type: persistentVolumeClaim
     nameOverride: configCache

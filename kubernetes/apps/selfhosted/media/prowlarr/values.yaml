@@ -1,23 +1,23 @@
 controllers:
-  radarr:
+  prowlarr:
     containers:
       app:
         image:
-          repository: ghcr.io/home-operations/radarr
-          tag: 5.26.0.10051@sha256:9a9bbec11725e485a2cd0fb1bd199ec0c358aa7b09c81ae712c2cfb9d555fde5
+          repository: ghcr.io/home-operations/prowlarr
+          tag: 1.36.3.5071@sha256:fc2bf7caecc52e1dded4eee430c3fc77c08e4b812aa2b6b71b9083b673f96093
         env:
-          RADARR__APP__INSTANCENAME: Radarr
-          RADARR__APP__THEME: dark
-          RADARR__AUTH__METHOD: External
-          RADARR__AUTH__REQUIRED: DisabledForLocalAddresses
-          RADARR__LOG__DBENABLED: "False"
-          RADARR__LOG__LEVEL: info
-          RADARR__SERVER__PORT: &port 80
-          RADARR__UPDATE__BRANCH: develop
+          PROWLARR__APP__INSTANCENAME: Prowlarr
+          PROWLARR__APP__THEME: dark
+          PROWLARR__AUTH__METHOD: External
+          PROWLARR__AUTH__REQUIRED: DisabledForLocalAddresses
+          PROWLARR__LOG__DBENABLED: "False"
+          PROWLARR__LOG__LEVEL: info
+          PROWLARR__SERVER__PORT: &port 80
+          PROWLARR__UPDATE__BRANCH: develop
           TZ: Europe/Berlin
         envFrom:
           - secretRef:
-              name: radarr-secret
+              name: prowlarr-secret
         probes:
           liveness: &probes
             enabled: true
@@ -49,13 +49,13 @@ defaultPodOptions:
     fsGroupChangePolicy: OnRootMismatch
 service:
   app:
-    controller: radarr
+    controller: prowlarr
     ports:
       http:
         port: *port
 route:
   app:
-    hostnames: ["radarr.devpi.de"]
+    hostnames: ["prowlarr.devpi.de"]
     parentRefs:
       - name: web-internal
         namespace: cilium
@@ -66,17 +66,6 @@ route:
             port: *port
 persistence:
   config:
-    existingClaim: radarr
-  config-cache:
-    type: persistentVolumeClaim
-    nameOverride: configCache
-    accessMode: ReadWriteOnce
-    size: 5Gi
-    globalMounts:
-      - path: /config/MediaCover
-  media:
-    existingClaim: media
-    globalMounts:
-      - path: /media
+    existingClaim: prowlarr
   tmp:
     type: emptyDir
