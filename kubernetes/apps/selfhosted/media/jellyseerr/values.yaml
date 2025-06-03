@@ -1,0 +1,87 @@
+controllers:
+  jellyseerr:
+    containers:
+      app:
+        image:
+          repository: ghcr.io/fallenbagel/jellyseerr
+          tag: 2.5.2@sha256:2a611369ad1d0d501c2d051fc89b6246ff081fb4a30879fdc75642cf6a37b1a6
+        env:
+          LOG_LEVEL: "info"
+          PORT: &port 80
+          TZ: Europe/Berlin
+        envFrom:
+          - secretRef:
+              name: jellyseerr-secret
+        probes:
+          liveness: &probes
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /api/v1/status
+                port: *port
+              initialDelaySeconds: 0
+              periodSeconds: 10
+              timeoutSeconds: 1
+              failureThreshold: 3
+          readiness: *probes
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities: { drop: ["ALL"] }
+        resources:
+          requests:
+            cpu: 10m
+          limits:
+            memory: 1Gi
+defaultPodOptions:
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
+    fsGroupChangePolicy: OnRootMismatch
+service:
+  app:
+    controller: jellyseerr
+    ports:
+      http:
+        port: *port
+route:
+  app:
+    hostnames: ["jellyseerr.devpi.de"]
+    parentRefs:
+      - name: web-internal
+        namespace: cilium
+        sectionName: https
+    rules:
+      - backendRefs:
+          - identifier: app
+            port: *port
+        matches:
+          - path:
+              type: PathPrefix
+              value: /
+persistence:
+  config:
+    type: persistentVolumeClaim
+    accessMode: ReadWriteOnce
+    size: 5Gi
+    storageClass: longhorn-backup
+    globalMounts:
+      - path: /app/config
+  config-cache:
+    type: persistentVolumeClaim
+    accessMode: ReadWriteOnce
+    size: 5Gi
+    globalMounts:
+      - path: /app/config/cache
+  tmpfs:
+    type: emptyDir
+    advancedMounts:
+      jellyseerr:
+        app:
+          - path: /app/config/logs
+            subPath: logs
+          - path: /tmp
+            subPath: tmp
