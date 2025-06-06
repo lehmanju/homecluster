@@ -30,6 +30,11 @@ controllers:
           SERVER_REGIONS: "DK Copenhagen,Netherlands,DE Berlin"
           FIREWALL_INPUT_PORTS: 8080
           FIREWALL_OUTBOUND_SUBNETS: 10.245.0.0/16,10.244.0.0/16 # Allow access to k8s subnets
+          PORT_FORWARD_ONLY: "true"
+          VPN_PORT_FORWARDING: "on"
+          VPN_PORT_FORWARDING_PROVIDER: private internet access
+          VPN_PORT_FORWARDING_UP_COMMAND: |
+            /bin/sh -c 'wget -O- --retry-connrefused --post-data "json={\"listen_port\":{{"{{"}}PORTS{{"}}"}}}" http://qbittorrent.media.svc.cluster.local:8080/api/v2/app/setPreferences 2>&1'
         envFrom:
           - secretRef:
               name: qbittorrent-secret
