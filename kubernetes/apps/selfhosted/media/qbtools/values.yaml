@@ -1,0 +1,109 @@
+controllers:
+  tagging:
+    type: cronjob
+    cronjob: &cronJobSpec
+      schedule: 0 * * * *
+      backoffLimit: 0
+      concurrencyPolicy: Forbid
+      successfulJobsHistory: 1
+      failedJobsHistory: 1
+      ttlSecondsAfterFinished: 3600
+    initContainers:
+      tag: &container
+        image:
+          repository: ghcr.io/buroa/qbtools
+          tag: v0.21.0@sha256:3a60f001c3f5fd068ff38960fbf9db726fa59edf135b18cd50294230366c284e
+        env:
+          QBITTORRENT_HOST: qbittorrent.media.svc.cluster.local
+          QBITTORRENT_PORT: 8080
+        envFrom:
+          - secretRef:
+              name: qbtools-secret
+        args:
+          [
+            "tagging",
+            "--added-on",
+            "--expired",
+            "--last-activity",
+            "--sites",
+            "--unregistered",
+            "--not-linked",
+          ]
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities: { drop: ["ALL"] }
+        resources:
+          requests:
+            cpu: 25m
+          limits:
+            memory: 256M
+    containers:
+      unregistered:
+        <<: *container
+        args: [
+            "prune",
+            "--exclude-category",
+            "manual",
+            "--exclude-category",
+            "music",
+            "--exclude-tag",
+            "added:1d",
+            "--include-tag",
+            "unregistered",
+            "--with-data",
+            #"--dry-run",
+          ]
+      expired:
+        <<: *container
+        args: [
+            "prune",
+            "--exclude-category",
+            "manual",
+            "--exclude-category",
+            "music",
+            "--exclude-tag",
+            "added:1d",
+            "--include-tag",
+            "expired",
+            "--with-data",
+            #"--dry-run",
+          ]
+    pod:
+      restartPolicy: Never
+  orphaned:
+    type: cronjob
+    cronjob:
+      <<: *cronJobSpec
+      schedule: 0 0 * * 0
+      suspend: true
+    containers:
+      app:
+        <<: *container
+        args: ["orphaned", "--exclude-pattern", "*_unpackerred*"] #", --dry-run"]
+    pod:
+      restartPolicy: Never
+  reannounce:
+    containers:
+      app:
+        <<: *container
+        args: ["reannounce", "--process-seeding"]
+
+defaultPodOptions:
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    runAsGroup: 1000
+persistence:
+  secret-file:
+    type: secret
+    name: qbtools-secret
+    globalMounts:
+      - path: /config/config.yaml
+        subPath: config.yaml
+        readOnly: true
+  media:
+    existingClaim: media
+    globalMounts:
+      - path: /media/Downloads/qbittorrent
+        subPath: Downloads/qbittorrent
