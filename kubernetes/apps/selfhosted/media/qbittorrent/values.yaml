@@ -57,6 +57,18 @@ controllers:
             add:
               - NET_ADMIN
 
+      vuetorrent:
+        image:
+          repository: alpine/curl
+          tag: 8.12.1@sha256:edbbe6f64e9890474df2864d7ee92941bb03ce17b07fd9cadc1d14e9453fc031
+        command:
+          - /bin/sh
+          - -c
+          - |
+            curl -L -o /vuetorrent/vuetorrent.zip \
+              https://github.com/vuetorrent/vuetorrent/releases/latest/download/vuetorrent.zip && \
+            unzip -o /vuetorrent/vuetorrent.zip -d /vuetorrent
+
     containers:
       app:
         nameOverride: qbittorrent
@@ -125,6 +137,8 @@ persistence:
           - path: /etc/coredns/Corefile
             subPath: Corefile
             readOnly: true
+  vuetorrent:
+    type: emptyDir
 
 route:
   app:
