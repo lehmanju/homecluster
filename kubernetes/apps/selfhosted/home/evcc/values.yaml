@@ -7,7 +7,7 @@ controllers:
       main:
         image:
           repository: docker.io/evcc/evcc
-          tag: 0.204.1@sha256:ad9cffc854829ee93633ad7aeb5d80d7b73e28e96c3273d32e12014e5abe021f
+          tag: 0.204.2@sha256:ee42c6fa258592af70678f41f5e0bc53144d90eb834e82aee30348564f7540a2
         args: ["-c", "/config/evcc.yaml", "--disable-auth"]
         resources:
           limits:
