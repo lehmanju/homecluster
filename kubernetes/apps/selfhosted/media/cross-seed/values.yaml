@@ -1,0 +1,98 @@
+controllers:
+  cross-seed:
+    containers:
+      app:
+        image:
+          repository: ghcr.io/cross-seed/cross-seed
+          tag: 6.12.6@sha256:4a954ce1f8b17d48d652544eb03f916a6f59f0f58499ede7b380d7f7dcc01ae8
+        env:
+          CROSS_SEED_PORT: &port 80
+          TZ: Europe/Berlin
+        envFrom:
+          - secret: cross-seed-secret
+          - secret: radarr-secret
+          - secret: sonarr-secret
+          - secret: prowlarr-secret
+        args: ["daemon"]
+        probes:
+          liveness: &probes
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /api/ping
+                port: *port
+              initialDelaySeconds: 0
+              periodSeconds: 10
+              timeoutSeconds: 1
+              failureThreshold: 3
+          readiness: *probes
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities: { drop: ["ALL"] }
+        resources:
+          requests:
+            cpu: 10m
+          limits:
+            memory: 512Mi
+defaultPodOptions:
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
+    fsGroupChangePolicy: OnRootMismatch
+service:
+  app:
+    controller: cross-seed
+    ports:
+      http:
+        port: *port
+
+configMaps:
+  cross-seed-config:
+    data:
+      config.js: |
+        function fetchIndexers(baseUrl, apiKey, tag) {
+            const buffer = require('child_process').execSync(`curl -fsSL "${baseUrl}/api/v1/tag/detail?apikey=${apiKey}"`);
+            const response = JSON.parse(buffer.toString('utf8'));
+            const indexerIds = response.filter(t => t.label === tag)[0]?.indexerIds ?? [];
+            const indexers = indexerIds.map(i => `${baseUrl}/${i}/api?apikey=${apiKey}`);
+            console.log(`Loaded ${indexers.length} indexers from Prowlarr`);
+            return indexers;
+        }
+        module.exports = {
+            action: "inject",
+            apiKey: process.env.CROSS_SEED_API_KEY,
+            linkCategory: "cross-seed",
+            linkDirs: ["/media/Downloads/qbittorrent/complete/cross-seed"],
+            linkType: "hardlink",
+            matchMode: "partial",
+            port: Number(process.env.CROSS_SEED_PORT),
+            skipRecheck: true,
+            radarr: ["http://radarr.media.svc.cluster.local/?apikey=" + process.env.RADARR__AUTH__APIKEY],
+            sonarr: ["http://sonarr.media.svc.cluster.local/?apikey=" + process.env.SONARR__AUTH__APIKEY],
+            torrentClients: ["qbittorrent:http://qbittorrent.media.svc.cluster.local:8080"],
+            torznab: fetchIndexers("http://prowlarr.media.svc.cluster.local", process.env.PROWLARR__AUTH__APIKEY, "cross-seed"),
+            useClientTorrents: true
+        };
+
+persistence:
+  config:
+    type: persistentVolumeClaim
+    accessMode: ReadWriteOnce
+    size: 5Gi
+    storageClass: longhorn-backup
+  secret-file:
+    type: configMap
+    identifier: cross-seed-config
+    globalMounts:
+      - path: /config/config.js
+        subPath: config.js
+        readOnly: true
+  media:
+    existingClaim: media
+    globalMounts:
+      - path: /media/Downloads
+        subPath: Downloads
