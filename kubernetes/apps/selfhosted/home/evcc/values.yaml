@@ -6,9 +6,10 @@ controllers:
     containers:
       main:
         image:
-          repository: docker.io/evcc/evcc
-          tag: 0.204.2@sha256:ee42c6fa258592af70678f41f5e0bc53144d90eb834e82aee30348564f7540a2
-        args: ["-c", "/config/evcc.yaml", "--disable-auth"]
+          repository: ghcr.io/lehmanju/evcc
+          tag: oauth
+          pullPolicy: Always
+        args: ["-c", "/config/evcc.yaml", "--disable-auth", "-l", "trace"]
         resources:
           limits:
             memory: 128Mi
