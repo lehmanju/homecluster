@@ -28,13 +28,13 @@ controllers:
           DNS_ADDRESS: "127.0.0.2"
           VPN_SERVICE_PROVIDER: private internet access
           SERVER_REGIONS: "DK Copenhagen,Netherlands,DE Berlin"
-          FIREWALL_INPUT_PORTS: 8080
+          FIREWALL_INPUT_PORTS: 8080,3000
           FIREWALL_OUTBOUND_SUBNETS: 10.245.0.0/16,10.244.0.0/16 # Allow access to k8s subnets
           PORT_FORWARD_ONLY: "true"
           VPN_PORT_FORWARDING: "on"
           VPN_PORT_FORWARDING_PROVIDER: private internet access
           VPN_PORT_FORWARDING_UP_COMMAND: |
-            /bin/sh -c 'wget -O- --retry-connrefused --post-data "json={\"listen_port\":{{"{{"}}PORTS{{"}}"}}}" http://qbittorrent.media.svc.cluster.local:8080/api/v2/app/setPreferences 2>&1'
+            /bin/sh -c 'wget -O- --retry-connrefused --post-data "json={\"listen_port\":{{"{{"}}PORTS{{"}}"}}}" http://qbittorrent:8080/api/v2/app/setPreferences 2>&1'
         envFrom:
           - secretRef:
               name: qbittorrent-secret
@@ -57,18 +57,6 @@ controllers:
             add:
               - NET_ADMIN
 
-      vuetorrent:
-        image:
-          repository: alpine/curl
-          tag: 8.14.1@sha256:4bd604d8050c4280cdc32ecc04116e87d1986d8b15024c00fe4d800353e16ac9
-        command:
-          - /bin/sh
-          - -c
-          - |
-            curl -L -o /vuetorrent/vuetorrent.zip \
-              https://github.com/vuetorrent/vuetorrent/releases/latest/download/vuetorrent.zip && \
-            unzip -o /vuetorrent/vuetorrent.zip -d /vuetorrent
-
     containers:
       app:
         nameOverride: qbittorrent
@@ -77,7 +65,7 @@ controllers:
           tag: 5.1.0@sha256:37aefd713ba31d51255995261616f1144378887bc5f21665a0ebf851fb85f69a
         env:
           TZ: Europe/Berlin
-          QBT_WEBUI_PORT: &port 8080
+          QBT_WEBUI_PORT: &qbit_port 8080
         probes:
           liveness:
             enabled: true
@@ -98,6 +86,32 @@ controllers:
           limits:
             memory: 4Gi
 
+  vuetorrent:
+    containers:
+      app:
+        image:
+          repository: ghcr.io/vuetorrent/vuetorrent-backend
+          tag: 2.5.1@sha256:bd7cb19459a664073a05e8c4c8482888a2f41f307aa2fce2b1d329e35db7b358
+        env:
+          QBIT_BASE: http://qbittorrent.media.svc.cluster.local:8080
+          PORT: &vue_port 3000
+          SKIP_X_FORWARD_HEADERS: true
+        probes:
+          liveness:
+            enabled: true
+          readiness:
+            enabled: true
+          startup:
+            enabled: true
+            spec:
+              failureThreshold: 30
+              periodSeconds: 10
+        resources:
+          requests:
+            cpu: 10m
+          limits:
+            memory: 256Mi
+
 defaultPodOptions:
   securityContext:
     runAsNonRoot: true
@@ -109,9 +123,16 @@ defaultPodOptions:
 service:
   app:
     controller: qbittorrent
+    forceRename: qbittorrent
     ports:
       http:
-        port: *port
+        port: *qbit_port
+
+  ui:
+    controller: vuetorrent
+    ports:
+      http:
+        port: *vue_port
 
 persistence:
   config:
@@ -137,9 +158,15 @@ persistence:
           - path: /etc/coredns/Corefile
             subPath: Corefile
             readOnly: true
-  vuetorrent:
-    type: emptyDir
-
+  vuetorrent-config:
+    type: persistentVolumeClaim
+    accessMode: ReadWriteOnce
+    size: 5Gi
+    storageClass: longhorn-backup
+    advancedMounts:
+      qbittorrent:
+        vuetorrent:
+          - path: /config
 route:
   app:
     hostnames:
@@ -152,8 +179,8 @@ route:
         sectionName: https
     rules:
       - backendRefs:
-          - identifier: app
-            port: *port
+          - identifier: ui
+            port: *vue_port
         matches:
           - path:
               type: PathPrefix
@@ -174,7 +201,7 @@ configMaps:
                 class error
             }
             forward . tls://9.9.9.9 tls://149.112.112.112 {
-                tls_servername dns.quad9.net        
+                tls_servername dns.quad9.net
                 policy sequential
                 health_check 5s
             }
