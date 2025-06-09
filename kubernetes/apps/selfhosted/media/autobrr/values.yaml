@@ -1,0 +1,90 @@
+controllers:
+  autobrr:
+    containers:
+      app:
+        image:
+          repository: ghcr.io/autobrr/autobrr
+          tag: v1.62.0@sha256:e9bf07f15c36555f4c7d28df44f137d420d6188bab0a53eb7dfbdcb62238caa4
+        env:
+          AUTOBRR__HOST: 0.0.0.0
+          AUTOBRR__PORT: &port 80
+          AUTOBRR__METRICS_ENABLED: false
+          AUTOBRR__METRICS_HOST: 0.0.0.0
+          AUTOBRR__METRICS_PORT: &metricsPort 9094
+          AUTOBRR__CHECK_FOR_UPDATES: false
+          AUTOBRR__LOG_LEVEL: INFO
+        envFrom:
+          - secretRef:
+              name: autobrr-secret
+        probes:
+          liveness: &probes
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /api/healthz/liveness
+                port: *port
+              initialDelaySeconds: 0
+              periodSeconds: 10
+              timeoutSeconds: 1
+              failureThreshold: 3
+          readiness: *probes
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities: { drop: ["ALL"] }
+        resources:
+          requests:
+            cpu: 10m
+          limits:
+            memory: 256Mi
+defaultPodOptions:
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
+    fsGroupChangePolicy: OnRootMismatch
+service:
+  app:
+    controller: autobrr
+    ports:
+      http:
+        port: *port
+      metrics:
+        port: *metricsPort
+#serviceMonitor:
+#  app:
+#    serviceName: autobrr
+#    endpoints:
+#      - port: metrics
+route:
+  app:
+    hostnames: ["autobrr.devpi.de"]
+    parentRefs:
+      - name: web-internal
+        namespace: cilium
+        sectionName: https
+    rules:
+      - backendRefs:
+          - identifier: app
+            port: *port
+        matches:
+          - path:
+              type: PathPrefix
+              value: /
+persistence:
+  config:
+    type: persistentVolumeClaim
+    accessMode: ReadWriteOnce
+    size: 5Gi
+    storageClass: longhorn-backup
+  tmpfs:
+    type: emptyDir
+    advancedMounts:
+      autobrr:
+        app:
+          - path: /config/log
+            subPath: log
+          - path: /tmp
+            subPath: tmp
