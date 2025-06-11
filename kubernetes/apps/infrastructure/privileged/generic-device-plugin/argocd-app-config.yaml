@@ -1,5 +1,5 @@
 helm:
   chart: app-template
   releaseName: generic-device-plugin
-  version: 4.0.1
+  version: 4.1.0
   repo: https://bjw-s-labs.github.io/helm-charts
