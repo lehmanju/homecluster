@@ -1,12 +1,5 @@
 controllers:
   qbittorrent:
-    type: statefulset
-
-    pod:
-      securityContext:
-        fsGroup: 1000
-        fsGroupChangePolicy: "OnRootMismatch"
-
     initContainers:
       coredns:
         image:
@@ -80,6 +73,9 @@ controllers:
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true
           capabilities: { drop: ["ALL"] }
+          runAsNonRoot: true
+          runAsUser: 1000
+          runAsGroup: 1000
         resources:
           requests:
             cpu: 100m
@@ -111,12 +107,12 @@ controllers:
             cpu: 10m
           limits:
             memory: 256Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities: { drop: ["ALL"] }
 
 defaultPodOptions:
   securityContext:
-    runAsNonRoot: true
-    runAsUser: 1000
-    runAsGroup: 1000
     fsGroup: 1000
     fsGroupChangePolicy: OnRootMismatch
 
