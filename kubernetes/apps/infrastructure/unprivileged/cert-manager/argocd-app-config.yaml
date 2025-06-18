@@ -1,5 +1,5 @@
 helm:
   chart: cert-manager
   releaseName: cert-manager
-  version: v1.18.0
+  version: v1.18.1
   repo: https://charts.jetstack.io
