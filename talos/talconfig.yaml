@@ -1,7 +1,7 @@
 ---
 clusterName: homecluster
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
-talosVersion: v1.10.2
+talosVersion: v1.10.4
 # renovate: depName=ghcr.io/siderolabs/kubelet datasource=docker
 kubernetesVersion: v1.33.1
 endpoint: https://cluster.lan:6443
@@ -69,6 +69,7 @@ nodes:
             - siderolabs/iscsi-tools
             - siderolabs/util-linux-tools
             - siderolabs/amdgpu
+            - siderolabs/realtek-firmware
     installDiskSelector:
       wwid: eui.000000000000000100a07524479db782
     networkInterfaces:
@@ -116,6 +117,11 @@ patches:
           forwardKubeDNSToHost: false
       sysctls:
         net.ipv6.conf.bond0.accept_ra: '2'
+      kubelet:
+        nodeIP:
+          validSubnets:
+            - 192.168.1.0/24
+            - fd7f:eaef:3150:10::/60
   - |-
     cluster:
       proxy:
