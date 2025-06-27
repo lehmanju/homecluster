@@ -65,6 +65,8 @@ controllers:
             "activity:1d",
             "--include-tag",
             "expired",
+            "--include-tag",
+            "not-linked",
             "--with-data",
             #"--dry-run",
           ]
