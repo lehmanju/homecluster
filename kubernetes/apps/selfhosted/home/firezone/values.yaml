@@ -1,0 +1,7 @@
+config:
+  token:
+    existingSecret: firezone-secret
+logLevel: info
+image:
+  repository: ghcr.io/firezone/gateway
+  tag: 1.4.11@sha256:25909687b3c172423144b1e4ff47e4c1f0a592d0ccb5869cc1137932bfee7b11
