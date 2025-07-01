@@ -4,7 +4,7 @@ ipv4:
 ipv6:
   enabled: true
 
-ipv6NativeRoutingCIDR: "fd7f:eaef:3171::/96"
+ipv6NativeRoutingCIDR: "fd7f:eaef:3100::/40"
 ipv4NativeRoutingCIDR: "10.244.0.0/16"
 autoDirectNodeRoutes: true
 routingMode: native
@@ -12,10 +12,16 @@ routingMode: native
 bpf:
   masquerade: true
 
+egressGateway:
+  enabled: true
+
 devices: bond+
 
-hubble:
-  enabled: false
+#hubble:jj
+#  ui:
+#    enabled: true
+#  relay:
+#    enabled: true
 
 kubeProxyReplacement: true
 kubeProxyReplacementHealthzBindAddr: 0.0.0.0:10256
@@ -66,4 +72,3 @@ cni:
 
 l2announcements:
   enabled: true
-  
