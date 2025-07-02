@@ -1,0 +1,7 @@
+helm:
+  chart: app-template
+  releaseName: netbird
+  version: 4.1.2
+  repo: https://bjw-s-labs.github.io/helm-charts
+app:
+  privileged: true

@@ -1,0 +1,27 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/refs/heads/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+
+controllers:
+  netbird:
+    containers:
+      netbird:
+        image:
+          repository: ghcr.io/netbirdio/netbird
+          tag: 0.49.0@sha256:2a16653e00d7a349dc8fc2c557dda24714775faddd3c4c59cc05a11dbfde90d9
+        env:
+          NB_HOSTNAME: "netbird-k8s-router" # name that will appear in the management UI
+          NB_LOG_LEVEL: "info"
+        envFrom:
+          - secretRef:
+              name: netbird-setup-key-secret
+        resources:
+          requests:
+            cpu: 10m
+          limits:
+            memory: 200M
+        securityContext:
+          capabilities:
+            add:
+              - NET_ADMIN
+              - SYS_RESOURCE
+              - SYS_ADMIN
