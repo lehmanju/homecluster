@@ -1,0 +1,7 @@
+helm:
+  chart: metrics-server
+  releaseName: metrics-server
+  version: 3.12.2
+  repo: ghcr.io/home-operations/charts-mirror
+app:
+  privileged: true

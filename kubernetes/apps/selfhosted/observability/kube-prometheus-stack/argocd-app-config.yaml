@@ -1,0 +1,7 @@
+helm:
+  chart: kube-prometheus-stack
+  releaseName: kube-prometheus-stack
+  version: 75.7.0
+  repo: ghcr.io/prometheus-community/charts
+app:
+  privileged: true
