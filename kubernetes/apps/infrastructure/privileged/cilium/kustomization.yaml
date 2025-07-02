@@ -4,3 +4,4 @@ resources:
   - ./pool.yaml
   - ./gatewayconfig.yaml
   - ./gateway-http.yaml
+  - ./egress-policy.yaml

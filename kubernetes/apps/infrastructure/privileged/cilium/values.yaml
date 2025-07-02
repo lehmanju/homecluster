@@ -17,7 +17,8 @@ egressGateway:
 
 devices: bond+
 
-#hubble:jj
+hubble:
+  enabled: false
 #  ui:
 #    enabled: true
 #  relay:

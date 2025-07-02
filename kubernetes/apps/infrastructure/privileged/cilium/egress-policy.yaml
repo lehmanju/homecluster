@@ -1,0 +1,19 @@
+apiVersion: cilium.io/v2
+kind: CiliumEgressGatewayPolicy
+metadata:
+  name: egress-firezone
+spec:
+  selectors:
+    - podSelector:
+        matchLabels:
+          io.kubernetes.pod.namespace: firezone
+  destinationCIDRs:
+    - "2000::/3"
+
+  egressGateway:
+    # Specify which node should act as gateway for this policy.
+    nodeSelector:
+      matchLabels:
+        kubernetes.io/hostname: minipc
+
+    interface: "bond0"
