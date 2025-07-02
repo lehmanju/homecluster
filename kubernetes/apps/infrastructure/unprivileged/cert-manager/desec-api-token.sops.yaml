@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Secret
+metadata:
+    name: desec-api-token
+type: Opaque
+data:
+    DESEC_TOKEN: ENC[AES256_GCM,data:wIj5t2UspjN83zFXggjrxaXxKjAAIxuIMRzhdn65cjN6NTIDTTQlZg==,iv:g8LblkgV2E4+F/JRnO8xI7nLvm7kfvN+CfVZG4QiexI=,tag:Y1eKf9C1RZPiPLpA4FPq9g==,type:str]
+sops:
+    age:
+        - recipient: age1zc4knw29dcgns9zdpyxyx56xsax6s9vsu82sgef3mph56mdr7fusp6v9yh
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSByZVdWWjF0ZjRiaVdEWWxz
+            THNtSHByaE5kYUY1cnlnZWcrMmhXNCt4a21NCkZHWmhFOTZZM3dVbjFaT2NOQTFY
+            UUZ0TTNzUkRBcmRvcWNXOTlrMXhLcHMKLS0tIHBMSHc0RTdsckluVzhFQ3NXRVdl
+            NHhJRk5WV3NaenJXYWRxUXpaN3pLSEEKR0OkjYTXu+vZvV2brh5iDx7UlrlX/Zse
+            8SfECDJK18J9vQa8B7MpWGkr/3pINQzniobuxrtkK/RG0vW4FL2jNQ==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2025-07-02T10:56:34Z"
+    mac: ENC[AES256_GCM,data:c4HzAGWuD6d7+26mJGM8TK8g5lBhFvx0CknPjeB4k42AlbyC6D7Xug7ymJRhbOlksm0Y0hWaKjoI9mMNkJ1s8d+LfYNd4QVu2i7VSs34GWHst5xOUOe5iGCh9HvWIDRyaR7myRArBG6t2H2NwFdVjfvdcDG1S4tY/f4WI2fepa8=,iv:fwf63s9bK86CwldyXdyc6OIrn7OiGkYgsnYN3O7z/pE=,tag:BhYs9w1cCoxxjcKUcA46rA==,type:str]
+    encrypted_regex: ^(data|stringData)$
+    version: 3.10.2

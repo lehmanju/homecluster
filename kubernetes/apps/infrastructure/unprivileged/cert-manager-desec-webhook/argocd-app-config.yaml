@@ -1,0 +1,7 @@
+helm:
+  chart: cert-manager-lego-webhook
+  releaseName: cert-manager-lego-webhook
+  version: 1.2.0
+  repo: https://yxwuxuanl.github.io/cert-manager-lego-webhook/
+app:
+  namespace: cert-manager
