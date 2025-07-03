@@ -23,7 +23,7 @@ releases:
     values:
       - ../apps/infrastructure/privileged/cilium/values.yaml
 
-  - name: argocd
+  - name: argo-cd
     namespace: argocd
     createNamespace: true
     chart: argo/argo-cd

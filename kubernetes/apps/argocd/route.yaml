@@ -16,7 +16,7 @@ spec:
         - kind: Service
           group: ""
           port: 80
-          name: argocd-server
+          name: argo-cd-argocd-server
           weight: 1
       matches:
         - path:
