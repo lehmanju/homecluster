@@ -80,7 +80,7 @@ controllers:
           requests:
             cpu: 100m
           limits:
-            memory: 4Gi
+            memory: 800Mi
 
   vuetorrent:
     containers:

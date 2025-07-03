@@ -34,7 +34,7 @@ controllers:
           requests:
             cpu: 25m
           limits:
-            memory: 256M
+            memory: 128Mi
     containers:
       unregistered:
         <<: *container
