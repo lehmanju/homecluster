@@ -20,6 +20,7 @@ spec:
         - resources-finalizer.argocd.argoproj.io
       annotations:
         argocd.argoproj.io/sync-wave: "3"
+        argocd.argoproj.io/compare-options: ServerSideDiff=true
     spec:
       project: default
       sources:
