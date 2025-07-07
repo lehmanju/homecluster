@@ -17,6 +17,7 @@ controllers:
           repository: ghcr.io/qdm12/gluetun
           tag: v3.40.0
         env:
+          #OPENVPN_MSSFIX: 1166
           DOT: "off"
           DNS_ADDRESS: "127.0.0.2"
           VPN_SERVICE_PROVIDER: private internet access
