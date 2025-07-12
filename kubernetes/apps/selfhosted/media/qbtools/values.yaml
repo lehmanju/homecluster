@@ -51,22 +51,33 @@ controllers:
             "--with-data",
             #"--dry-run",
           ]
-      expired:
+      unlinked:
         <<: *container
         args: [
             "prune",
             "--exclude-category",
             "manual",
-            "--exclude-category",
-            "music",
             "--exclude-tag",
             "added:1d",
-            "--exclude-tag",
-            "activity:1d",
             "--include-tag",
             "expired",
             "--include-tag",
             "not-linked",
+            "--with-data",
+            #"--dry-run",
+          ]
+      autobrr:
+        <<: *container
+        args: [
+            "prune",
+            "--exclude-category",
+            "manual",
+            "--exclude-tag",
+            "added:1d",
+            "--include-tag",
+            "expired",
+            "--include-tag",
+            "autobrr",
             "--with-data",
             #"--dry-run",
           ]
