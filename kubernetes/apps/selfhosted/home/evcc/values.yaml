@@ -62,6 +62,7 @@ route:
   app:
     hostnames:
       - evcc.devpi.de
+      - car.devpi.de
     parentRefs:
       - name: web-internal
         namespace: cilium
