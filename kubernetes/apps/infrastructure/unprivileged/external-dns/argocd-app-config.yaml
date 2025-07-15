@@ -1,5 +1,5 @@
 helm:
   chart: external-dns
   releaseName: external-dns
-  version: 1.17.0
+  version: 1.18.0
   repo: https://kubernetes-sigs.github.io/external-dns
