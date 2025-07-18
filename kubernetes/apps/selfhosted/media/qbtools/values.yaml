@@ -51,7 +51,7 @@ controllers:
             "--with-data",
             #"--dry-run",
           ]
-      unlinked:
+      cross-seed:
         <<: *container
         args: [
             "prune",
@@ -59,10 +59,12 @@ controllers:
             "manual",
             "--exclude-tag",
             "added:1d",
+            "--exclude-tag",
+            "activity:1d",
+            "--exclude-tag",
+            "activity:7d",
             "--include-tag",
-            "expired",
-            "--include-tag",
-            "not-linked",
+            "cross-seed",
             "--with-data",
             #"--dry-run",
           ]
@@ -78,6 +80,19 @@ controllers:
             "expired",
             "--include-tag",
             "autobrr",
+            "--with-data",
+            #"--dry-run",
+          ]
+      unlinked:
+        <<: *container
+        args: [
+            "prune",
+            "--exclude-category",
+            "manual",
+            "--include-tag",
+            "expired",
+            "--include-tag",
+            "not-linked",
             "--with-data",
             #"--dry-run",
           ]
