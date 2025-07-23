@@ -61,25 +61,8 @@ controllers:
             "added:1d",
             "--exclude-tag",
             "activity:1d",
-            "--exclude-tag",
-            "activity:7d",
             "--include-tag",
             "cross-seed",
-            "--with-data",
-            #"--dry-run",
-          ]
-      autobrr:
-        <<: *container
-        args: [
-            "prune",
-            "--exclude-category",
-            "manual",
-            "--exclude-tag",
-            "added:1d",
-            "--include-tag",
-            "expired",
-            "--include-tag",
-            "autobrr",
             "--with-data",
             #"--dry-run",
           ]
