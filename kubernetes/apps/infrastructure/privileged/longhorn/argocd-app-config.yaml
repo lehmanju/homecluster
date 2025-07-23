@@ -1,5 +1,5 @@
 helm:
   chart: longhorn
   releaseName: longhorn
-  version: 1.9.0
+  version: 1.9.1
   repo: https://charts.longhorn.io
