@@ -51,6 +51,7 @@ controllers:
             "--with-data",
             #"--dry-run",
           ]
+      # remove cross-seeds after one day
       cross-seed:
         <<: *container
         args: [
@@ -59,19 +60,20 @@ controllers:
             "manual",
             "--exclude-tag",
             "added:1d",
-            "--exclude-tag",
-            "activity:1d",
             "--include-tag",
             "cross-seed",
             "--with-data",
             #"--dry-run",
           ]
+      # remove unlinked and expired torrents after one day
       unlinked:
         <<: *container
         args: [
             "prune",
             "--exclude-category",
             "manual",
+            "--exclude-tag",
+            "added:1d",
             "--include-tag",
             "expired",
             "--include-tag",
