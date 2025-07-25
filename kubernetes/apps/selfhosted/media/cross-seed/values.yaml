@@ -75,7 +75,8 @@ configMaps:
             sonarr: ["http://sonarr.media.svc.cluster.local/?apikey=" + process.env.SONARR__AUTH__APIKEY],
             torrentClients: ["qbittorrent:http://qbittorrent.media.svc.cluster.local:8080"],
             torznab: fetchIndexers("http://prowlarr.media.svc.cluster.local", process.env.PROWLARR__AUTH__APIKEY, "cross-seed"),
-            useClientTorrents: true
+            useClientTorrents: true,
+            duplicateCategories: true,
         };
 
 persistence:
