@@ -44,8 +44,8 @@ persistence:
     globalMounts:
       - path: /.config/tqm
   config-file:
-    type: secret
-    name: tqm-secret
+    type: configMap
+    name: tqm-configmap
     globalMounts:
       - path: /.config/tqm/config.yaml
         subPath: config.yaml

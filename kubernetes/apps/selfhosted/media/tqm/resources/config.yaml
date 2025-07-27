@@ -1,0 +1,146 @@
+clients:
+  qb:
+    download_path: /media/Downloads/qbittorrent
+    enabled: true
+    filter: default
+    type: qbittorrent
+    url: http://qbittorrent.media.svc.cluster.local:8080
+filters:
+  default:
+    MapHardlinksFor:
+      - retag
+    ignore:
+      - IsTrackerDown()
+      - Downloaded == false && !IsUnregistered()
+      - SeedingHours < 26 && !IsUnregistered()
+    remove:
+      - IsUnregistered()
+      # Remove torrents that are not linked to any client and expired
+      - HasAnyTag("not-linked") && HasAnyTag("hnr:immune")
+      # Remove torrents that are single tv episodes and older than 14 days (prefer season packs) and expired
+      - len(Files) <= 3 && ( Label in ["tv-sonarr"] || HasAnyTag("tv-sonarr.cross-seed") ) && AddedDays >= 14 && HasAnyTag("hnr:immune")
+    tag:
+      - name: added:1d
+        mode: full
+        update:
+          - AddedDays < 7
+      - name: added:7d
+        mode: full
+        update:
+          - AddedDays >= 7 && AddedDays < 14
+      - name: added:14d
+        mode: full
+        update:
+          - AddedDays >= 14 && AddedDays < 30
+      - name: added:30d
+        mode: full
+        update:
+          - AddedDays >= 30 && AddedDays < 180
+      - name: added:180d
+        mode: full
+        update:
+          - AddedDays >= 180
+      - name: not-linked
+        mode: full
+        update:
+          - HardlinkedOutsideClient == false && Label in ["tv-sonarr", "radarr", "autobrr", "cross-seed"]
+      - name: site:ant
+        mode: full
+        update:
+          - TrackerName == "anthelion.me"
+      - name: site:ar
+        mode: full
+        update:
+          - TrackerName == "alpharatio.cc"
+      - name: site:blu
+        mode: full
+        update:
+          - TrackerName in ["blutopia.cc", "blutopia.xyz"]
+      - name: site:fnp
+        mode: full
+        update:
+          - TrackerName == "fearnopeer.com"
+      - name: site:fl
+        mode: full
+        update:
+          - TrackerName in ["filelist.io", "thefl.org"]
+      - name: site:hds
+        mode: full
+        update:
+          - TrackerName == "hd-space.pw"
+      - name: site:hdt
+        mode: full
+        update:
+          - TrackerName == "hdts-announce.ru"
+      - name: site:ipt
+        mode: full
+        update:
+          - TrackerName in ["bgp.technology", "empirehost.me", "stackoverflow.tech"]
+      - name: site:mlk
+        mode: full
+        update:
+          - TrackerName == "milkie.cc"
+      - name: site:mtv
+        mode: full
+        update:
+          - TrackerName == "morethantv.me"
+      - name: site:oe
+        mode: full
+        update:
+          - TrackerName == "onlyencodes.cc"
+      - name: site:phd
+        mode: full
+        update:
+          - TrackerName == "privatehd.to"
+      - name: site:rfx
+        mode: full
+        update:
+          - TrackerName == "reelflix.xyz"
+      - name: site:st
+        mode: full
+        update:
+          - TrackerName == "scenetime.com"
+      - name: site:sp
+        mode: full
+        update:
+          - TrackerName == "seedpool.org"
+      - name: site:td
+        mode: full
+        update:
+          - TrackerName in ["jumbohostpro.eu", "td-peers.com"]
+      - name: site:tl
+        mode: full
+        update:
+          - TrackerName in ["tleechreload.org", "torrentleech.org"]
+      - name: site:uhd
+        mode: full
+        update:
+          - TrackerName == "uhdbits.org"
+      - name: hnr:immune
+        mode: full
+        update:
+          - (TrackerName != "anthelion.me" || SeedingDays > 14.1 || DownloadedBytes == 0)
+          - (TrackerName != "alpharatio.cc" || SeedingDays > 14.1 || DownloadedBytes == 0)
+          - (TrackerName != "blutopia.cc" && TrackerName != "blutopia.xyz" || SeedingDays > 14.1 || DownloadedBytes == 0)
+          - (TrackerName != "filelist.io" && TrackerName != "thefl.org" || SeedingDays > 7.1 || DownloadedBytes == 0)
+          - (TrackerName != "hd-space.pw" || SeedingDays > 7.1 || DownloadedBytes == 0)
+          - (TrackerName != "hdts-announce.ru" || SeedingDays > 7.1 || DownloadedBytes == 0)
+          - (TrackerName != "bgp.technology" && TrackerName != "empirehost.me" && TrackerName != "stackoverflow.tech" || SeedingDays > 14.1 || DownloadedBytes == 0)
+          - (TrackerName != "milkie.cc" || SeedingDays > 14.1 || DownloadedBytes == 0)
+          - (TrackerName != "morethantv.me" || SeedingDays > 14.1 || DownloadedBytes == 0)
+          - (TrackerName != "onlyencodes.cc" || SeedingDays > 14.1 || DownloadedBytes == 0)
+          - (TrackerName != "privatehd.to" || SeedingDays > 14.1 || DownloadedBytes == 0)
+          - (TrackerName != "reelflix.xyz" || SeedingDays > 7.1 || DownloadedBytes == 0)
+          - (TrackerName != "scenetime.com" ||  SeedingDays > 7.1 || DownloadedBytes == 0)
+          - (TrackerName != "seedpool.org" || SeedingDays > 10.1 || DownloadedBytes == 0)
+          - (TrackerName != "jumbohostpro.eu" && TrackerName != "td-peers.com" || SeedingDays > 7.1 || DownloadedBytes == 0)
+          - (TrackerName != "tleechreload.org" && TrackerName != "torrentleech.org" || SeedingDays > 7.1 || DownloadedBytes == 0)
+          - (TrackerName != "uhdbits.org" || SeedingDays > 7.1 || DownloadedBytes == 0)
+      - name: tracker-down
+        mode: full
+        update:
+          - IsTrackerDown()
+      - name: unregistered
+        mode: full
+        update:
+          - IsUnregistered()
