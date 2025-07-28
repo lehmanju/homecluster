@@ -1,7 +1,7 @@
 helm:
   chart: app-template
   releaseName: sonarr
-  version: 4.1.2
+  version: 4.2.0
   repo: https://bjw-s-labs.github.io/helm-charts
 app:
   namespace: media
