@@ -1,52 +1,8 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/common-4.0.1/charts/library/common/values.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/common-4.2.0/charts/library/common/values.schema.json
 
 controllers:
   tandoor:
-    initContainers:
-      init-chmod-data:
-        image:
-          repository: ghcr.io/tandoorrecipes/recipes
-          tag: 2.0.1@sha256:b95f7b3e3df000cd39a152be0ddff7139c6d7c5f59cd306f325da44c50a81d05
-        env:
-          # Configure application
-          SECRET_KEY:
-            valueFrom:
-              secretKeyRef:
-                name: tandoor-secret
-                key: TANDOOR_SECRET_KEY
-          # Configure postgres integration
-          DB_ENGINE: django.db.backends.postgresql
-          POSTGRES_HOST: tandoor-postgres.tandoor.svc.cluster.local
-          POSTGRES_PORT: 5432
-          POSTGRES_USER: tandoor
-          POSTGRES_DB: recipes
-          POSTGRES_PASSWORD:
-            valueFrom:
-              secretKeyRef:
-                name: tandoor-secret
-                key: TANDOOR_POSTGRES_PASSWORD
-        resources:
-          requests:
-            cpu: 250m
-            memory: 64Mi
-        command:
-          - sh
-          - -c
-          - |
-            set -e
-            source venv/bin/activate
-            echo "Updating database"
-            python manage.py migrate
-            python manage.py collectstatic_js_reverse
-            python manage.py collectstatic --noinput
-            echo "Setting media file attributes"
-            chown -R 65534:65534 /opt/recipes/mediafiles
-            find /opt/recipes/mediafiles -type d | xargs -r chmod 755
-            find /opt/recipes/mediafiles -type f | xargs -r chmod 644
-            echo "Done"
-        securityContext:
-          runAsUser: 0
     containers:
       app:
         image:
@@ -73,15 +29,6 @@ controllers:
           DEBUG: "0"
           ALLOWED_HOSTS: "*"
           GUNICORN_MEDIA: "0"
-        command:
-          - /opt/recipes/venv/bin/gunicorn
-          - -b
-          - :8080
-          - --access-logfile
-          - "-"
-          - --error-logfile
-          - "-"
-          - recipes.wsgi
         probes:
           liveness:
             enabled: true
@@ -94,21 +41,9 @@ controllers:
         resources:
           requests:
             cpu: 100m
-            memory: 64Mi
+            memory: 200Mi
           limits:
-            memory: 256Mi
-        securityContext:
-          runAsUser: 65534
-      nginx:
-        image:
-          repository: nginx
-          tag: latest
-        resources:
-          requests:
-            cpu: 100m
-            memory: 64Mi
-          limits:
-            memory: 256Mi
+            memory: 800Mi
 
   postgres:
     containers:
@@ -135,10 +70,8 @@ service:
   app:
     controller: tandoor
     ports:
-      nginx:
-        port: 80
       tandoor:
-        port: 8080
+        port: 80
   postgres:
     controller: postgres
     ports:
@@ -155,22 +88,12 @@ route:
       - recipes.devpi.de
     rules:
       - backendRefs:
-          - port: 8080
-            name: tandoor-app
-        matches:
-          - path:
-              type: PathPrefix
-              value: /
-      - backendRefs:
           - port: 80
             name: tandoor-app
         matches:
           - path:
               type: PathPrefix
-              value: /static
-          - path:
-              type: PathPrefix
-              value: /media
+              value: /
 
 persistence:
   data:
@@ -187,11 +110,6 @@ persistence:
             subPath: media
           - path: /opt/recipes/staticfiles
             subPath: static
-        nginx:
-          - path: /media
-            subPath: media
-          - path: /static
-            subPath: static
   db:
     existingClaim: tandoor-db-a
     advancedMounts:
@@ -199,37 +117,3 @@ persistence:
         postgres:
           - path: /var/lib/postgresql/data
             subPath: data
-  config:
-    type: configMap
-    identifier: nginx-config
-    advancedMounts:
-      tandoor:
-        nginx:
-          - path: /etc/nginx/nginx.conf
-            subPath: nginx.conf
-
-configMaps:
-  nginx-config:
-    data:
-      nginx.conf: |-
-        events {
-          worker_connections 1024;
-        }
-        http {
-          include mime.types;
-          server {
-            listen 80;
-            server_name _;
-
-            client_max_body_size 16M;
-
-            # serve static files
-            location /static/ {
-              alias /static/;
-            }
-            # serve media files
-            location /media/ {
-              alias /media/;
-            }
-          }
-        }
