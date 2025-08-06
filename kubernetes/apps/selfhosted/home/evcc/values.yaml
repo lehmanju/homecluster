@@ -6,8 +6,8 @@ controllers:
     containers:
       main:
         image:
-          repository: ghcr.io/lehmanju/evcc
-          tag: oauth
+          repository: docker.io/evcc/evcc
+          tag: nightly
           pullPolicy: Always
         args: ["-c", "/config/evcc.yaml", "--disable-auth", "-l", "trace"]
         resources:
@@ -62,7 +62,7 @@ route:
   app:
     hostnames:
       - evcc.devpi.de
-      - car.devpi.de
+      #- car.devpi.de
     parentRefs:
       - name: web-internal
         namespace: cilium
