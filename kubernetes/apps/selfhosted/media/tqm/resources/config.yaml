@@ -5,14 +5,18 @@ clients:
     filter: default
     type: qbittorrent
     url: http://qbittorrent.media.svc.cluster.local:8080
+
+bypassIgnoreIfUnregistered: true
+
 filters:
   default:
     MapHardlinksFor:
       - retag
     ignore:
       - IsTrackerDown()
-      - Downloaded == false && !IsUnregistered()
-      - SeedingHours < 26 && !IsUnregistered()
+      - Downloaded == false
+      - SeedingHours < 26
+      - HasAnyTag("permaseed")
     remove:
       - IsUnregistered()
       # Remove torrents that are not linked to any client and expired
@@ -116,6 +120,10 @@ filters:
         mode: full
         update:
           - TrackerName == "uhdbits.org"
+      - name: site:ysc
+        mode: full
+        update:
+          - TrackerName == "yu-scene.net"
       - name: hnr:immune
         mode: full
         update:
@@ -136,6 +144,7 @@ filters:
           - (TrackerName != "jumbohostpro.eu" && TrackerName != "td-peers.com" || SeedingDays > 7.1 || DownloadedBytes == 0)
           - (TrackerName != "tleechreload.org" && TrackerName != "torrentleech.org" || SeedingDays > 10.1 || Ratio > 1.01 || DownloadedBytes == 0)
           - (TrackerName != "uhdbits.org" || SeedingDays > 7.1 || DownloadedBytes == 0)
+          - (TrackerName != "yu-scene.net" || SeedingDays > 5.1 || DownloadedBytes == 0)
       - name: tracker-down
         mode: full
         update:
