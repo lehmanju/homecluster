@@ -17,6 +17,7 @@ filters:
       - Downloaded == false
       - SeedingHours < 26
       - HasAnyTag("permaseed")
+      - Label in ["manual"]
     remove:
       - IsUnregistered()
       # Remove torrents that are not linked to any client and expired
@@ -130,6 +131,7 @@ filters:
           - (TrackerName != "anthelion.me" || SeedingDays > 14.1 || DownloadedBytes == 0)
           - (TrackerName != "alpharatio.cc" || SeedingDays > 14.1 || DownloadedBytes == 0)
           - (TrackerName != "blutopia.cc" && TrackerName != "blutopia.xyz" || SeedingDays > 14.1 || DownloadedBytes == 0)
+          - (TrackerName != "fearnopeer.com" || SeedingDays > 7.1 || DownloadedBytes == 0)
           - (TrackerName != "filelist.io" && TrackerName != "thefl.org" || SeedingDays > 7.1 || DownloadedBytes == 0)
           - (TrackerName != "hd-space.pw" || SeedingDays > 7.1 || DownloadedBytes == 0)
           - (TrackerName != "hdts-announce.ru" || SeedingDays > 7.1 || DownloadedBytes == 0)
@@ -142,7 +144,7 @@ filters:
           - (TrackerName != "scenetime.com" ||  SeedingDays > 7.1 || DownloadedBytes == 0)
           - (TrackerName != "seedpool.org" || SeedingDays > 10.1 || DownloadedBytes == 0)
           - (TrackerName != "jumbohostpro.eu" && TrackerName != "td-peers.com" || SeedingDays > 7.1 || DownloadedBytes == 0)
-          - (TrackerName != "tleechreload.org" && TrackerName != "torrentleech.org" || SeedingDays > 10.1 || Ratio > 1.01 || DownloadedBytes == 0)
+          - (TrackerName != "tleechreload.org" && TrackerName != "torrentleech.org" || SeedingDays > 10.1 || Ratio > 1.01  || DownloadedBytes == 0)
           - (TrackerName != "uhdbits.org" || SeedingDays > 7.1 || DownloadedBytes == 0)
           - (TrackerName != "yu-scene.net" || SeedingDays > 5.1 || DownloadedBytes == 0)
       - name: tracker-down
