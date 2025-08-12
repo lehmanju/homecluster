@@ -5,8 +5,8 @@ controllers:
       schedule: "@hourly"
       timeZone: Europe/Berlin
       concurrencyPolicy: Forbid
-      successfulJobsHistory: 12
-      failedJobsHistory: 12
+      successfulJobsHistory: 3
+      failedJobsHistory: 3
     initContainers:
       retag: &container
         image:
@@ -30,7 +30,6 @@ controllers:
         args:
           - clean
           - qb
-          - --dry-run
 defaultPodOptions:
   securityContext:
     runAsNonRoot: true

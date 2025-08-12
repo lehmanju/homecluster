@@ -20,21 +20,20 @@ filters:
       - Label in ["manual"]
     remove:
       - IsUnregistered()
-      # Remove torrents that are not linked to any client and expired
-      - HasAnyTag("not-linked") && HasAnyTag("hnr:immune")
-      # Remove torrents that are single tv episodes and older than 14 days (prefer season packs) and expired
+      # Remove not linked and expired
+      - HasAllTags("not-linked", "hnr:immune")
+      # Remove single tv episodes and older than 14 days (prefer season packs) and expired
       - len(Files) <= 3 && ( Label in ["tv-sonarr"] || HasAnyTag("tv-sonarr.cross-seed") ) && AddedDays >= 14 && HasAnyTag("hnr:immune")
+      # Remove prune and expired
+      - HasAnyTag(hnr:immune) && (HasAnyTag("prune:14d") && SeedingDays > 14 || HasAnyTag("prune:7d") && SeedingDays > 7)
     tag:
       - name: added:1d
-        mode: full
         update:
           - AddedDays < 7
       - name: added:7d
-        mode: full
         update:
           - AddedDays >= 7 && AddedDays < 14
       - name: added:14d
-        mode: full
         update:
           - AddedDays >= 14 && AddedDays < 30
       - name: added:30d
@@ -42,91 +41,69 @@ filters:
         update:
           - AddedDays >= 30 && AddedDays < 180
       - name: added:180d
-        mode: full
         update:
           - AddedDays >= 180
       - name: not-linked
-        mode: full
         update:
-          - HardlinkedOutsideClient == false && Label in ["tv-sonarr", "radarr", "autobrr", "cross-seed"]
+          - HardlinkedOutsideClient == false
       - name: site:ant
-        mode: full
         update:
           - TrackerName == "anthelion.me"
       - name: site:ar
-        mode: full
         update:
           - TrackerName == "alpharatio.cc"
       - name: site:blu
-        mode: full
         update:
           - TrackerName in ["blutopia.cc", "blutopia.xyz"]
       - name: site:fnp
-        mode: full
         update:
           - TrackerName == "fearnopeer.com"
       - name: site:fl
-        mode: full
         update:
           - TrackerName in ["filelist.io", "thefl.org"]
       - name: site:hds
-        mode: full
         update:
           - TrackerName == "hd-space.pw"
       - name: site:hdt
-        mode: full
         update:
           - TrackerName == "hdts-announce.ru"
       - name: site:ipt
-        mode: full
         update:
           - TrackerName in ["bgp.technology", "empirehost.me", "stackoverflow.tech"]
       - name: site:mlk
-        mode: full
         update:
           - TrackerName == "milkie.cc"
       - name: site:mtv
-        mode: full
         update:
           - TrackerName == "morethantv.me"
       - name: site:oe
-        mode: full
         update:
           - TrackerName == "onlyencodes.cc"
       - name: site:phd
-        mode: full
         update:
           - TrackerName == "privatehd.to"
       - name: site:rfx
-        mode: full
         update:
           - TrackerName == "reelflix.xyz"
       - name: site:st
-        mode: full
         update:
           - TrackerName == "scenetime.com"
       - name: site:sp
-        mode: full
         update:
           - TrackerName == "seedpool.org"
       - name: site:td
-        mode: full
         update:
           - TrackerName in ["jumbohostpro.eu", "td-peers.com"]
       - name: site:tl
-        mode: full
         update:
           - TrackerName in ["tleechreload.org", "torrentleech.org"]
       - name: site:uhd
-        mode: full
         update:
           - TrackerName == "uhdbits.org"
       - name: site:ysc
-        mode: full
         update:
           - TrackerName == "yu-scene.net"
       - name: hnr:immune
-        mode: full
         update:
           - (TrackerName != "anthelion.me" || SeedingDays > 14.1 || DownloadedBytes == 0)
           - (TrackerName != "alpharatio.cc" || SeedingDays > 14.1 || DownloadedBytes == 0)
@@ -148,10 +125,8 @@ filters:
           - (TrackerName != "uhdbits.org" || SeedingDays > 7.1 || DownloadedBytes == 0)
           - (TrackerName != "yu-scene.net" || SeedingDays > 5.1 || DownloadedBytes == 0)
       - name: tracker-down
-        mode: full
         update:
           - IsTrackerDown()
       - name: unregistered
-        mode: full
         update:
           - IsUnregistered()
