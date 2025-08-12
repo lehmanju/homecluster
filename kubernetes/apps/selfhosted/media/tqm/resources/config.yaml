@@ -24,8 +24,6 @@ filters:
       - HasAllTags("not-linked", "hnr:immune")
       # Remove single tv episodes and older than 14 days (prefer season packs) and expired
       - len(Files) <= 3 && ( Label in ["tv-sonarr"] || HasAnyTag("tv-sonarr.cross-seed") ) && AddedDays >= 14 && HasAnyTag("hnr:immune")
-      # Remove prune and expired
-      - HasAnyTag(hnr:immune) && (HasAnyTag("prune:14d") && SeedingDays > 14 || HasAnyTag("prune:7d") && SeedingDays > 7)
     tag:
       - name: added:1d
         update:
