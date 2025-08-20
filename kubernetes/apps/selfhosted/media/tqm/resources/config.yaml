@@ -18,12 +18,11 @@ filters:
       - SeedingHours < 26
       - HasAnyTag("permaseed")
       - Label in ["manual"]
+      - HasAnyTag("expired") == false
     remove:
       - IsUnregistered()
-      # Remove not linked and expired
-      - HasAllTags("not-linked", "expired")
-      # Remove single tv episodes and older than 14 days (prefer season packs) and expired
-      - len(Files) <= 3 && ( Label in ["tv-sonarr"] || HasAnyTag("tv-sonarr.cross-seed") ) && AddedDays >= 14 && HasAnyTag("expired")
+      - HasAnyTag("not-linked")
+      - HasAnyTag("episode", "site:TL") && SeedingDays > 14
     tag:
       - name: added:1d
         update:
@@ -122,6 +121,9 @@ filters:
           - (TrackerName != "tleechreload.org" && TrackerName != "torrentleech.org" || SeedingDays > 10.1 || Ratio > 1.01  || DownloadedBytes == 0)
           - (TrackerName != "uhdbits.org" || SeedingDays > 7.1 || DownloadedBytes == 0)
           - (TrackerName != "yu-scene.net" || SeedingDays > 5.1 || DownloadedBytes == 0)
+      - name: episode
+        update:
+          - len(Files) <= 3 && (Label in ["tv-sonarr"] || HasAnyTag("tv-sonarr.cross-seed"))
       - name: tracker-down
         update:
           - IsTrackerDown()
