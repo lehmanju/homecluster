@@ -21,8 +21,8 @@ filters:
       - HasAnyTag("expired") == false
     remove:
       - IsUnregistered()
-      - HasAnyTag("not-linked")
-      - HasAnyTag("episode", "site:TL") && SeedingDays > 14
+      - HasAnyTag("not-linked", "episode")
+      - HasAnyTag("site:TL", "site:YSC", "site:ST")
     tag:
       - name: added:1d
         update:
