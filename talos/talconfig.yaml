@@ -20,44 +20,6 @@ clusterSvcNets:
 cniConfig:
   name: none
 nodes:
-  - hostname: raspberrypi-black
-    ipAddress: 192.168.1.21
-    controlPlane: true
-    schematic:
-      overlay:
-        image: siderolabs/sbc-raspberrypi
-        name: rpi_generic
-      customization:
-        systemExtensions:
-          officialExtensions:
-            - siderolabs/iscsi-tools
-            - siderolabs/util-linux-tools
-    installDiskSelector:
-      size: <=64GB
-    networkInterfaces:
-      - interface: bond0
-        bond:
-          mode: active-backup
-          deviceSelectors:
-            - hardwareAddr: 2c:cf:67:09:61:85
-        dhcp: true
-        vip:
-          ip: *talosControlplaneVip
-        addresses:
-          - 192.168.1.21
-    machineDisks:
-      - device: /dev/disk/by-id/ata-CT1000MX500SSD1_2114E59353BB
-        partitions:
-          - mountpoint: /var/mnt/extra
-    patches:
-      - |-
-        machine:
-          kubelet:
-            extraMounts:
-              - destination: /var/mnt/extra
-                type: bind
-                source: /var/mnt/extra
-                options: ["bind", "rshared", "rw"]
   - hostname: minipc
     ipAddress: 192.168.1.22
     controlPlane: true
@@ -103,6 +65,14 @@ nodes:
         provisioning:
           diskSelector:
             match: disk.transport == "sata"
+          minSize: 500GiB
+          grow: true
+        filesystem:
+          type: xfs
+      - name: extra-usb
+        provisioning:
+          diskSelector:
+            match: disk.transport == "usb"
           minSize: 500GiB
           grow: true
         filesystem:
