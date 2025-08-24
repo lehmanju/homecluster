@@ -146,6 +146,13 @@ persistence:
     globalMounts:
       - path: /media/Downloads/qbittorrent
         subPath: Downloads/qbittorrent
+  extra:
+    type: hostPath
+    hostPath: /var/mnt/extra-usb
+    advancedMounts:
+      qbittorrent:
+        app:
+          - path: /media-ext
   coredns:
     type: configMap
     identifier: qbittorrent-coredns
