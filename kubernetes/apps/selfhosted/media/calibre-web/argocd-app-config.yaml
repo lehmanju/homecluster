@@ -1,0 +1,7 @@
+helm:
+  chart: app-template
+  releaseName: calibre-web
+  version: 4.2.0
+  repo: https://bjw-s-labs.github.io/helm-charts
+app:
+  namespace: media

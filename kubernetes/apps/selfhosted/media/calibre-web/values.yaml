@@ -1,0 +1,55 @@
+controllers:
+  calibre-web:
+    containers:
+      app:
+        image:
+          repository: ghcr.io/bjw-s-labs/calibre-web
+          tag: 0.6.24@sha256:1412ca16aba9db9307d2d553ab0c9f36c8b5bfedd128a04cb21bda8a876184d8
+        env:
+          CACHE_DIR: /cache
+        probes:
+          liveness:
+            enabled: true
+          readiness:
+            enabled: true
+        resources:
+          requests:
+            cpu: 5m
+            memory: 470M
+          limits:
+            memory: 470M
+    pod:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: "OnRootMismatch"
+service:
+  app:
+    controller: calibre-web
+    ipFamilyPolicy: PreferDualStack
+    ports:
+      http:
+        port: 8083
+route:
+  app:
+    hostnames: ["books.devpi.de"]
+    parentRefs:
+      - name: web-internal
+        namespace: cilium
+        sectionName: https
+persistence:
+  cache:
+    type: emptyDir
+    globalMounts:
+      - path: /cache
+  config:
+    type: persistentVolumeClaim
+    accessMode: ReadWriteOnce
+    size: 5Gi
+    storageClass: longhorn-backup
+  media:
+    existingClaim: media
+    globalMounts:
+      - path: /media/Books
+        subPath: Books
