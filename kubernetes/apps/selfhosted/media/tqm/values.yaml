@@ -55,3 +55,8 @@ persistence:
     globalMounts:
       - path: /media
         readOnly: true
+  extra:
+    existingClaim: media-ext
+    globalMounts:
+      - path: /media-ext
+        readOnly: true
