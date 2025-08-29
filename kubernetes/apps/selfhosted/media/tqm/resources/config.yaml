@@ -16,9 +16,9 @@ filters:
       - IsTrackerDown()
       - Downloaded == false
       - SeedingHours < 26
-      - HasAnyTag("permaseed")
+      - '"permaseed" in Tags'
       - Label in ["manual"]
-      - HasAnyTag("expired") == false
+      - '"expired" not in Tags'
     remove:
       - IsUnregistered()
       - HasAnyTag("not-linked", "episode")
@@ -118,7 +118,7 @@ filters:
           - (TrackerName != "scenetime.com" ||  SeedingDays > 7.1 || DownloadedBytes == 0)
           - (TrackerName != "seedpool.org" || SeedingDays > 10.1 || DownloadedBytes == 0)
           - (TrackerName != "jumbohostpro.eu" && TrackerName != "td-peers.com" || SeedingDays > 7.1 || DownloadedBytes == 0)
-          - (TrackerName != "tleechreload.org" && TrackerName != "torrentleech.org" || SeedingDays > 10.1 || Ratio > 1.01  || DownloadedBytes == 0)
+          - (TrackerName != "tleechreload.org" && TrackerName != "torrentleech.org" || SeedingDays > 10.1 || Ratio > 1.01  || (DownloadedBytes / TotalBytes <= 0.09))
           - (TrackerName != "uhdbits.org" || SeedingDays > 7.1 || DownloadedBytes == 0)
           - (TrackerName != "yu-scene.net" || SeedingDays > 5.1 || DownloadedBytes == 0)
       - name: episode
