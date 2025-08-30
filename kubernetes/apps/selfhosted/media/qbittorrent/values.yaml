@@ -20,11 +20,16 @@ controllers:
           #OPENVPN_MSSFIX: 1166
           DOT: "off"
           DNS_ADDRESS: "127.0.0.2"
-          VPN_SERVICE_PROVIDER: private internet access
-          SERVER_REGIONS: "DK Copenhagen,Netherlands,DE Berlin"
+          VPN_SERVICE_PROVIDER: custom
+          #SERVER_REGIONS: "DK Copenhagen,Netherlands,DE Berlin"
+          VPN_TYPE: wireguard
+          WIREGUARD_ENDPOINT_IP: 46.246.8.68
+          WIREGUARD_ENDPOINT_PORT: 1337
+          WIREGUARD_ADDRESSES: 10.31.212.235/32
+          SERVER_NAMES: stockholm402
           FIREWALL_INPUT_PORTS: 8080,3000
           FIREWALL_OUTBOUND_SUBNETS: 10.245.0.0/16,10.244.0.0/16 # Allow access to k8s subnets
-          PORT_FORWARD_ONLY: "true"
+          #PORT_FORWARD_ONLY: "true"
           VPN_PORT_FORWARDING: "on"
           VPN_PORT_FORWARDING_PROVIDER: private internet access
           VPN_PORT_FORWARDING_UP_COMMAND: |
