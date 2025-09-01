@@ -12,7 +12,7 @@ spec:
   sources:
     - chart: argo-cd
       repoURL: https://argoproj.github.io/argo-helm
-      targetRevision: 8.3.2
+      targetRevision: 8.3.3
       helm:
         valueFiles:
           - $repo/kubernetes/apps/argocd/values.yaml
