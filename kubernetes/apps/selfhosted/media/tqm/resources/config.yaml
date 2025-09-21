@@ -21,7 +21,7 @@ filters:
       - '"expired" not in Tags'
     remove:
       - IsUnregistered()
-      - HasAnyTag("not-linked", "episode")
+      - HasAnyTag("not-linked", "episode", "cleanup")
       - HasAnyTag("site:TL", "site:YSC", "site:ST")
     tag:
       - name: added:1d
