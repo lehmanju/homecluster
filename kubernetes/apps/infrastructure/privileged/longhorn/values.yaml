@@ -1,7 +1,7 @@
 defaultSettings:
   defaultDataPath: /var/mnt/extra/longhorn
   defaultLonghornStaticStorageClass: longhorn
-  storageReservedPercentageForDefaultDisk: 10
+  storageReservedPercentageForDefaultDisk: "10"
   replicaSoftAntiAffinity: true
   replicaDiskSoftAntiAffinity: false
   replicaAutoBalance: least-effort
