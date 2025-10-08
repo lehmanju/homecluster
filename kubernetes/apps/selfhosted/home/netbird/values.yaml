@@ -7,7 +7,7 @@ controllers:
       netbird:
         image:
           repository: ghcr.io/netbirdio/netbird
-          tag: 0.59.3@sha256:1c4e84d9968d3bc8b089485ebad97f68944088c1e55f7989b74d33c46f396d8f
+          tag: 0.59.4@sha256:38cc67eff2da56b75f39b1cd6d2fbddd6e8ee36a9e9b1565657a5e711b335476
         env:
           NB_HOSTNAME: "netbird-k8s-router" # name that will appear in the management UI
           NB_LOG_LEVEL: "info"
