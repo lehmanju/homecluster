@@ -12,6 +12,9 @@ spec:
         revision: HEAD
         files:
           - path: kubernetes/apps/selfhosted/**/argocd-app-config.yaml
+  ignoreApplicationDifferences:
+    - jsonPointers:
+        - /spec/syncPolicy
   template:
     metadata:
       name: "{{.path.basename}}"
