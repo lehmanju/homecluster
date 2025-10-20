@@ -17,21 +17,22 @@ controllers:
           repository: ghcr.io/qdm12/gluetun
           tag: v3.40.0
         env:
-          #OPENVPN_MSSFIX: 1166
+          OPENVPN_MSSFIX: 1166
           DOT: "off"
           DNS_ADDRESS: "127.0.0.2"
-          VPN_SERVICE_PROVIDER: custom
-          #SERVER_REGIONS: "DK Copenhagen,Netherlands,DE Berlin"
-          VPN_TYPE: wireguard
-          WIREGUARD_ENDPOINT_IP: 46.246.8.68
-          WIREGUARD_ENDPOINT_PORT: 1337
-          WIREGUARD_ADDRESSES: 10.31.212.235/32
-          SERVER_NAMES: stockholm402
+          #VPN_SERVICE_PROVIDER: custom
+          VPN_SERVICE_PROVIDER: private internet access
+          SERVER_REGIONS: "DK Copenhagen,Netherlands,DE Berlin"
+          #VPN_TYPE: wireguard
+          #WIREGUARD_ENDPOINT_IP: 188.126.94.120
+          #WIREGUARD_ENDPOINT_PORT: 1337
+          #WIREGUARD_ADDRESSES: 10.22.251.23/32
+          #SERVER_NAMES: copenhagen403
           FIREWALL_INPUT_PORTS: 8080,3000
           FIREWALL_OUTBOUND_SUBNETS: 10.245.0.0/16,10.244.0.0/16 # Allow access to k8s subnets
           #PORT_FORWARD_ONLY: "true"
           VPN_PORT_FORWARDING: "on"
-          VPN_PORT_FORWARDING_PROVIDER: private internet access
+          #VPN_PORT_FORWARDING_PROVIDER: private internet access
           VPN_PORT_FORWARDING_UP_COMMAND: |
             /bin/sh -c 'wget -O- --retry-connrefused --post-data "json={\"listen_port\":{{"{{"}}PORTS{{"}}"}}}" http://qbittorrent:8080/api/v2/app/setPreferences 2>&1'
         envFrom:
@@ -211,7 +212,6 @@ configMaps:
             }
             forward . tls://9.9.9.9 tls://149.112.112.112 {
                 tls_servername dns.quad9.net
-                policy sequential
                 health_check 5s
             }
             reload
