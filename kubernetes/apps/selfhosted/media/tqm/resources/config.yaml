@@ -22,7 +22,7 @@ filters:
     remove:
       - IsUnregistered()
       - HasAnyTag("not-linked", "episode", "cleanup")
-      - HasAnyTag("site:TL", "site:YSC", "site:ST")
+      - HasAnyTag("site:TL", "site:YSC", "site:ST", "site:FNP")
     tag:
       - name: added:1d
         update:
@@ -114,7 +114,7 @@ filters:
           - (TrackerName != "hdts-announce.ru" || SeedingDays > 7.1 || DownloadedBytes == 0)
           - (TrackerName != "bgp.technology" && TrackerName != "empirehost.me" && TrackerName != "stackoverflow.tech" || SeedingDays > 14.1 || DownloadedBytes == 0)
           - (TrackerName != "lst.gg" || SeedingDays > 31.1)
-          - (TrackerName != "fearnopeer.com" || SeedingDays > 14.1)
+          - (TrackerName != "fearnopeer.com" || SeedingDays > 14.1 || DownloadedBytes == 0)
           - (TrackerName != "milkie.cc" || SeedingDays > 14.1 || DownloadedBytes == 0)
           - (TrackerName != "morethantv.me" || SeedingDays > 14.1 || DownloadedBytes == 0)
           - (TrackerName != "onlyencodes.cc" || SeedingDays > 14.1 || DownloadedBytes == 0)
