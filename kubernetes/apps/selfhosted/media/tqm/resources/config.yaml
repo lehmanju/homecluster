@@ -108,7 +108,6 @@ filters:
           - (TrackerName != "anthelion.me" || SeedingDays > 14.1 || DownloadedBytes == 0)
           - (TrackerName != "alpharatio.cc" || SeedingDays > 14.1 || DownloadedBytes == 0)
           - (TrackerName != "blutopia.cc" && TrackerName != "blutopia.xyz" || SeedingDays > 14.1 || DownloadedBytes == 0)
-          - (TrackerName != "fearnopeer.com" || SeedingDays > 30.1)
           - (TrackerName != "filelist.io" && TrackerName != "thefl.org" || SeedingDays > 7.1 || DownloadedBytes == 0)
           - (TrackerName != "hd-space.pw" || SeedingDays > 7.1 || DownloadedBytes == 0)
           - (TrackerName != "hdts-announce.ru" || SeedingDays > 7.1 || DownloadedBytes == 0)
