@@ -1,0 +1,5 @@
+helm:
+  chart: grafana-operator
+  releaseName: grafana-operator
+  version: v5.20.0
+  repo: oci://ghcr.io/grafana/helm-charts/grafana-operator
