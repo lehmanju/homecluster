@@ -3,15 +3,27 @@
     customManagers: [
         {
             customType: "jsonata",
-            description: "Process helm charts in argocd-app-config.yaml",
+            description: "Process helm charts in argocd-app-config.yaml (non-OCI repositories)",
             fileFormat: "yaml",
             fileMatch: [
                 "(^|/)argocd-app-config\\.ya?ml$"
             ],
             matchStrings: [
-                'helm.{ "depName": chart, "currentValue": version, "registryUrl": repo }'
+                'helm[repo != null and $not($contains(repo, "oci://"))].{ "depName": chart, "currentValue": version, "registryUrl": repo }'
             ],
             datasourceTemplate: "helm",
+        },
+        {
+            customType: "jsonata",
+            description: "Process OCI helm charts in argocd-app-config.yaml",
+            fileFormat: "yaml",
+            fileMatch: [
+                "(^|/)argocd-app-config\\.ya?ml$"
+            ],
+            matchStrings: [
+                'helm[repo != null and $contains(repo, "oci://")].{ "depName": chart, "currentValue": version, "packageName": $substring(repo, 6) }'
+            ],
+            datasourceTemplate: "docker",
         },
     ],
 }
