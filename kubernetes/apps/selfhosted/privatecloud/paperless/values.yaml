@@ -85,7 +85,7 @@ controllers:
       postgres:
         image:
           repository: docker.io/postgres
-          tag: 15.15
+          tag: 18.1
         env:
           POSTGRES_DB: paperless
           POSTGRES_USER: paperless
