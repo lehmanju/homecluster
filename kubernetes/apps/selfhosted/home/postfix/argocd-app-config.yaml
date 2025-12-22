@@ -1,5 +1,5 @@
 helm:
   chart: mail
   releaseName: postfix
-  version: v4.4.0
+  version: 5.0.1
   repo: https://bokysan.github.io/docker-postfix/
