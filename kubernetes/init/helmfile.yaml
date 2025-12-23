@@ -27,7 +27,7 @@ releases:
     namespace: argocd
     createNamespace: true
     chart: argo/argo-cd
-    version: 9.1.9
+    version: 9.1.10
     values:
       - ../apps/argocd/values.yaml
     secrets:
