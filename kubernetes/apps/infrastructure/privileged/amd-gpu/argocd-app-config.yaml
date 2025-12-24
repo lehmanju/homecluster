@@ -1,5 +1,5 @@
 helm:
   chart: amd-gpu
   releaseName: amd-gpu
-  version: 0.20.0
+  version: 0.21.0
   repo: https://rocm.github.io/k8s-device-plugin/
