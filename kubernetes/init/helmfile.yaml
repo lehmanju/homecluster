@@ -19,7 +19,7 @@ releases:
     namespace: cilium
     createNamespace: false
     chart: cilium/cilium
-    version: 1.18.5
+    version: 1.18.6
     values:
       - ../apps/infrastructure/privileged/cilium/values.yaml
 
