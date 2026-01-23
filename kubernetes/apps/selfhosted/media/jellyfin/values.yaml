@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/refs/heads/main/charts/library/common/values.schema.json
 controllers:
   jellyfin:
     annotations:
@@ -80,8 +81,12 @@ persistence:
     globalMounts:
       - path: /media
         readOnly: true
-  tmpfs:
-    type: emptyDir
+  tmpfs:    
+    type: persistentVolumeClaim
+    accessMode: ReadWriteOnce
+    size: 5Gi
+    storageClass: longhorn-ephemeral
+    forceRename: jellyfin-tmpfs
     advancedMounts:
       jellyfin:
         app:

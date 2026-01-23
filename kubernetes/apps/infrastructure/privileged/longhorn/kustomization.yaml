@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - ./route.yaml
   - ./backup-sc.yaml
+  - ./eph-sc.yaml
