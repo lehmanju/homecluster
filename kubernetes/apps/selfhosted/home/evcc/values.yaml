@@ -49,7 +49,10 @@ service:
 
 persistence:
   data:
-    existingClaim: evcc-data-a
+    type: persistentVolumeClaim
+    accessMode: ReadWriteOnce
+    size: 5Gi
+    storageClass: longhorn-backup
     globalMounts:
       - path: /data
   config:
