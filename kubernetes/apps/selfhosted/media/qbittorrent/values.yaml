@@ -15,7 +15,7 @@ controllers:
           - coredns
         image:
           repository: ghcr.io/qdm12/gluetun
-          tag: v3.41.0
+          tag: v3.41.1
         env:
           OPENVPN_MSSFIX: 1166
           DOT: "off"
