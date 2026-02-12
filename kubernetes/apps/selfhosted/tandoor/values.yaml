@@ -50,7 +50,7 @@ controllers:
       postgres:
         image:
           repository: docker.io/postgres
-          tag: 17.7
+          tag: 17.8
         env:
           POSTGRES_USER: tandoor
           POSTGRES_DB: recipes
