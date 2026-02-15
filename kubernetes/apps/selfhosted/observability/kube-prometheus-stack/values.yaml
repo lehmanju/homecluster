@@ -3,6 +3,9 @@ crds:
   upgradeJob:
     enabled: true
     forceConflicts: true
+    image:
+      kubectl:
+        tag: "1.35.0"
 cleanPrometheusOperatorObjectNames: true
 alertmanager:
   route:
