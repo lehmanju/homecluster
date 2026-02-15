@@ -5,7 +5,7 @@ crds:
     forceConflicts: true
     image:
       kubectl:
-        tag: "1.35.0"
+        tag: "v1.35.0"
 cleanPrometheusOperatorObjectNames: true
 alertmanager:
   route:
