@@ -24,6 +24,8 @@ controllers:
               secretKeyRef:
                 name: sonarr-secret
                 key: SONARR__AUTH__APIKEY
+          - name: RECYCLARR_DATA_DIR
+            value: /tmp
         args: ["sync"]
         securityContext:
           allowPrivilegeEscalation: false
