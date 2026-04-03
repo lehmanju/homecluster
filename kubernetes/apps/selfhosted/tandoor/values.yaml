@@ -7,7 +7,7 @@ controllers:
       app:
         image:
           repository: ghcr.io/tandoorrecipes/recipes
-          tag: 2.6.1@sha256:22a93021d14c1f4b0f7a3eebac22f3cddba4328b7a43861630881a4008d09d8d
+          tag: 2.6.3@sha256:3b1e66b7df6703d4bc8f56a9efe170a635d0724dc9dc676d7c80582a34f9abbe
         env:
           # Configure application
           SECRET_KEY:
