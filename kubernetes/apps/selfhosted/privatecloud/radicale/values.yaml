@@ -7,7 +7,7 @@ controllers:
       main:
         image:
           repository: ghcr.io/kozea/radicale
-          tag: 3.6.1@sha256:9e491a26418544cc71d9b027149eee50eb98501c39cb8eba41122447a19abbf6
+          tag: 3.7.0@sha256:4b7285e4229fe8f8ec7a64e5ec4057fe7c5a662cd0092acebc415c3211a22d1a
         resources:
           limits:
             memory: 128Mi
