@@ -84,7 +84,7 @@ persistence:
   tmpfs:    
     type: persistentVolumeClaim
     accessMode: ReadWriteOnce
-    size: 5Gi
+    size: 20Gi
     storageClass: longhorn-ephemeral
     forceRename: jellyfin-tmpfs
     advancedMounts:
