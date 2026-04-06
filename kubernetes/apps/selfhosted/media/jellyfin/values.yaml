@@ -82,8 +82,18 @@ persistence:
       - path: /media
         readOnly: true
   tmpfs:
-    type: emptyDir
-    sizeLimit: 5Gi
+    type: custom
+    volumeSpec:
+      name: jellyfin-ephemeral
+      ephemeral:
+        volumeClaimTemplate:
+          spec:
+            accessModes:
+              - ReadWriteOnce
+            storageClassName: "longhorn-ephemeral"
+            resources:
+              requests:
+                storage: 40Gi
     advancedMounts:
       jellyfin:
         app:
