@@ -8,13 +8,6 @@ defaultSettings:
   createDefaultDiskLabeledNodes: true
 preUpgradeChecker:
   jobEnabled: false
-  upgradeVersionCheck: false
 persistence:
   defaultClassReplicaCount: 1
   fsType: "xfs"
-image:
-  longhorn:
-    manager:
-      tag: v1.11.0-hotfix-1
-    instanceManager:
-      tag: v1.11.0-hotfix-2
