@@ -81,18 +81,17 @@ persistence:
     globalMounts:
       - path: /media
         readOnly: true
-  tmpfs:    
-    type: persistentVolumeClaim
-    accessMode: ReadWriteOnce
-    size: 20Gi
-    storageClass: longhorn-ephemeral
-    forceRename: jellyfin-tmpfs
+  tmpfs:
+    type: emptyDir
+    sizeLimit: 5Gi
     advancedMounts:
       jellyfin:
         app:
           - path: /cache
             subPath: cache
-          - path: /config/log
-            subPath: log
           - path: /tmp
             subPath: tmp
+          - path: /transcode
+            subPath: transcode
+          - path: /config/log
+            subPath: logs
