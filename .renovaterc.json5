@@ -15,6 +15,7 @@
     ':gitSignOff',
     ':semanticCommits',
     ':timezone(Europe/Berlin)',
+    'schedule:weekly'
   ],
   dependencyDashboardTitle: 'Renovate Dashboard 🤖',
   suppressNotifications: [
