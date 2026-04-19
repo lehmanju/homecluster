@@ -1,5 +1,5 @@
 helm:
   chart: cilium
   releaseName: cilium
-  version: 1.19.2
+  version: 1.19.3
   repo: https://helm.cilium.io
