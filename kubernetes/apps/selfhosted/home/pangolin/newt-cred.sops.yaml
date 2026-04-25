@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Secret
+metadata:
+    name: pangolin-newt-cred
+type: Opaque
+stringData:
+    PANGOLIN_ENDPOINT: ENC[AES256_GCM,data:PlRVdVLgn3DqfrVN+aUyvklf7O02gBzJ,iv:twz9o7/jOX9Q6qe6UIkEtDXIP9hgBPgM4bypoOZQrqU=,tag:evgixL8PmChiPAxCr3WBMQ==,type:str]
+    NEWT_ID: ENC[AES256_GCM,data:6vzUdG/K84qGOxJlx9rI,iv:BM4ubu3d0jTv5BBHFHHv9NYcPaMKdC5pg0HyDVc9Hko=,tag:MvNenyO14D6xS5SnkbG9sw==,type:str]
+    NEWT_SECRET: ENC[AES256_GCM,data:vIOxZpJrrPzN9TP1zEU1Q65W0DXZTWnTNPY7RZMK/gqqTdZ7x65lfMh78rzEr7vt,iv:PkhFnsDtOeiwx8ayndU2nWkuf/EN0vc+wca7S2xGtxg=,tag:uXN7L/qwD2D00i4RJ2hCdg==,type:str]
+sops:
+    age:
+        - recipient: age1zc4knw29dcgns9zdpyxyx56xsax6s9vsu82sgef3mph56mdr7fusp6v9yh
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBVUUNZcjNRM3RpRVZHNllR
+            TE95L3ExcFByeTFwWVlOMGN0QjNJWFpseVQ0CnZweTl2TDFLWkdGOENtbGc0aHhy
+            NWRxMEpWMzFKbHR1Vm92eXczWUxSM3cKLS0tIHlmemFxRHltaDc3ZXVibDBlVlpy
+            d1BkV0FTaHExbmlqUUJmYk9sbTk2VWsKBu16uyLdaNtKeFgNaPrONthP17xNBF9d
+            E30lILWc4qZ38CStDmIbf+9W2ihySrU5oRH6l3nkqMIzOZRWM2LTCg==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-04-25T15:53:33Z"
+    mac: ENC[AES256_GCM,data:JnwuPyG0f1TChty0ZjNQaCrFHwV4jx8FEbOT1IirysR4GGnC53D7wNVYrsEL8kRU6c/rim2n7tiJ9lIC59A8xPjIIEz6ca7CtiIMz5iKp6Wj2s3tynK6yqegEmN7yXo4FxEk/TCtrJwHANs/XAsnT2GTl31UHFP2lu2fh+xW9tM=,iv:nwMBNReAEksDDXqmOa2m7QmAlCyFWKF7LKa45UuKk6s=,tag:UazHM1JsrXI3v/8/bHFmaA==,type:str]
+    encrypted_regex: ^(data|stringData)$
+    version: 3.12.2

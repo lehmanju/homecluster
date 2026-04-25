@@ -1,0 +1,16 @@
+newtInstances:
+  - name: home-newt
+    enabled: true
+    auth:
+      existingSecretName: pangolin-newt-cred
+      keys:
+        endpointKey: PANGOLIN_ENDPOINT
+        idKey: NEWT_ID
+        secretKey: NEWT_SECRET
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 300m
+        memory: 256Mi
