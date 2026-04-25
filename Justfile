@@ -1,19 +1,25 @@
 [working-directory: 'talos']
 @genconfig:
-  talhelper genconfig
+  mkdir -p ./clusterconfig
+  sops -d ./talsecret.sops.yaml > ./clusterconfig/.secrets.yaml
+  talosctl gen config homecluster https://cluster.lan:6443 --with-secrets ./clusterconfig/.secrets.yaml --config-patch-control-plane "@./minipc.config.yaml" --output-types controlplane,talosconfig --output-dir ./clusterconfig --force
+  rm -f ./clusterconfig/.secrets.yaml
+  talosctl --talosconfig ./clusterconfig/talosconfig config endpoint 192.168.1.22
+  talosctl --talosconfig ./clusterconfig/talosconfig config node 192.168.1.22
+  mv ./clusterconfig/controlplane.yaml ./clusterconfig/homecluster-minipc.yaml
 
 [working-directory: 'talos/clusterconfig']
 @apply-initial: genconfig
-  talosctl apply-config -n 192.168.1.123 --file homecluster-minipc.yaml --insecure
+  talosctl apply-config -n 192.168.1.22 --file homecluster-minipc.yaml --insecure
   # todo different nodes
 
 [working-directory: 'talos/clusterconfig']  
 @apply-update: genconfig
-  talosctl apply-config -n 192.168.1.22 -e 192.168.1.22 --file homecluster-minipc.yaml --talosconfig=./talosconfig
+  talosctl apply-config -n 192.168.1.22 --file homecluster-minipc.yaml --talosconfig=./talosconfig
   # todo different nodes
 
 @bootstrap:
-  talosctl bootstrap -n 192.168.1.22 -e 192.168.1.22 --talosconfig=./talos/clusterconfig/talosconfig
+  talosctl bootstrap -n 192.168.1.22 --talosconfig=./talos/clusterconfig/talosconfig
   # wait until control plane is ready
   #helmfile apply -f kubernetes/init/helmfile.yaml
   #kubectl apply -f kubernetes/cluster.yaml
@@ -27,7 +33,7 @@
 
 [working-directory: 'talos/clusterconfig']
 @reset:
-  talosctl -n 192.168.1.21 -e 192.168.1.21 --talosconfig=./talosconfig reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --reboot
+  talosctl -n 192.168.1.21 --talosconfig=./talosconfig reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --reboot
 
 [working-directory: 'talos/clusterconfig']
 @do +AARGS:

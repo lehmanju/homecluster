@@ -6,13 +6,14 @@ Talos Kubernetes Cluster@Home with Applications managed by ArgoCD
 - `kubernetes/bootstrap` Argo-CD applications
 - `kubernetes/apps` application configuration
 - `kubernetes/init` initial cluster setup (applied once)
-- `talos/` TalOS configurations (using `talhelper`)
+- `talos/` TalOS configurations (native `talosctl` generation + patches)
 - `network/` OpenWRT router configuration 
 
 ## Setup
 
-To deploy a cluster, secrets must be generated first with `just apply-initial`. This has to be done only once.
-Then run  `just bootstrap` if it's the first node. Talos should now be running. After successful kubelet startup, run `helmfile apply -f kubernetes/init/helmfile.yaml` and `kubectl apply -f kubernetes/cluster.yaml`. Argo-CD should sync all apps and the cluster is up and running.
+Generate Talos machine config offline with `just genconfig`.
+To deploy a cluster, run `just apply-initial`. This has to be done only once.
+Then run `just bootstrap` if it's the first node. Talos should now be running. After successful kubelet startup, run `helmfile apply -f kubernetes/init/helmfile.yaml` and `kubectl apply -f kubernetes/cluster.yaml`. Argo-CD should sync all apps and the cluster is up and running.
 
 ArgoCDs initial password can be obtained with `argocd admin initial-password -n argocd`, webinterface access is provided by running `just forward-argocd` and then opening `http://localhost:13000` in a webbrowser.
 

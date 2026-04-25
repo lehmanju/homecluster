@@ -1,0 +1,121 @@
+cluster:
+  allowSchedulingOnControlPlanes: true
+  proxy:
+    disabled: true
+  network:
+    cni:
+      name: none
+    podSubnets:
+      - 10.244.0.0/16
+      - fd7f:eaef:3171::/48
+    serviceSubnets:
+      - 10.245.0.0/16
+      - fd7f:eaef:3172::/112
+  apiServer:
+    certSANs:
+      - cluster.lan
+      - 192.168.1.20
+      - 127.0.0.1
+  inlineManifests:
+    - name: cilium-namespace-privileged
+      contents: |-
+        ---
+        apiVersion: v1
+        kind: Namespace
+        metadata:
+          name: cilium
+          labels:
+            pod-security.kubernetes.io/enforce: privileged
+        ---
+  controlPlane:
+    endpoint: https://cluster.lan:6443
+machine:
+  certSANs:
+    - cluster.lan
+    - 192.168.1.20
+    - 127.0.0.1
+  network:
+    nameservers:
+      - 192.168.1.1
+      - fd7f:eaef:3150:10::1
+  install:
+    diskSelector:
+      wwid: eui.000000000000000100a07524479db782
+    image: factory.talos.dev/metal-installer/67da75b3fc2777e3df229a79a74114898a2db3a46d6937db04b3e6fb829ff334:v1.12.6
+    wipe: false
+    grubUseUKICmdline: true
+  sysctls:
+    net.ipv6.conf.bond0.accept_ra: "2"
+  kubelet:
+    nodeIP:
+      validSubnets:
+        - 192.168.1.0/24
+        - fd7f:eaef:3150:10::/60
+  features:
+    hostDNS:
+      enabled: true
+      forwardKubeDNSToHost: false
+    diskQuotaSupport: true
+    kubePrism:
+      enabled: true
+      port: 7445
+---
+apiVersion: v1alpha1
+kind: HostnameConfig
+auto: "off"
+hostname: minipc
+---
+apiVersion: v1alpha1
+kind: VolumeConfig
+name: EPHEMERAL
+provisioning:
+  diskSelector:
+    match: disk.transport == "nvme"
+  grow: false
+  maxSize: 50GiB
+---
+apiVersion: v1alpha1
+kind: UserVolumeConfig
+name: extra-nvme
+provisioning:
+  diskSelector:
+    match: disk.transport == "nvme"
+  grow: true
+  minSize: 200GiB
+filesystem:
+  type: xfs
+---
+apiVersion: v1alpha1
+kind: UserVolumeConfig
+name: extra-sata
+provisioning:
+  diskSelector:
+    match: disk.transport == "sata"
+  grow: true
+  minSize: 500GiB
+filesystem:
+  type: xfs
+---
+apiVersion: v1alpha1
+kind: LinkAliasConfig
+name: bond0-m0
+selector:
+  match: glob("b0:41:6f:14:7c:c5", mac(link.hardware_addr))
+---
+apiVersion: v1alpha1
+kind: BondConfig
+name: bond0
+links:
+  - bond0-m0
+bondMode: active-backup
+addresses:
+  - address: 192.168.1.22/24
+  - address: fd7f:eaef:3150:10::22/64
+routes:
+  - gateway: 192.168.1.1
+  - gateway: fd7f:eaef:3150:10::1
+---
+apiVersion: v1alpha1
+kind: Layer2VIPConfig
+name: 192.168.1.20
+link: bond0
