@@ -4,16 +4,16 @@
 
 [working-directory: 'talos/clusterconfig']
 @apply-initial: genconfig
-  talosctl apply-config -n 192.168.1.123 --file homecluster-raspberrypi-black.yaml --insecure
+  talosctl apply-config -n 192.168.1.123 --file homecluster-minipc.yaml --insecure
   # todo different nodes
 
 [working-directory: 'talos/clusterconfig']  
 @apply-update: genconfig
-  talosctl apply-config -n 192.168.1.21 -e 192.168.1.21 --file homecluster-raspberrypi-black.yaml --talosconfig=./talosconfig
+  talosctl apply-config -n 192.168.1.22 -e 192.168.1.22 --file homecluster-minipc.yaml --talosconfig=./talosconfig
   # todo different nodes
 
 @bootstrap:
-  talosctl bootstrap -n 192.168.1.21 -e 192.168.1.21 --talosconfig=./talos/clusterconfig/talosconfig
+  talosctl bootstrap -n 192.168.1.22 -e 192.168.1.22 --talosconfig=./talos/clusterconfig/talosconfig
   # wait until control plane is ready
   #helmfile apply -f kubernetes/init/helmfile.yaml
   #kubectl apply -f kubernetes/cluster.yaml
