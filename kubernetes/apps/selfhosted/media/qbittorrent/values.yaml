@@ -152,13 +152,6 @@ persistence:
     globalMounts:
       - path: /media/Downloads/qbittorrent
         subPath: Downloads/qbittorrent
-  extra:
-    existingClaim: media-ext
-    advancedMounts:
-      qbittorrent:
-        app:
-          - path: /media-ext/Downloads/qbittorrent
-            subPath: Downloads/qbittorrent
   coredns:
     type: configMap
     identifier: qbittorrent-coredns

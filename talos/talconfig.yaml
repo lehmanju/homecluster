@@ -69,14 +69,6 @@ nodes:
           grow: true
         filesystem:
           type: xfs
-      - name: extra-usb
-        provisioning:
-          diskSelector:
-            match: disk.transport == "usb"
-          minSize: 500GiB
-          grow: true
-        filesystem:
-          type: xfs
 
 patches:
   - |-
