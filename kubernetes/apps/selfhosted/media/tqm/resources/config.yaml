@@ -22,7 +22,7 @@ filters:
     remove:
       - IsUnregistered()
       - HasAnyTag("not-linked", "episode", "cleanup")
-      - HasAnyTag("site:TL", "site:YSC", "site:ST", "site:FNP")
+      - HasAnyTag("site:TL", "site:ST", "site:FNP")
     tag:
       - name: added:1d
         update:
