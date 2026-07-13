@@ -21,3 +21,4 @@ jobs:
             kubernetes/**
           changed-only-ignore: |
             .github/**
+          enable-ksops-compat: true
