@@ -1,6 +1,8 @@
 controllers:
   multus:
     type: daemonset
+    pod:
+      automountServiceAccountToken: true
     initContainers:
       cni-plugins:
         image:
