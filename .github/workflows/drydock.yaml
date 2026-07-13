@@ -22,3 +22,5 @@ jobs:
           changed-only-ignore: |
             .github/**
           enable-ksops-compat: true
+          repo-map: |
+            https://github.com/lehmanju/homecluster.git=.
