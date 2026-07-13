@@ -1,0 +1,23 @@
+name: drydock
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  drydock:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: sholdee/drydock/pr-action@main
+        with:
+          version: latest
+          skip-secrets: "true"
+          comment-mode: both
+          changed-only-include: |
+            kubernetes/**
+          changed-only-ignore: |
+            .github/**
