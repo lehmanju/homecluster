@@ -1,0 +1,84 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/refs/heads/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+
+controllers:
+  bookboss:
+    containers:
+      app:
+        image:
+          repository: ghcr.io/szinn/bookboss
+          tag: v0.8.31
+        env:
+          BOOKBOSS__DATABASE__DATABASE_URL: "sqlite:////library/bookboss.db?mode=rwc"
+          BOOKBOSS__LIBRARY__LIBRARY_PATH: /library/books
+          BOOKBOSS__IMPORT__BOOKDROP_PATH: /library/bookdrop
+          BOOKBOSS__FRONTEND__BASE_URL: https://bookboss.devpi.de
+          BOOKBOSS__FRONTEND__LISTEN_PORT: "8080"
+        envFrom:
+          - secretRef:
+              name: bookboss-secret
+        probes:
+          liveness:
+            enabled: true
+          readiness:
+            enabled: true
+          startup:
+            enabled: true
+            spec:
+              initialDelaySeconds: 10
+              failureThreshold: 30
+              periodSeconds: 5
+        resources:
+          requests:
+            cpu: 25m
+            memory: 256Mi
+          limits:
+            memory: 512Mi
+
+defaultPodOptions:
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
+    fsGroupChangePolicy: OnRootMismatch
+
+service:
+  app:
+    controller: bookboss
+    ports:
+      http:
+        port: 8080
+
+route:
+  app:
+    parentRefs:
+      - name: web-internal
+        namespace: cilium
+        sectionName: https
+    hostnames:
+      - bookboss.devpi.de
+    rules:
+      - backendRefs:
+          - port: 8080
+            name: bookboss-app
+        matches:
+          - path:
+              type: PathPrefix
+              value: /
+
+persistence:
+  config:
+    type: persistentVolumeClaim
+    accessMode: ReadWriteOnce
+    size: 5Gi
+    storageClass: longhorn-backup
+    globalMounts:
+      - path: /config
+  library:
+    type: persistentVolumeClaim
+    accessMode: ReadWriteOnce
+    size: 20Gi
+    storageClass: longhorn-backup
+    globalMounts:
+      - path: /library
