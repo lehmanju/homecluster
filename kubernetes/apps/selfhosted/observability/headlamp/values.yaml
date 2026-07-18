@@ -1,0 +1,27 @@
+config:
+  # Authenticate all users as the pod's service account (simple for homelab)
+  unsafeUseServiceAccountToken: true
+  # Keep built-in static plugins (includes Prometheus plugin)
+  staticPlugins:
+    enabled: true
+
+# Gateway API HTTPRoute — no separate ingress resource needed
+httpRoute:
+  enabled: true
+  parentRefs:
+    - name: web-internal
+      namespace: cilium
+      sectionName: https
+  hostnames:
+    - headlamp.devpi.de
+
+# Single replica is sufficient for a homelab
+replicaCount: 1
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 128Mi
+  limits:
+    cpu: 200m
+    memory: 256Mi

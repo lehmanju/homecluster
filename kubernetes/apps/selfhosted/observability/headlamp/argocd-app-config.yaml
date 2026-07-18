@@ -1,0 +1,7 @@
+helm:
+  chart: headlamp
+  releaseName: headlamp
+  version: 0.43.0
+  repo: https://kubernetes-sigs.github.io/headlamp/
+app:
+  namespace: headlamp
