@@ -1,0 +1,5 @@
+helm:
+  chart: k8s-gpu-dra-driver
+  releaseName: amd-gpu-dra-driver
+  version: 1.0.0
+  repo: https://rocm.github.io/k8s-gpu-dra-driver
