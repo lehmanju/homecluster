@@ -69,6 +69,7 @@ machine:
       content: |-
         [plugins."io.containerd.cri.v1.runtime"]
           cdi_spec_dirs = ["/var/run/cdi"]
+          device_ownership_from_security_context = true
 ---
 apiVersion: v1alpha1
 kind: HostnameConfig

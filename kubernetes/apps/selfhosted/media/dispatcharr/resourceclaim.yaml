@@ -1,0 +1,12 @@
+apiVersion: resource.k8s.io/v1
+kind: ResourceClaim
+metadata:
+  name: amd-gpu
+spec:
+  devices:
+    requests:
+      - name: gpu
+        exactly:
+          allocationMode: ExactCount
+          deviceClassName: gpu.amd.com
+          count: 1
