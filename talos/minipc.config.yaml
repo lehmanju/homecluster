@@ -47,6 +47,10 @@ machine:
   sysctls:
     net.ipv6.conf.bond0.accept_ra: "2"
   kubelet:
+    extraConfig:
+      featureGates:
+        DynamicResourceAllocation: true
+        ResourceHealthStatus: true
     nodeIP:
       validSubnets:
         - 192.168.1.0/24
@@ -59,6 +63,12 @@ machine:
     kubePrism:
       enabled: true
       port: 7445
+  files:
+    - op: create
+      path: /etc/cri/conf.d/20-customization.part
+      content: |-
+        [plugins."io.containerd.cri.v1.runtime"]
+          cdi_spec_dirs = ["/var/run/cdi"]
 ---
 apiVersion: v1alpha1
 kind: HostnameConfig
