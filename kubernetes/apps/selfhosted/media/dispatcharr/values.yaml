@@ -2,9 +2,24 @@
 controllers:
   dispatcharr:
     pod:
+      hostUsers: false
       resourceClaims:
         - name: gpu
           resourceClaimName: amd-gpu
+    initContainers:
+      chown-dbdir:
+        image:
+          repository: docker.io/library/alpine
+          tag: "3.24"
+        command:
+          - /bin/sh
+          - -c
+        args:
+          - |
+            mkdir -p /data/db
+            chmod 0750 /data/db
+        securityContext:
+          runAsUser: 0
     containers:
       app:
         image:
@@ -35,10 +50,6 @@ controllers:
             spec:
               failureThreshold: 30
               periodSeconds: 10
-        securityContext:
-          allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: true
-          capabilities: { drop: ["ALL"] }
         resources:
           requests:
             cpu: 100m
@@ -47,15 +58,6 @@ controllers:
             memory: 3Gi
           claims:
             - name: gpu
-
-defaultPodOptions:
-  securityContext:
-    runAsNonRoot: true
-    runAsUser: 1000
-    runAsGroup: 1000
-    fsGroup: 1000
-    fsGroupChangePolicy: OnRootMismatch
-    supplementalGroups: [44, 105]
 
 service:
   app:
@@ -86,18 +88,18 @@ persistence:
     accessMode: ReadWriteOnce
     size: 10Gi
     storageClass: longhorn-backup
-    globalMounts:
-      - path: /data
-  tmp:
-    type: custom
-    volumeSpec:
-      name: dispatcharr-tmp
-      ephemeral:
-        volumeClaimTemplate:
-          spec:
-            accessModes:
-              - ReadWriteOnce
-            storageClassName: "longhorn-ephemeral"
-            resources:
-              requests:
-                storage: 10Gi
+    advancedMounts:
+      dispatcharr:
+        app:
+          - path: /data
+            subPath: data
+        chown-dbdir:
+          - path: /data
+            subPath: data
+  tmpfs:
+    type: emptyDir
+    advancedMounts:
+      dispatcharr:
+        app:
+          - path: /tmp
+            subPath: tmp
