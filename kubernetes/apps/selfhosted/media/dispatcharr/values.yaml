@@ -1,0 +1,98 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/refs/heads/main/charts/library/common/values.schema.json
+controllers:
+  dispatcharr:
+    containers:
+      app:
+        image:
+          repository: ghcr.io/dispatcharr/dispatcharr
+          tag: 0.27.2@sha256:f2b5ea3128b0513feb07efee7539ad546f3ba3a9095f19936f446f75b8baa894
+        env:
+          CELERY_BROKER_URL: redis://localhost:6379/0
+          DISPATCHARR_ENV: aio
+          DISPATCHARR_LOG_LEVEL: info
+          DISPATCHARR_PORT: &port 9191
+          REDIS_HOST: localhost
+          TZ: Europe/Berlin
+        probes:
+          liveness: &probes
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /
+                port: *port
+              initialDelaySeconds: 0
+              periodSeconds: 10
+              timeoutSeconds: 1
+              failureThreshold: 3
+          readiness: *probes
+          startup:
+            enabled: true
+            spec:
+              failureThreshold: 30
+              periodSeconds: 10
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities: { drop: ["ALL"] }
+        resources:
+          requests:
+            cpu: 100m
+            memory: 500Mi
+          limits:
+            memory: 3Gi
+            amd.com/gpu: "1"
+
+defaultPodOptions:
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
+    fsGroupChangePolicy: OnRootMismatch
+    supplementalGroups: [44, 105]
+
+service:
+  app:
+    controller: dispatcharr
+    ports:
+      http:
+        port: *port
+
+route:
+  app:
+    hostnames: ["dispatcharr.devpi.de"]
+    parentRefs:
+      - name: web-internal
+        namespace: cilium
+        sectionName: https
+    rules:
+      - backendRefs:
+          - identifier: app
+            port: *port
+        matches:
+          - path:
+              type: PathPrefix
+              value: /
+
+persistence:
+  data:
+    type: persistentVolumeClaim
+    accessMode: ReadWriteOnce
+    size: 10Gi
+    storageClass: longhorn-backup
+    globalMounts:
+      - path: /data
+  tmp:
+    type: custom
+    volumeSpec:
+      name: dispatcharr-tmp
+      ephemeral:
+        volumeClaimTemplate:
+          spec:
+            accessModes:
+              - ReadWriteOnce
+            storageClassName: "longhorn-ephemeral"
+            resources:
+              requests:
+                storage: 10Gi
