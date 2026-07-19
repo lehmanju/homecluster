@@ -1,6 +1,10 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/refs/heads/main/charts/library/common/values.schema.json
 controllers:
   dispatcharr:
+    pod:
+      resourceClaims:
+        - name: gpu
+          resourceClaimTemplateName: amd-gpu
     containers:
       app:
         image:
@@ -41,7 +45,8 @@ controllers:
             memory: 500Mi
           limits:
             memory: 3Gi
-            amd.com/gpu: "1"
+          claims:
+            - name: gpu
 
 defaultPodOptions:
   securityContext:
