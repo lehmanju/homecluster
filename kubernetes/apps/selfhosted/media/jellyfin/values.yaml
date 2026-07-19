@@ -3,6 +3,10 @@ controllers:
   jellyfin:
     annotations:
       reloader.stakater.com/auto: "true"
+    pod:
+      resourceClaims:
+        - name: gpu
+          resourceClaimTemplateName: amd-gpu
     containers:
       app:
         image:
@@ -37,7 +41,8 @@ controllers:
             cpu: 100m
           limits:
             memory: 4Gi
-            amd.com/gpu: "1"
+          claims:
+            - name: gpu
 defaultPodOptions:
   securityContext:
     runAsNonRoot: true

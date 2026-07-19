@@ -3,5 +3,7 @@ helm:
   releaseName: jellyfin
   version: 5.0.1
   repo: https://bjw-s-labs.github.io/helm-charts
+dependsOn:
+  - name: amd-gpu-dra-driver
 app:
   namespace: media
