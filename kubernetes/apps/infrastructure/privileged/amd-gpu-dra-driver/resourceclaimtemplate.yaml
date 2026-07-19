@@ -1,0 +1,11 @@
+apiVersion: resource.k8s.io/v1
+kind: ResourceClaimTemplate
+metadata:
+  name: amd-gpu
+spec:
+  spec:
+    devices:
+      requests:
+        - name: gpu
+          deviceClassName: gpu.amd.com
+          exactly: 1
