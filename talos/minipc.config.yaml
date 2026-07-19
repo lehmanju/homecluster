@@ -16,6 +16,8 @@ cluster:
       - cluster.lan
       - 192.168.1.20
       - 127.0.0.1
+    extraArgs:
+      feature-gates: UserNamespacesSupport=true
   inlineManifests:
     - name: cilium-namespace-privileged
       contents: |-
@@ -46,11 +48,13 @@ machine:
     grubUseUKICmdline: true
   sysctls:
     net.ipv6.conf.bond0.accept_ra: "2"
+    user.max_user_namespaces: "11255"
   kubelet:
     extraConfig:
       featureGates:
         DynamicResourceAllocation: true
         ResourceHealthStatus: true
+        UserNamespacesSupport: true
     nodeIP:
       validSubnets:
         - 192.168.1.0/24
