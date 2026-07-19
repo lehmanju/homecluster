@@ -6,7 +6,7 @@ controllers:
     pod:
       resourceClaims:
         - name: gpu
-          resourceClaimTemplateName: amd-gpu
+          resourceClaimName: amd-gpu
     containers:
       app:
         image:
