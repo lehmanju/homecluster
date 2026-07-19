@@ -5,3 +5,5 @@ helm:
   repo: https://bjw-s-labs.github.io/helm-charts
 app:
   namespace: media
+dependsOn:
+  - name: amd-gpu-dra-driver
