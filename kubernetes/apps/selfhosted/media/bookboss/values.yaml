@@ -61,7 +61,7 @@ route:
     rules:
       - backendRefs:
           - port: 8080
-            name: bookboss-app
+            identifier: app
         matches:
           - path:
               type: PathPrefix
