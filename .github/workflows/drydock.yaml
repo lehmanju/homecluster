@@ -12,7 +12,7 @@ jobs:
   drydock:
     runs-on: ubuntu-latest
     steps:
-      - uses: sholdee/drydock/pr-action@main
+      - uses: sholdee/drydock/pr-action@d7e639f7a8879f77a8afe8c886900d9e97a9ca92 # main
         with:
           version: latest
           skip-secrets: "true"
