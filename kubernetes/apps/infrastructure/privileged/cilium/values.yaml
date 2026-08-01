@@ -71,5 +71,5 @@ operator:
 cni:
   exclusive: false
 
-l2announcements:
+bgpControlPlane:
   enabled: true
