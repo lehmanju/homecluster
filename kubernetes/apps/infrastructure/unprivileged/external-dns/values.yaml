@@ -1,45 +1,21 @@
 domainFilters:
   - devpi.de
 extraArgs:
-  - --webhook-provider-url=http://localhost:8888
+  - --rfc2136-host=192.168.1.1
+  - --rfc2136-port=53530
+  - --rfc2136-zone=devpi.de
+  - --rfc2136-tsig-keyname=rndc-key
+  - --rfc2136-tsig-secret-alg=hmac-sha256
+  - --rfc2136-tsig-axfr
 policy: sync
 provider:
-  name: webhook
-  webhook:
-    image:
-      repository: ghcr.io/muhlba91/external-dns-provider-adguard
-      tag: v11.1.1
-    env:
-      - name: DRY_RUN
-        value: "false"
-      - name: LOG_LEVEL
-        value: debug
-      - name: ADGUARD_URL
-        value: http://192.168.1.1:8080
-      - name: ADGUARD_USER
-        value: admin
-      - name: ADGUARD_PASSWORD
-        valueFrom:
-          secretKeyRef:
-            name: external-dns-adguardhome-secret
-            key: external_dns_password
-    ports:
-      - containerPort: 8080
-        name: http-webhook
-    livenessProbe:
-      httpGet:
-        path: /healthz
-        port: http-webhook
-      initialDelaySeconds: 10
-      timeoutSeconds: 5
-    readinessProbe:
-      httpGet:
-        path: /healthz
-        port: http-webhook
-      initialDelaySeconds: 10
-      timeoutSeconds: 5
-    securityContext:
-      readOnlyRootFilesystem: true
+  name: rfc2136
+env:
+  - name: EXTERNAL_DNS_RFC2136_TSIG_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: external-dns-bind-secret
+        key: tsig_secret
 resources:
   requests:
     cpu: 16m
