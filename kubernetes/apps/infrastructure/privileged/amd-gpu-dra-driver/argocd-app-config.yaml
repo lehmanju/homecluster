@@ -1,5 +1,5 @@
 helm:
   chart: k8s-gpu-dra-driver
   releaseName: amd-gpu-dra-driver
-  version: v0.1.0
-  repo: ghcr.io/buroa/helm
+  version: 1.0.1
+  repo: ghcr.io/home-operations/charts-mirror
