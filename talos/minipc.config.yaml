@@ -43,7 +43,7 @@ machine:
   install:
     diskSelector:
       wwid: eui.000000000000000100a07524479db782
-    image: factory.talos.dev/metal-installer/67da75b3fc2777e3df229a79a74114898a2db3a46d6937db04b3e6fb829ff334:v1.12.6
+    image: factory.talos.dev/metal-installer/67da75b3fc2777e3df229a79a74114898a2db3a46d6937db04b3e6fb829ff334:v1.13.7
     wipe: false
     grubUseUKICmdline: true
   sysctls:
