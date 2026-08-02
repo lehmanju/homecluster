@@ -39,7 +39,6 @@ machine:
   network:
     nameservers:
       - 192.168.1.1
-      - fd7f:eaef:3150:10::1
   install:
     diskSelector:
       wwid: eui.000000000000000100a07524479db782
@@ -58,7 +57,6 @@ machine:
     nodeIP:
       validSubnets:
         - 192.168.1.0/24
-        - fd7f:eaef:3150:10::/60
   features:
     hostDNS:
       enabled: true
@@ -125,10 +123,8 @@ links:
 bondMode: active-backup
 addresses:
   - address: 192.168.1.22/24
-  - address: fd7f:eaef:3150:10::22/64
 routes:
   - gateway: 192.168.1.1
-  - gateway: fd7f:eaef:3150:10::1
 ---
 apiVersion: v1alpha1
 kind: Layer2VIPConfig
