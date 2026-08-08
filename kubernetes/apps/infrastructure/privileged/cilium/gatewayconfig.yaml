@@ -5,5 +5,5 @@ metadata:
 spec:
   service:
     type: LoadBalancer
-    ipFamilyPolicy: PreferDualStack
-    ipFamilies: [IPv4, IPv6]
+    ipFamilyPolicy: SingleStack
+    ipFamilies: [IPv4]

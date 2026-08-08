@@ -7,4 +7,13 @@ metadata:
 spec:
   allowFirstLastIPs: "No"
   blocks:
-    - cidr: 10.243.0.0/16
+    - cidr: 10.10.128.0/24
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumL2AnnouncementPolicy
+metadata:
+  name: l2announcepolicy
+spec:
+  loadBalancerIPs: true
+  interfaces:
+    - bond0
