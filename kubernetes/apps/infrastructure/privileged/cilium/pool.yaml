@@ -16,4 +16,4 @@ metadata:
 spec:
   loadBalancerIPs: true
   interfaces:
-    - bond0
+    - enp1s0

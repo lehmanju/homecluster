@@ -13,4 +13,4 @@ spec:
     nodeSelector:
       matchLabels: {}
 
-    interface: "bond0"
+    interface: "enp1s0"

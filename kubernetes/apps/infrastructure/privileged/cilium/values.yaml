@@ -16,7 +16,7 @@ egressGateway:
   enabled: true
 
 devices:
-  - bond0
+  - enp1s0
 
 hubble:
   enabled: false
