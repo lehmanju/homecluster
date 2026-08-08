@@ -15,7 +15,8 @@ bpf:
 egressGateway:
   enabled: true
 
-devices: bond+
+devices:
+  - bond0
 
 hubble:
   enabled: false
@@ -71,5 +72,5 @@ operator:
 cni:
   exclusive: false
 
-bgpControlPlane:
+l2announcements:
   enabled: true
