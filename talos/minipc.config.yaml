@@ -43,6 +43,7 @@ machine:
   sysctls:
     net.ipv6.conf.bond0.accept_ra: "2"
     user.max_user_namespaces: "11255"
+    net/ipv6/conf/bond0.1/disable_ipv6: "1"
   kubelet:
     extraConfig:
       featureGates:
@@ -126,9 +127,7 @@ apiVersion: v1alpha1
 kind: VLANConfig
 name: bond0.1
 vlanID: 1
-vlanMode: 802.1q
 parent: bond0
-up: true
 ---
 apiVersion: v1alpha1
 kind: Layer2VIPConfig
