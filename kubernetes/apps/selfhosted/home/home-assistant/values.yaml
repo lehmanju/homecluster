@@ -48,7 +48,6 @@ defaultPodOptions:
     k8s.v1.cni.cncf.io/networks: |
       [{
         "name": "iot",
-        "interface": "eth1",
         "namespace": "multus",
         "ips": ["192.168.1.45/24"],
         "mac": "32:d0:8d:e8:14:a6"
