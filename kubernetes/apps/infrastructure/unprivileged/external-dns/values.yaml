@@ -1,5 +1,6 @@
 domainFilters:
   - devpi.de
+logLevel: debug
 extraArgs:
   - --rfc2136-host=10.10.0.1
   - --rfc2136-port=53530
