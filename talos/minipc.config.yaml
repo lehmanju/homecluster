@@ -13,8 +13,7 @@ cluster:
       - fd7f:eaef:3172::/112
   apiServer:
     certSANs:
-      - cluster.lan
-      - 192.168.1.20
+      - 10.10.1.20
       - 127.0.0.1
     extraArgs:
       feature-gates: UserNamespacesSupport=true
@@ -30,15 +29,11 @@ cluster:
             pod-security.kubernetes.io/enforce: privileged
         ---
   controlPlane:
-    endpoint: https://cluster.lan:6443
+    endpoint: https://10.10.1.20:6443
 machine:
   certSANs:
-    - cluster.lan
-    - 192.168.1.20
+    - 10.10.1.20
     - 127.0.0.1
-  network:
-    nameservers:
-      - 192.168.1.1
   install:
     diskSelector:
       wwid: eui.000000000000000100a07524479db782
@@ -56,7 +51,7 @@ machine:
         UserNamespacesSupport: true
     nodeIP:
       validSubnets:
-        - 192.168.1.0/24
+        - 10.10.1.0/24
   features:
     hostDNS:
       enabled: true
@@ -121,12 +116,21 @@ name: bond0
 links:
   - bond0-m0
 bondMode: active-backup
-addresses:
-  - address: 192.168.1.22/24
-routes:
-  - gateway: 192.168.1.1
+---
+apiVersion: v1alpha1
+kind: DHCPv4Config
+name: bond0
+clientIdentifier: mac
+---
+apiVersion: v1alpha1
+kind: VLANConfig
+name: bond0.1
+vlanID: 1
+vlanMode: 802.1q
+parent: bond0
+up: true
 ---
 apiVersion: v1alpha1
 kind: Layer2VIPConfig
-name: 192.168.1.20
+name: 10.10.1.20
 link: bond0
