@@ -15,8 +15,7 @@ bpf:
 egressGateway:
   enabled: true
 
-devices:
-  - enp1s0
+devices: enp1s0+
 
 hubble:
   enabled: false
