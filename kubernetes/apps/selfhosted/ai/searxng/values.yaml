@@ -1,0 +1,84 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/refs/heads/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+
+controllers:
+  searxng:
+    annotations:
+      reloader.stakater.com/auto: "true"
+    pod:
+      securityContext:
+        fsGroup: 977
+        fsGroupChangePolicy: "OnRootMismatch"
+        runAsGroup: 977
+        runAsUser: 977
+    containers:
+      app:
+        image:
+          repository: ghcr.io/searxng/searxng
+          tag: 2026.8.14-094c33d40@sha256:892cf809341915a4b7710d3c9045005b4c377d51335a089b6d4da0b28750788d
+        env:
+          SEARXNG_PORT: &port 8080
+        envFrom:
+          - secretRef:
+              name: searxng-secret
+        probes:
+          liveness:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /stats
+                port: *port
+              initialDelaySeconds: 0
+              periodSeconds: 10
+              timeoutSeconds: 1
+              failureThreshold: 3
+          readiness:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /stats
+                port: *port
+              initialDelaySeconds: 0
+              periodSeconds: 10
+              timeoutSeconds: 1
+              failureThreshold: 3
+        resources:
+          requests:
+            cpu: 10m
+            memory: 215Mi
+          limits:
+            memory: 4Gi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            add:
+              - CHOWN
+              - DAC_OVERRIDE
+              - SETGID
+              - SETUID
+            drop:
+              - ALL
+          readOnlyRootFilesystem: true
+service:
+  app:
+    controller: searxng
+    ports:
+      http:
+        port: *port
+persistence:
+  config:
+    type: configMap
+    name: searxng-config
+    globalMounts:
+      - path: /etc/searxng/limiter.toml
+        subPath: limiter.toml
+        readOnly: true
+      - path: /etc/searxng/settings.yml
+        subPath: settings.yaml
+        readOnly: true
+  tmpfs:
+    type: emptyDir
+    globalMounts:
+      - path: /tmp

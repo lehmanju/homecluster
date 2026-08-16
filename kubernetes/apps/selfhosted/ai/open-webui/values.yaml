@@ -1,0 +1,70 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/refs/heads/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+
+controllers:
+  open-webui:
+    annotations:
+      reloader.stakater.com/auto: "true"
+    containers:
+      app:
+        image:
+          repository: ghcr.io/open-webui/open-webui
+          tag: v0.11.0@sha256:72c0ba641ba75e7aa52655cb242570906ececd09b1140fb736483038a22b3228
+        env:
+          TZ: Europe/Berlin
+          # Features
+          ENABLE_RAG_WEB_SEARCH: true
+          ENABLE_SEARCH_QUERY: true
+          ENABLE_SIGNUP: true
+          # RAG web search backend (SearXNG - cluster-internal)
+          RAG_WEB_SEARCH_ENGINE: searxng
+          SEARXNG_QUERY_URL: http://searxng.searxng.svc.cluster.local:8080/search?q=<query>
+        envFrom:
+          - secretRef:
+              name: open-webui-secret
+        resources:
+          requests:
+            cpu: 100m
+          limits:
+            memory: 2Gi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
+defaultPodOptions:
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
+    fsGroupChangePolicy: OnRootMismatch
+service:
+  app:
+    controller: open-webui
+    ports:
+      http:
+        port: 8080
+route:
+  app:
+    hostnames:
+      - chat.devpi.de
+    parentRefs:
+      - name: web-internal
+        namespace: cilium
+        sectionName: https
+    rules:
+      - backendRefs:
+          - identifier: app
+            port: 8080
+        matches:
+          - path:
+              type: PathPrefix
+              value: /
+persistence:
+  config:
+    type: persistentVolumeClaim
+    accessMode: ReadWriteOnce
+    size: 10Gi
+    storageClass: longhorn-backup
+    globalMounts:
+      - path: /app/backend/data
