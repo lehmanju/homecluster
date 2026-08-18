@@ -12,9 +12,6 @@ routingMode: native
 bpf:
   masquerade: true
 
-egressGateway:
-  enabled: true
-
 devices: enp1s0+
 
 hubble:
