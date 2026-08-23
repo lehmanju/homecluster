@@ -7,7 +7,7 @@ controllers:
       app:
         image:
           repository: ghcr.io/szinn/bookboss
-          tag: v0.8.33
+          tag: v0.8.34
         env:
           BOOKBOSS__DATABASE__DATABASE_URL: "sqlite:////library/bookboss.db?mode=rwc"
           BOOKBOSS__LIBRARY__LIBRARY_PATH: /library/books
