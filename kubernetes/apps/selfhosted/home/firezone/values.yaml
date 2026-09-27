@@ -4,4 +4,4 @@ config:
 logLevel: info
 image:
   repository: ghcr.io/firezone/gateway
-  tag: 1.6.1@sha256:5269a8040ee1c532daeabdc2d1ff7afa165be07e0637bb627e3acfed4837b2e6
+  tag: 1.6.2@sha256:d8591dc00885c21b58de25f334246548bcfb93dfba125e6854fe05bda6ce2317
