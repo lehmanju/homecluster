@@ -7,6 +7,8 @@ controllers:
       resourceClaims:
         - name: gpu
           resourceClaimName: amd-gpu
+      # jellyfin/jellyfin#17831: default 30s can SIGKILL the shutdown VACUUM+ANALYZE on v12
+      terminationGracePeriodSeconds: 120
     containers:
       app:
         image:
@@ -14,24 +16,38 @@ controllers:
           tag: 10.11.11@sha256:45f648c382a0c8b552582fcea40e95cb17c5d475473a891cba0eb7523fb92112
         env:
           TZ: Europe/Berlin
+          DOTNET_SYSTEM_IO_DISABLEFILELOCKING: "true"
+          JELLYFIN_PublishedServerUrl: https://jellyfin.devpi.de
         probes:
-          liveness: &probes
+          liveness:
             enabled: true
             custom: true
             spec:
               httpGet:
                 path: /health
                 port: &port 8096
-              initialDelaySeconds: 0
-              periodSeconds: 10
-              timeoutSeconds: 1
-              failureThreshold: 3
-          readiness: *probes
+              periodSeconds: 30
+              timeoutSeconds: 10
+              failureThreshold: 5
+          readiness:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /health
+                port: *port
+              periodSeconds: 30
+              timeoutSeconds: 10
+              failureThreshold: 5
           startup:
             enabled: true
+            custom: true
             spec:
-              failureThreshold: 30
+              httpGet:
+                path: /health
+                port: *port
               periodSeconds: 10
+              failureThreshold: 30
         securityContext:
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true
