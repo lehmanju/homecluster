@@ -1,77 +1,87 @@
-cluster:
-  allowSchedulingOnControlPlanes: true
-  proxy:
-    disabled: true
-  network:
-    cni:
-      name: none
-    podSubnets:
-      - 10.244.0.0/16
-      - fd7f:eaef:3171::/48
-    serviceSubnets:
-      - 10.245.0.0/16
-      - fd7f:eaef:3172::/112
-  apiServer:
-    certSANs:
-      - 10.10.1.20
-      - 127.0.0.1
-    extraArgs:
-      feature-gates: UserNamespacesSupport=true
-  inlineManifests:
-    - name: cilium-namespace-privileged
-      contents: |-
-        ---
-        apiVersion: v1
-        kind: Namespace
-        metadata:
-          name: cilium
-          labels:
-            pod-security.kubernetes.io/enforce: privileged
-        ---
-  controlPlane:
-    endpoint: https://10.10.1.20:6443
 machine:
   certSANs:
-    - 10.10.1.20
     - 127.0.0.1
-  install:
-    diskSelector:
-      wwid: eui.000000000000000100a07524479db782
-    image: factory.talos.dev/metal-installer/7c9e329e408b058e4bdb5e18e4af75eed95d5b53944d6024fa59f8fa235e1741:v1.13.8
-    wipe: false
-    grubUseUKICmdline: true
-  sysctls:
-    net.ipv6.conf.enp1s0.accept_ra: "2"
-    user.max_user_namespaces: "11255"
-    net/ipv6/conf/enp1s0.1/disable_ipv6: "1"
-  kubelet:
-    extraConfig:
-      featureGates:
-        DynamicResourceAllocation: true
-        ResourceHealthStatus: true
-        UserNamespacesSupport: true
-    nodeIP:
-      validSubnets:
-        - 10.10.1.0/24
-  features:
-    hostDNS:
-      enabled: true
-      forwardKubeDNSToHost: false
-    diskQuotaSupport: true
-    kubePrism:
-      enabled: true
-      port: 7445
-  files:
-    - op: create
-      path: /etc/cri/conf.d/20-customization.part
-      content: |-
-        [plugins."io.containerd.cri.v1.runtime"]
-          cdi_spec_dirs = ["/var/run/cdi"]
-          device_ownership_from_security_context = true
+---
+apiVersion: v1alpha1
+kind: UnattendedInstallConfig
+installer:
+  image: factory.talos.dev/metal-installer/7c9e329e408b058e4bdb5e18e4af75eed95d5b53944d6024fa59f8fa235e1741:v1.14.4
+provisioning:
+  diskSelector:
+    match: disk.wwid == "eui.000000000000000100a07524479db782"
+---
+apiVersion: v1alpha1
+kind: ResolverConfig
+hostDNS:
+  forwardKubeDNSToHost: false
+---
+apiVersion: v1alpha1
+kind: SecurityProfileConfig
+workloadIsolation: false
+---
+apiVersion: v1alpha1
+kind: KubeNodeConfig
+nodeIP:
+  validSubnets:
+    - 10.10.1.0/24
+taints:
+  node-role.kubernetes.io/control-plane:
+    $patch: delete
+---
+apiVersion: v1alpha1
+kind: KubeNetworkConfig
+podSubnets:
+  - 10.244.0.0/16
+  - fd7f:eaef:3171::/48
+serviceSubnets:
+  - 10.245.0.0/16
+  - fd7f:eaef:3172::/112
+---
+apiVersion: v1alpha1
+kind: KubeFlannelCNIConfig
+$patch: delete
+---
+apiVersion: v1alpha1
+kind: KubeAPIServerConfig
+certExtraSANs:
+  - 127.0.0.1
+---
+apiVersion: v1alpha1
+kind: KubeProxyConfig
+enabled: false
+---
+apiVersion: v1alpha1
+kind: KubeInlineManifestConfig
+name: cilium-namespace-privileged
+manifest: |-
+  ---
+  apiVersion: v1
+  kind: Namespace
+  metadata:
+    name: cilium
+    labels:
+      pod-security.kubernetes.io/enforce: privileged
+  ---
+---
+apiVersion: v1alpha1
+kind: SysctlConfig
+params:
+  net.ipv6.conf.enp1s0.accept_ra: "2"
+  net/ipv6/conf/enp1s0.1/disable_ipv6: "1"
+  user.max_user_namespaces: "11255"
+---
+apiVersion: v1alpha1
+kind: CRICustomizationConfig
+name: 20-customization
+content: |-
+  [plugins."io.containerd.cri.v1.runtime"]
+    cdi_spec_dirs = ["/var/run/cdi"]
+    device_ownership_from_security_context = true
 ---
 apiVersion: v1alpha1
 kind: HostnameConfig
-auto: "off"
+auto:
+  $patch: delete
 hostname: minipc
 ---
 apiVersion: v1alpha1
