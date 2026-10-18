@@ -1,5 +1,5 @@
 defaultSettings:
-  defaultDataPath: /var/mnt/extra/longhorn
+  defaultDataPath: /var/mnt/extra-nvme/longhorn
   defaultLonghornStaticStorageClass: longhorn
   storageReservedPercentageForDefaultDisk: "10"
   replicaSoftAntiAffinity: true
