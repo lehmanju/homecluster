@@ -1,5 +1,0 @@
-helm:
-  chart: newt
-  releaseName: pangolin-newt
-  version: 1.5.0
-  repo: https://charts.fossorial.io

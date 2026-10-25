@@ -1,7 +1,0 @@
-helm:
-  chart: firezone-gateway
-  releaseName: firezone
-  version: 0.33.0
-  repo: https://intuinewin.github.io/helm-charts/
-app:
-  privileged: true
