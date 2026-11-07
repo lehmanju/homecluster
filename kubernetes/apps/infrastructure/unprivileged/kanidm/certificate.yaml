@@ -6,10 +6,10 @@ metadata:
 spec:
   secretName: idm-devpi-de-tls
   dnsNames:
-    - idm.devpi.de
+    - '*.devpi.de'
   issuerRef:
     kind: ClusterIssuer
-    name: letsencrypt-staging
+    name: letsencrypt-prod
   privateKey:
     algorithm: ECDSA
     size: 256
