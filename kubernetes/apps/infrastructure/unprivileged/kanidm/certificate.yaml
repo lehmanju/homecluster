@@ -9,7 +9,7 @@ spec:
     - idm.devpi.de
   issuerRef:
     kind: ClusterIssuer
-    name: letsencrypt-prod
+    name: letsencrypt-staging
   privateKey:
     algorithm: ECDSA
     size: 256
