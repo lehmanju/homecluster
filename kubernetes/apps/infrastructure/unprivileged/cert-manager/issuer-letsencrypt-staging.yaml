@@ -11,14 +11,12 @@ spec:
     solvers:
       - dns01:
           webhook:
-            groupName: lego.dns-solver
-            solverName: lego-solver
+            groupName: acme.pr0ton11.github.com
+            solverName: desec
             config:
-              # available provider refer to https://go-acme.github.io/lego/dns/#dns-providers
-              provider: desec
-              envFrom:
-                secret:
-                  name: desec-api-token
+              apiKeySecretRef:
+                name: desec-api-token
+                key: DESEC_TOKEN
           cnameStrategy: Follow
         selector:
           dnsZones:

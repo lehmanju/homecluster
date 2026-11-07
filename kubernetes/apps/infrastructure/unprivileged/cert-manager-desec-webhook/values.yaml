@@ -1,3 +1,7 @@
-webhook:
-  envs:
-    LEGO_DISABLE_CNAME_SUPPORT: "false"
+# Secret (in the cluster resource namespace) holding the deSEC API token.
+# The webhook is only granted get/watch on the secrets listed here.
+secretName:
+  - desec-api-token
+
+# The upstream chart template references replicaCount but ships no default.
+replicaCount: 1

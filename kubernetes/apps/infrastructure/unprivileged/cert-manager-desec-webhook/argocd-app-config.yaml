@@ -1,7 +1,7 @@
 helm:
-  chart: cert-manager-lego-webhook
-  releaseName: cert-manager-lego-webhook
-  version: 1.6.2
-  repo: https://yxwuxuanl.github.io/cert-manager-lego-webhook/
+  chart: cert-manager-desec-webhook
+  releaseName: cert-manager-desec-webhook
+  version: 0.1.7
+  repo: oci://ghcr.io/pr0ton11/helm/cert-manager-desec-webhook
 app:
   namespace: cert-manager
