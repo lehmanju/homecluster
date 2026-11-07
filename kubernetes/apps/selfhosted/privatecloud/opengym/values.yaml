@@ -1,0 +1,134 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/refs/heads/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+
+controllers:
+  opengym:
+    # The API keeps its data in JSON files on a single volume, so a second pod
+    # would be a second writer. Never run this as a rolling update.
+    strategy: Recreate
+    containers:
+      api:
+        image:
+          repository: ghcr.io/duartesantos8/opengym-api
+          tag: 1.4.4
+        env:
+          PORT: "3000"
+          DATA_DIR: /data
+          # Passkeys are bound to this hostname and only work over HTTPS.
+          RP_ID: opengym.devpi.de
+          ORIGIN: https://opengym.devpi.de
+          RP_NAME: openGym
+          # The first profile created becomes the instance admin.
+          FIRST_USER_ADMIN: "1"
+          TZ: Europe/Berlin
+        probes:
+          liveness:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /api/health
+                port: 3000
+              initialDelaySeconds: 30
+              periodSeconds: 30
+          readiness:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /api/health
+                port: 3000
+              initialDelaySeconds: 10
+              periodSeconds: 10
+        resources:
+          requests:
+            cpu: 10m
+            memory: 128Mi
+          limits:
+            memory: 512Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities: { drop: ["ALL"] }
+      web:
+        image:
+          repository: ghcr.io/duartesantos8/opengym-web
+          tag: 1.4.4
+        env:
+          NGINX_PORT: "8080"
+          BACKEND: 127.0.0.1
+          PORT: "3000"
+        probes:
+          liveness:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /
+                port: 8080
+              initialDelaySeconds: 30
+              periodSeconds: 30
+          readiness:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /
+                port: 8080
+              initialDelaySeconds: 10
+              periodSeconds: 10
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+          limits:
+            memory: 128Mi
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 101
+          runAsGroup: 101
+          allowPrivilegeEscalation: false
+          capabilities: { drop: ["ALL"] }
+
+defaultPodOptions:
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
+    fsGroupChangePolicy: OnRootMismatch
+
+service:
+  app:
+    controller: opengym
+    ports:
+      http:
+        port: 8080
+
+route:
+  app:
+    parentRefs:
+      - name: web-internal
+        namespace: cilium
+        sectionName: https
+    hostnames:
+      - opengym.devpi.de
+    rules:
+      - backendRefs:
+          - identifier: app
+            port: 8080
+        matches:
+          - path:
+              type: PathPrefix
+              value: /
+
+persistence:
+  # Accounts, passkeys, per-profile state, session secret and uploads.
+  data:
+    type: persistentVolumeClaim
+    accessMode: ReadWriteOnce
+    size: 2Gi
+    storageClass: longhorn-backup
+    advancedMounts:
+      opengym:
+        api:
+          - path: /data
