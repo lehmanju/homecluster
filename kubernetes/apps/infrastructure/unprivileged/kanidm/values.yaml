@@ -1,0 +1,4 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/pando85/kaniop/master/charts/kaniop/values.schema.json
+
+replicas: 1

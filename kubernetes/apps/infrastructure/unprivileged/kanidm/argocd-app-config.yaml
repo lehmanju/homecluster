@@ -1,0 +1,7 @@
+---
+helm:
+  chart: kaniop
+  releaseName: kaniop
+  version: 0.21.0
+  repo: ghcr.io/pando85/helm-charts
+
