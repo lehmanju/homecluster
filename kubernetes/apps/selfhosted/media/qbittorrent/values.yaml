@@ -33,20 +33,7 @@ controllers:
               command:
                 - /bin/sh
                 - -c
-                - |
-                  (ip rule del table 51820; ip -6 rule del table 51820) || true
-                  (
-                    i=0
-                    while [ "$i" -lt 60 ]; do
-                      if wget -q -O- \
-                        --post-data "json={\"listen_port\":${FIREWALL_VPN_INPUT_PORTS}}" \
-                        "http://127.0.0.1:8080/api/v2/app/setPreferences"; then
-                        exit 0
-                      fi
-                      i=$((i + 1))
-                      sleep 5
-                    done
-                  ) &
+                - (ip rule del table 51820; ip -6 rule del table 51820) || true
         resources:
           requests:
             squat.ai/tun: "1"
@@ -91,21 +78,29 @@ controllers:
           limits:
             memory: 2Gi
 
-  vuetorrent:
+  qui:
     containers:
       app:
         image:
-          repository: ghcr.io/vuetorrent/vuetorrent-backend
-          tag: 2.7.4@sha256:8887bd34b17396543c8374dcf2ab98af4c7deb24b24889cbc47742b3d56e4adc
+          repository: ghcr.io/autobrr/qui
+          tag: v1.35.0@sha256:a5b2f5faf6388cce257137c88e4b189458fd799cf9119ed476c980e5a69341b2
         env:
-          QBIT_BASE: http://qbittorrent.media.svc.cluster.local:8080
-          PORT: &vue_port 3000
-          SKIP_X_FORWARD_HEADERS: true
+          TZ: Europe/Berlin
+          QUI__HOST: 0.0.0.0
+          QUI__PORT: &qui_port 7476
+          QUI__AUTH_DISABLED: "true"
+          QUI__I_ACKNOWLEDGE_THIS_IS_A_BAD_IDEA: "true"
+          QUI__AUTH_DISABLED_ALLOWED_CIDRS: 0.0.0.0/0
         probes:
           liveness:
             enabled: true
           readiness:
             enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /health
+                port: *qui_port
           startup:
             enabled: true
             spec:
@@ -115,10 +110,14 @@ controllers:
           requests:
             cpu: 10m
           limits:
-            memory: 256Mi
+            memory: 512Mi
         securityContext:
           allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
           capabilities: { drop: ["ALL"] }
+          runAsNonRoot: true
+          runAsUser: 1000
+          runAsGroup: 1000
 
 defaultPodOptions:
   securityContext:
@@ -133,11 +132,11 @@ service:
       http:
         port: *qbit_port
 
-  ui:
-    controller: vuetorrent
+  qui:
+    controller: qui
     ports:
       http:
-        port: *vue_port
+        port: *qui_port
 
 persistence:
   config:
@@ -163,14 +162,14 @@ persistence:
           - path: /etc/coredns/Corefile
             subPath: Corefile
             readOnly: true
-  vuetorrent-config:
+  qui-config:
     type: persistentVolumeClaim
     accessMode: ReadWriteOnce
     size: 5Gi
     storageClass: longhorn-backup
     advancedMounts:
-      qbittorrent:
-        vuetorrent:
+      qui:
+        app:
           - path: /config
 route:
   app:
@@ -184,8 +183,8 @@ route:
         sectionName: https
     rules:
       - backendRefs:
-          - identifier: ui
-            port: *vue_port
+          - identifier: qui
+            port: *qui_port
         matches:
           - path:
               type: PathPrefix
