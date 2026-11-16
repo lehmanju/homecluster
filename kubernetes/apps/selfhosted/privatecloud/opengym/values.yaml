@@ -10,7 +10,7 @@ controllers:
       api:
         image:
           repository: ghcr.io/duartesantos8/opengym-api
-          tag: 1.4.4
+          tag: 1.4.5
         env:
           PORT: "3000"
           DATA_DIR: /data
